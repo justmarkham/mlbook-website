@@ -1,0 +1,2638 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.29">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Kevin Markham">
+
+<title>11&nbsp; Comparing linear and non-linear models – Master Machine Learning with scikit-learn</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./ch12.html" rel="next">
+<link href="./ch10.html" rel="prev">
+<link href="./favicon.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-0815c480559380816a4d1ea211a47e91.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-485d01fc63b59abcd3ee1bf1e8e2748d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./ch11.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Comparing linear and non-linear models</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Master Machine Learning with scikit-learn</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About this book</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Review of the Machine Learning workflow</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Encoding categorical features</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improving your workflow with ColumnTransformer and Pipeline</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Workflow review #1</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Encoding text data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Handling missing values</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fixing common workflow problems</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Workflow review #2</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Evaluating and tuning a Pipeline</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch11.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Comparing linear and non-linear models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Ensembling multiple models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Feature selection</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Feature standardization</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Feature engineering with custom transformers</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Workflow review #3</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">High-cardinality categorical features</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Class imbalance</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Class imbalance walkthrough</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Going further</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#trying-a-random-forest-model" id="toc-trying-a-random-forest-model" class="nav-link active" data-scroll-target="#trying-a-random-forest-model"><span class="header-section-number">11.1</span> Trying a random forest model</a></li>
+  <li><a href="#tuning-random-forests-with-randomized-search" id="toc-tuning-random-forests-with-randomized-search" class="nav-link" data-scroll-target="#tuning-random-forests-with-randomized-search"><span class="header-section-number">11.2</span> Tuning random forests with randomized search</a></li>
+  <li><a href="#further-tuning-with-grid-search" id="toc-further-tuning-with-grid-search" class="nav-link" data-scroll-target="#further-tuning-with-grid-search"><span class="header-section-number">11.3</span> Further tuning with grid search</a></li>
+  <li><a href="#qa-how-do-i-tune-two-models-with-a-single-grid-search" id="toc-qa-how-do-i-tune-two-models-with-a-single-grid-search" class="nav-link" data-scroll-target="#qa-how-do-i-tune-two-models-with-a-single-grid-search"><span class="header-section-number">11.4</span> Q&amp;A: How do I tune two models with a single grid search?</a></li>
+  <li><a href="#qa-how-do-i-tune-two-models-with-a-single-randomized-search" id="toc-qa-how-do-i-tune-two-models-with-a-single-randomized-search" class="nav-link" data-scroll-target="#qa-how-do-i-tune-two-models-with-a-single-randomized-search"><span class="header-section-number">11.5</span> Q&amp;A: How do I tune two models with a single randomized search?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Comparing linear and non-linear models</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="trying-a-random-forest-model" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="trying-a-random-forest-model"><span class="header-section-number">11.1</span> Trying a random forest model</h2>
+<p>So far, the only model we’ve used in this book is logistic regression. But what if you wanted to try a different model?</p>
+<p>One great thing about the scikit-learn API is that once you’ve built a workflow, you can easily swap in a different model, usually without making any other changes to your workflow. This is a huge benefit of scikit-learn, since it’s not possible to know ahead of time which model is going to work best for a given problem and dataset. This is also known as the “no free lunch” theorem.</p>
+<p>In this chapter, we’re going to try out the random forest model, which is one of the most well-known models in Machine Learning. Whereas logistic regression is a linear model, random forests is a non-linear model based on decision trees. These two types of models have different overall properties, thus it may turn out that one type is better suited to this particular problem.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Random forest model:</strong></p>
+<ul>
+<li>Non-linear model</li>
+<li>Based on decision trees</li>
+<li>Different properties from logistic regression</li>
+</ul>
+</div>
+</div>
+</div>
+<p>We start out by importing the RandomForestClassifier class from the ensemble module, and creating an instance called rf. Because there’s randomness involved in a random forest, we’ll set a random state for reproducibility. And because building a random forest can be computationally expensive, it has its own n_jobs parameter (just like grid search and randomized search), which we’ll set to -1 to enable parallel processing.</p>
+<div id="165a852b" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>rf <span class="op">=</span> RandomForestClassifier(random_state<span class="op">=</span><span class="dv">1</span>, n_jobs<span class="op">=-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We’ll create a new Pipeline object called rf_pipe that uses random forests instead of logistic regression.</p>
+<div id="09b65907" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rf_pipe <span class="op">=</span> make_pipeline(ct, rf)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>rf_pipe</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0c76727c-cac7-4275-8e3f-30d5f50caa5a" type="checkbox"><label class="sk-toggleable__label" for="0c76727c-cac7-4275-8e3f-30d5f50caa5a">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('columntransformer',
+                 ColumnTransformer(transformers=[('pipeline',
+                                                  Pipeline(steps=[('simpleimputer',
+                                                                   SimpleImputer(fill_value='missing',
+                                                                                 strategy='constant')),
+                                                                  ('onehotencoder',
+                                                                   OneHotEncoder())]),
+                                                  ['Embarked', 'Sex']),
+                                                 ('countvectorizer',
+                                                  CountVectorizer(), 'Name'),
+                                                 ('simpleimputer',
+                                                  SimpleImputer(),
+                                                  ['Age', 'Fare']),
+                                                 ('passthrough', 'passthrough',
+                                                  ['Parch'])])),
+                ('randomforestclassifier',
+                 RandomForestClassifier(n_jobs=-1, random_state=1))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="725711bf-16ad-44ab-be48-56eb45ac6d99" type="checkbox"><label class="sk-toggleable__label" for="725711bf-16ad-44ab-be48-56eb45ac6d99">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
+                                 Pipeline(steps=[('simpleimputer',
+                                                  SimpleImputer(fill_value='missing',
+                                                                strategy='constant')),
+                                                 ('onehotencoder',
+                                                  OneHotEncoder())]),
+                                 ['Embarked', 'Sex']),
+                                ('countvectorizer', CountVectorizer(), 'Name'),
+                                ('simpleimputer', SimpleImputer(),
+                                 ['Age', 'Fare']),
+                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a59b0238-3a09-41e7-be72-24c8afd6df4b" type="checkbox"><label class="sk-toggleable__label" for="a59b0238-3a09-41e7-be72-24c8afd6df4b">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="c7a276d9-f3a6-4b69-bd0a-9697a6987e8e" type="checkbox"><label class="sk-toggleable__label" for="c7a276d9-f3a6-4b69-bd0a-9697a6987e8e">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0368b3cf-91c0-4467-afe6-7ee935c86799" type="checkbox"><label class="sk-toggleable__label" for="0368b3cf-91c0-4467-afe6-7ee935c86799">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f7ce907f-5d71-4e9c-8c5d-020b9bb0f3bc" type="checkbox"><label class="sk-toggleable__label" for="f7ce907f-5d71-4e9c-8c5d-020b9bb0f3bc">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="718d7133-f1f4-49ed-ad00-ac81adb8f83c" type="checkbox"><label class="sk-toggleable__label" for="718d7133-f1f4-49ed-ad00-ac81adb8f83c">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f914e1a4-d444-48be-8b4f-6127bb8e96c3" type="checkbox"><label class="sk-toggleable__label" for="f914e1a4-d444-48be-8b4f-6127bb8e96c3">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="1324ed7a-6c80-4810-9939-3909fc154f4e" type="checkbox"><label class="sk-toggleable__label" for="1324ed7a-6c80-4810-9939-3909fc154f4e">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="df8ab126-9292-4b4e-8ce6-b8433ac06591" type="checkbox"><label class="sk-toggleable__label" for="df8ab126-9292-4b4e-8ce6-b8433ac06591">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8515158e-85e4-4f63-bd49-9f98f3816b9a" type="checkbox"><label class="sk-toggleable__label" for="8515158e-85e4-4f63-bd49-9f98f3816b9a">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ec25bfd8-ae54-4967-8f66-3a6e673fa482" type="checkbox"><label class="sk-toggleable__label" for="ec25bfd8-ae54-4967-8f66-3a6e673fa482">RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(n_jobs=-1, random_state=1)</pre></div></div></div></div></div></div></div>
+</div>
+</div>
+<p>And we can cross-validate it to generate a baseline accuracy, which is 0.811. This accuracy is nearly identical to the baseline accuracy of our logistic regression Pipeline, but it’s likely that we can improve it through hyperparameter tuning.</p>
+<div id="bb2efa90" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cross_val_score(rf_pipe, X, y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>0.811436821291821</code></pre>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Pipeline accuracy scores:</strong></p>
+<ul>
+<li><strong>Grid search (LR):</strong> 0.828</li>
+<li><strong>Baseline (LR):</strong> 0.811</li>
+<li><strong>Baseline (RF):</strong> 0.811 👈</li>
+</ul>
+</div>
+</div>
+</div>
+<p>As an aside, I’ve simplified the Pipeline accuracy scores table to only include the most important scores from the previous chapter. As you might guess, “LR” stands for logistic regression and “RF” stands for random forests. And going forward, I’ll always use the term “baseline” in this table to describe a Pipeline that has not undergone any hyperparameter tuning via grid search or randomized search.</p>
+</section>
+<section id="tuning-random-forests-with-randomized-search" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="tuning-random-forests-with-randomized-search"><span class="header-section-number">11.2</span> Tuning random forests with randomized search</h2>
+<p>When tuning random forests, we’ll try tuning the same parameters for the transformers as before, but different parameters for the model. It’s still important to tune the transformations and the model at the same time, because it may turn out that the best data transformations for a random forest model are different than the best data transformations for a logistic regression model.</p>
+<p>Rather than typing a parameters dictionary from scratch, we can start by creating a copy of the params dictionary called rf_params.</p>
+<div id="420f9c7c" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>rf_params <span class="op">=</span> params.copy()</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>rf_params</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>{'logisticregression__penalty': ['l1', 'l2'],
+ 'logisticregression__C': [0.1, 1, 10],
+ 'columntransformer__pipeline__onehotencoder__drop': [None, 'first'],
+ 'columntransformer__countvectorizer__ngram_range': [(1, 1), (1, 2)],
+ 'columntransformer__simpleimputer__add_indicator': [False, True]}</code></pre>
+</div>
+</div>
+<p>Then, we’ll delete the entries from the rf_params dictionary that only apply to logistic regression.</p>
+<div id="00a7ebc2" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> rf_params[<span class="st">'logisticregression__penalty'</span>]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> rf_params[<span class="st">'logisticregression__C'</span>]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>rf_params</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>{'columntransformer__pipeline__onehotencoder__drop': [None, 'first'],
+ 'columntransformer__countvectorizer__ngram_range': [(1, 1), (1, 2)],
+ 'columntransformer__simpleimputer__add_indicator': [False, True]}</code></pre>
+</div>
+</div>
+<p>Alternatively, we could have created the rf_params dictionary using a dictionary comprehension that only keeps the entries in params that start with the letters ‘col’.</p>
+<div id="e26186ca" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>rf_params <span class="op">=</span> {k:v <span class="cf">for</span> k, v <span class="kw">in</span> params.items() <span class="cf">if</span> k.startswith(<span class="st">'col'</span>)}</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>rf_params</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>{'columntransformer__pipeline__onehotencoder__drop': [None, 'first'],
+ 'columntransformer__countvectorizer__ngram_range': [(1, 1), (1, 2)],
+ 'columntransformer__simpleimputer__add_indicator': [False, True]}</code></pre>
+</div>
+</div>
+<p>Now we’re ready to add tuning parameters for the RandomForestClassifier. Random forests has a lot of parameters you can tune, which can make for a computationally expensive grid search if you try to tune all of them. This is compounded by the fact that random forests is comparatively slower to train than logistic regression.</p>
+<p>When you’re not quite sure which parameters to tune or which values to try for those parameters, I would suggest a two-step approach, which is what we’ll use in this chapter:</p>
+<ol type="1">
+<li>First, use a randomized search with a variety of parameters and values. This allows you to test out a lot of different combinations while still controlling the computational budget. Examine the results of the search to look for trends of what’s working and what’s not.</li>
+<li>Second, use a grid search with a more optimized set of parameters and values, based on what you learned from the randomized search.</li>
+</ol>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Two-step approach to hyperparameter tuning:</strong></p>
+<ol type="1">
+<li><strong>Randomized search:</strong> Test a variety of parameters and values, then examine the results for trends</li>
+<li><strong>Grid search:</strong> Use an optimized set of parameters and values based on what you learned from step 1</li>
+</ol>
+</div>
+</div>
+</div>
+<p>We’ll start by trying out four parameters from the RandomForestClassifier, which I selected based on research and experience.</p>
+<p>First, we’ll confirm that the Pipeline step name is randomforestclassifier (all lowercase).</p>
+<div id="b57cefb6" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>rf_pipe.named_steps.keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>dict_keys(['columntransformer', 'randomforestclassifier'])</code></pre>
+</div>
+</div>
+<p>Then we’ll add the four parameters I selected and some reasonable values for those parameters to the rf_params dictionary:</p>
+<ul>
+<li>n_estimators is the number of decision trees in the random forest.</li>
+<li>min_samples_leaf is a way to control overfitting, just like regularization is used to control overfitting in a logistic regression model.</li>
+<li>And max_features and bootstrap affect certain properties of the random forest algorithm.</li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>RandomForestClassifier tuning parameters:</strong></p>
+<ul>
+<li><strong>n_estimators:</strong> Number of decisions trees in the forest
+<ul>
+<li>100 (default)</li>
+<li>300</li>
+<li>500</li>
+<li>700</li>
+</ul></li>
+<li><strong>min_samples_leaf:</strong> Minimum number of samples at a leaf node
+<ul>
+<li>1 (default)</li>
+<li>2</li>
+<li>3</li>
+</ul></li>
+<li><strong>max_features:</strong> Number of features to consider when choosing a split
+<ul>
+<li>‘sqrt’ (default)</li>
+<li>None</li>
+</ul></li>
+<li><strong>bootstrap:</strong> Whether bootstrap samples are used when building trees
+<ul>
+<li>True (default)</li>
+<li>False</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="51531878" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>rf_params[<span class="st">'randomforestclassifier__n_estimators'</span>] <span class="op">=</span> [<span class="dv">100</span>, <span class="dv">300</span>, <span class="dv">500</span>, <span class="dv">700</span>]</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>rf_params[<span class="st">'randomforestclassifier__min_samples_leaf'</span>] <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>rf_params[<span class="st">'randomforestclassifier__max_features'</span>] <span class="op">=</span> [<span class="st">'sqrt'</span>, <span class="va">None</span>]</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>rf_params[<span class="st">'randomforestclassifier__bootstrap'</span>] <span class="op">=</span> [<span class="va">True</span>, <span class="va">False</span>]</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>rf_params</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>{'columntransformer__pipeline__onehotencoder__drop': [None, 'first'],
+ 'columntransformer__countvectorizer__ngram_range': [(1, 1), (1, 2)],
+ 'columntransformer__simpleimputer__add_indicator': [False, True],
+ 'randomforestclassifier__n_estimators': [100, 300, 500, 700],
+ 'randomforestclassifier__min_samples_leaf': [1, 2, 3],
+ 'randomforestclassifier__max_features': ['sqrt', None],
+ 'randomforestclassifier__bootstrap': [True, False]}</code></pre>
+</div>
+</div>
+<p>Finally, we’ll create an instance of RandomizedSearchCV called rf_rand, making sure to use the rf_pipe and rf_params objects, and we’ll run 100 iterations of the randomized search.</p>
+<p>Notice that I’ve added a warning to this cell to indicate that it takes a few minutes to run on my local machine, though it may run faster or slower on your machine.</p>
+<div id="4aa9f7af" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">WARNING</span><span class="co">: EXTENDED RUNTIME</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>rf_rand <span class="op">=</span> RandomizedSearchCV(rf_pipe, rf_params, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                             n_iter<span class="op">=</span><span class="dv">100</span>, random_state<span class="op">=</span><span class="dv">1</span>, n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>time rf_rand.fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: user 2.84 s, sys: 403 ms, total: 3.25 s
+Wall time: 13min 24s</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="c73931c7-1eb1-488c-ae4a-6eddda2a8fa0" type="checkbox"><label class="sk-toggleable__label" for="c73931c7-1eb1-488c-ae4a-6eddda2a8fa0">RandomizedSearchCV</label><div class="sk-toggleable__content"><pre>RandomizedSearchCV(cv=5,
+                   estimator=Pipeline(steps=[('columntransformer',
+                                              ColumnTransformer(transformers=[('pipeline',
+                                                                               Pipeline(steps=[('simpleimputer',
+                                                                                                SimpleImputer(fill_value='missing',
+                                                                                                              strategy='constant')),
+                                                                                               ('onehotencoder',
+                                                                                                OneHotEncoder())]),
+                                                                               ['Embarked',
+                                                                                'Sex']),
+                                                                              ('countvectorizer',
+                                                                               CountVectorizer(),
+                                                                               'Name'),
+                                                                              ('simpleimputer',
+                                                                               SimpleImputer(),
+                                                                               ['Age',
+                                                                                'Far...
+                                        'columntransformer__pipeline__onehotencoder__drop': [None,
+                                                                                             'first'],
+                                        'columntransformer__simpleimputer__add_indicator': [False,
+                                                                                            True],
+                                        'randomforestclassifier__bootstrap': [True,
+                                                                              False],
+                                        'randomforestclassifier__max_features': ['sqrt',
+                                                                                 None],
+                                        'randomforestclassifier__min_samples_leaf': [1,
+                                                                                     2,
+                                                                                     3],
+                                        'randomforestclassifier__n_estimators': [100,
+                                                                                 300,
+                                                                                 500,
+                                                                                 700]},
+                   random_state=1, scoring='accuracy')</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="cd3e93f8-2583-423d-82a7-e3e4996eadf0" type="checkbox"><label class="sk-toggleable__label" for="cd3e93f8-2583-423d-82a7-e3e4996eadf0">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
+                                 Pipeline(steps=[('simpleimputer',
+                                                  SimpleImputer(fill_value='missing',
+                                                                strategy='constant')),
+                                                 ('onehotencoder',
+                                                  OneHotEncoder())]),
+                                 ['Embarked', 'Sex']),
+                                ('countvectorizer', CountVectorizer(), 'Name'),
+                                ('simpleimputer', SimpleImputer(),
+                                 ['Age', 'Fare']),
+                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8f9517dd-407b-48f1-89cf-a68280fe4160" type="checkbox"><label class="sk-toggleable__label" for="8f9517dd-407b-48f1-89cf-a68280fe4160">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8cb221ff-bda6-41e9-8fca-332cb2b0d5f1" type="checkbox"><label class="sk-toggleable__label" for="8cb221ff-bda6-41e9-8fca-332cb2b0d5f1">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="643354db-528a-4359-8fa0-704bc9e556b2" type="checkbox"><label class="sk-toggleable__label" for="643354db-528a-4359-8fa0-704bc9e556b2">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="9c5824ea-a560-4a48-97dd-1822aca7b530" type="checkbox"><label class="sk-toggleable__label" for="9c5824ea-a560-4a48-97dd-1822aca7b530">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a875f374-a2fd-45ce-b929-a1c8f3f7660a" type="checkbox"><label class="sk-toggleable__label" for="a875f374-a2fd-45ce-b929-a1c8f3f7660a">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="dd7a1736-b702-45cd-b693-708c673523a6" type="checkbox"><label class="sk-toggleable__label" for="dd7a1736-b702-45cd-b693-708c673523a6">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="9d317c77-7ed1-41e4-b6de-c39610425470" type="checkbox"><label class="sk-toggleable__label" for="9d317c77-7ed1-41e4-b6de-c39610425470">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6ab0a733-e870-4a91-94fc-68fa2d4119a0" type="checkbox"><label class="sk-toggleable__label" for="6ab0a733-e870-4a91-94fc-68fa2d4119a0">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3b958f20-0d88-4215-b25e-597985951807" type="checkbox"><label class="sk-toggleable__label" for="3b958f20-0d88-4215-b25e-597985951807">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f4eeaf41-10fe-43b5-9b32-84b353fa65df" type="checkbox"><label class="sk-toggleable__label" for="f4eeaf41-10fe-43b5-9b32-84b353fa65df">RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(n_jobs=-1, random_state=1)</pre></div></div></div></div></div></div></div></div></div></div></div></div>
+</div>
+</div>
+<p>We see that the best score found during the randomized search is 0.825, which is better than our baseline score of 0.811, but not quite as good as the 0.828 score of our best logistic regression Pipeline.</p>
+<div id="13fd90ce" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>rf_rand.best_score_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>0.8249262444291003</code></pre>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Pipeline accuracy scores:</strong></p>
+<ul>
+<li><strong>Grid search (LR):</strong> 0.828</li>
+<li><strong>Randomized search (RF):</strong> 0.825 👈</li>
+<li><strong>Baseline (LR):</strong> 0.811</li>
+<li><strong>Baseline (RF):</strong> 0.811</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="further-tuning-with-grid-search" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="further-tuning-with-grid-search"><span class="header-section-number">11.3</span> Further tuning with grid search</h2>
+<p>Let’s now examine the results from the randomized search to look for trends, specifically focusing on the top 20 results. We’ll convert the results to a DataFrame, and then sort by rank_test_score. Keep in mind that it’s hard to draw any definitive conclusions since this is a randomized search, so what we’re looking for is just any obvious trends.</p>
+<div id="61087cfa" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pd.DataFrame(rf_rand.cv_results_)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>results.sort_values(<span class="st">'rank_test_score'</span>).head(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">mean_fit_time</th>
+<th data-quarto-table-cell-role="th">std_fit_time</th>
+<th data-quarto-table-cell-role="th">mean_score_time</th>
+<th data-quarto-table-cell-role="th">std_score_time</th>
+<th data-quarto-table-cell-role="th">param_randomforestclassifier__n_estimators</th>
+<th data-quarto-table-cell-role="th">param_randomforestclassifier__min_samples_leaf</th>
+<th data-quarto-table-cell-role="th">param_randomforestclassifier__max_features</th>
+<th data-quarto-table-cell-role="th">param_randomforestclassifier__bootstrap</th>
+<th data-quarto-table-cell-role="th">param_columntransformer__simpleimputer__add_indicator</th>
+<th data-quarto-table-cell-role="th">param_columntransformer__pipeline__onehotencoder__drop</th>
+<th data-quarto-table-cell-role="th">param_columntransformer__countvectorizer__ngram_range</th>
+<th data-quarto-table-cell-role="th">params</th>
+<th data-quarto-table-cell-role="th">split0_test_score</th>
+<th data-quarto-table-cell-role="th">split1_test_score</th>
+<th data-quarto-table-cell-role="th">split2_test_score</th>
+<th data-quarto-table-cell-role="th">split3_test_score</th>
+<th data-quarto-table-cell-role="th">split4_test_score</th>
+<th data-quarto-table-cell-role="th">mean_test_score</th>
+<th data-quarto-table-cell-role="th">std_test_score</th>
+<th data-quarto-table-cell-role="th">rank_test_score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">13</td>
+<td>1.775191</td>
+<td>0.141556</td>
+<td>0.056017</td>
+<td>0.016206</td>
+<td>700</td>
+<td>3</td>
+<td>None</td>
+<td>True</td>
+<td>False</td>
+<td>first</td>
+<td>(1, 1)</td>
+<td>{'randomforestclassifier__n_estimators': 700, ...</td>
+<td>0.815642</td>
+<td>0.808989</td>
+<td>0.853933</td>
+<td>0.803371</td>
+<td>0.842697</td>
+<td>0.824926</td>
+<td>0.019809</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">70</td>
+<td>2.067046</td>
+<td>0.245151</td>
+<td>0.084293</td>
+<td>0.021412</td>
+<td>700</td>
+<td>3</td>
+<td>None</td>
+<td>True</td>
+<td>False</td>
+<td>None</td>
+<td>(1, 1)</td>
+<td>{'randomforestclassifier__n_estimators': 700, ...</td>
+<td>0.810056</td>
+<td>0.808989</td>
+<td>0.853933</td>
+<td>0.803371</td>
+<td>0.837079</td>
+<td>0.822685</td>
+<td>0.019513</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">31</td>
+<td>1.907166</td>
+<td>0.051550</td>
+<td>0.065388</td>
+<td>0.017367</td>
+<td>500</td>
+<td>3</td>
+<td>None</td>
+<td>True</td>
+<td>True</td>
+<td>first</td>
+<td>(1, 2)</td>
+<td>{'randomforestclassifier__n_estimators': 500, ...</td>
+<td>0.810056</td>
+<td>0.814607</td>
+<td>0.848315</td>
+<td>0.797753</td>
+<td>0.842697</td>
+<td>0.822685</td>
+<td>0.019513</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">45</td>
+<td>1.132841</td>
+<td>0.087042</td>
+<td>0.042709</td>
+<td>0.005103</td>
+<td>300</td>
+<td>2</td>
+<td>None</td>
+<td>True</td>
+<td>False</td>
+<td>None</td>
+<td>(1, 1)</td>
+<td>{'randomforestclassifier__n_estimators': 300, ...</td>
+<td>0.815642</td>
+<td>0.808989</td>
+<td>0.842697</td>
+<td>0.808989</td>
+<td>0.837079</td>
+<td>0.822679</td>
+<td>0.014370</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">33</td>
+<td>0.866417</td>
+<td>0.121050</td>
+<td>0.049790</td>
+<td>0.017742</td>
+<td>300</td>
+<td>3</td>
+<td>None</td>
+<td>True</td>
+<td>False</td>
+<td>first</td>
+<td>(1, 1)</td>
+<td>{'randomforestclassifier__n_estimators': 300, ...</td>
+<td>0.810056</td>
+<td>0.808989</td>
+<td>0.848315</td>
+<td>0.803371</td>
+<td>0.837079</td>
+<td>0.821562</td>
+<td>0.017764</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">54</td>
+<td>1.027468</td>
+<td>0.098267</td>
+<td>0.040619</td>
+<td>0.009987</td>
+<td>300</td>
+<td>2</td>
+<td>None</td>
+<td>True</td>
+<td>True</td>
+<td>None</td>
+<td>(1, 1)</td>
+<td>{'randomforestclassifier__n_estimators': 300, ...</td>
+<td>0.821229</td>
+<td>0.808989</td>
+<td>0.842697</td>
+<td>0.803371</td>
+<td>0.831461</td>
+<td>0.821549</td>
+<td>0.014379</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">68</td>
+<td>2.022925</td>
+<td>0.063011</td>
+<td>0.059829</td>
+<td>0.010787</td>
+<td>500</td>
+<td>3</td>
+<td>None</td>
+<td>True</td>
+<td>False</td>
+<td>None</td>
+<td>(1, 2)</td>
+<td>{'randomforestclassifier__n_estimators': 500, ...</td>
+<td>0.804469</td>
+<td>0.808989</td>
+<td>0.848315</td>
+<td>0.803371</td>
+<td>0.837079</td>
+<td>0.820444</td>
+<td>0.018609</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">81</td>
+<td>0.466743</td>
+<td>0.120791</td>
+<td>0.023605</td>
+<td>0.006715</td>
+<td>100</td>
+<td>3</td>
+<td>None</td>
+<td>True</td>
+<td>True</td>
+<td>first</td>
+<td>(1, 2)</td>
+<td>{'randomforestclassifier__n_estimators': 100, ...</td>
+<td>0.815642</td>
+<td>0.803371</td>
+<td>0.842697</td>
+<td>0.803371</td>
+<td>0.837079</td>
+<td>0.820432</td>
+<td>0.016601</td>
+<td>8</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">15</td>
+<td>0.830716</td>
+<td>0.132376</td>
+<td>0.079704</td>
+<td>0.038660</td>
+<td>300</td>
+<td>2</td>
+<td>None</td>
+<td>True</td>
+<td>True</td>
+<td>first</td>
+<td>(1, 1)</td>
+<td>{'randomforestclassifier__n_estimators': 300, ...</td>
+<td>0.810056</td>
+<td>0.808989</td>
+<td>0.842697</td>
+<td>0.797753</td>
+<td>0.837079</td>
+<td>0.819315</td>
+<td>0.017433</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">94</td>
+<td>1.838951</td>
+<td>0.144510</td>
+<td>0.066304</td>
+<td>0.007401</td>
+<td>500</td>
+<td>2</td>
+<td>None</td>
+<td>True</td>
+<td>True</td>
+<td>first</td>
+<td>(1, 1)</td>
+<td>{'randomforestclassifier__n_estimators': 500, ...</td>
+<td>0.815642</td>
+<td>0.808989</td>
+<td>0.837079</td>
+<td>0.797753</td>
+<td>0.837079</td>
+<td>0.819308</td>
+<td>0.015596</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">98</td>
+<td>0.274403</td>
+<td>0.058110</td>
+<td>0.048240</td>
+<td>0.018102</td>
+<td>100</td>
+<td>2</td>
+<td>None</td>
+<td>True</td>
+<td>True</td>
+<td>first</td>
+<td>(1, 1)</td>
+<td>{'randomforestclassifier__n_estimators': 100, ...</td>
+<td>0.815642</td>
+<td>0.808989</td>
+<td>0.837079</td>
+<td>0.808989</td>
+<td>0.825843</td>
+<td>0.819308</td>
+<td>0.010816</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">63</td>
+<td>2.992522</td>
+<td>0.228749</td>
+<td>0.069530</td>
+<td>0.024953</td>
+<td>700</td>
+<td>1</td>
+<td>None</td>
+<td>True</td>
+<td>True</td>
+<td>first</td>
+<td>(1, 1)</td>
+<td>{'randomforestclassifier__n_estimators': 700, ...</td>
+<td>0.837989</td>
+<td>0.814607</td>
+<td>0.814607</td>
+<td>0.780899</td>
+<td>0.848315</td>
+<td>0.819283</td>
+<td>0.023280</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">18</td>
+<td>2.152134</td>
+<td>0.208370</td>
+<td>0.077971</td>
+<td>0.021875</td>
+<td>700</td>
+<td>2</td>
+<td>None</td>
+<td>True</td>
+<td>True</td>
+<td>first</td>
+<td>(1, 1)</td>
+<td>{'randomforestclassifier__n_estimators': 700, ...</td>
+<td>0.810056</td>
+<td>0.808989</td>
+<td>0.831461</td>
+<td>0.797753</td>
+<td>0.842697</td>
+<td>0.818191</td>
+<td>0.016402</td>
+<td>13</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">57</td>
+<td>1.565075</td>
+<td>0.269175</td>
+<td>0.100762</td>
+<td>0.052414</td>
+<td>500</td>
+<td>2</td>
+<td>None</td>
+<td>True</td>
+<td>False</td>
+<td>None</td>
+<td>(1, 1)</td>
+<td>{'randomforestclassifier__n_estimators': 500, ...</td>
+<td>0.815642</td>
+<td>0.808989</td>
+<td>0.837079</td>
+<td>0.792135</td>
+<td>0.837079</td>
+<td>0.818185</td>
+<td>0.017225</td>
+<td>14</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">12</td>
+<td>0.407637</td>
+<td>0.104994</td>
+<td>0.028871</td>
+<td>0.011479</td>
+<td>100</td>
+<td>3</td>
+<td>None</td>
+<td>True</td>
+<td>True</td>
+<td>None</td>
+<td>(1, 2)</td>
+<td>{'randomforestclassifier__n_estimators': 100, ...</td>
+<td>0.815642</td>
+<td>0.803371</td>
+<td>0.831461</td>
+<td>0.803371</td>
+<td>0.837079</td>
+<td>0.818185</td>
+<td>0.013990</td>
+<td>14</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">72</td>
+<td>1.241201</td>
+<td>0.032166</td>
+<td>0.038227</td>
+<td>0.005361</td>
+<td>300</td>
+<td>1</td>
+<td>None</td>
+<td>True</td>
+<td>False</td>
+<td>None</td>
+<td>(1, 1)</td>
+<td>{'randomforestclassifier__n_estimators': 300, ...</td>
+<td>0.821229</td>
+<td>0.808989</td>
+<td>0.820225</td>
+<td>0.797753</td>
+<td>0.842697</td>
+<td>0.818178</td>
+<td>0.014942</td>
+<td>16</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>0.662763</td>
+<td>0.088451</td>
+<td>0.041698</td>
+<td>0.010623</td>
+<td>500</td>
+<td>1</td>
+<td>sqrt</td>
+<td>False</td>
+<td>False</td>
+<td>first</td>
+<td>(1, 1)</td>
+<td>{'randomforestclassifier__n_estimators': 500, ...</td>
+<td>0.837989</td>
+<td>0.831461</td>
+<td>0.820225</td>
+<td>0.752809</td>
+<td>0.848315</td>
+<td>0.818160</td>
+<td>0.033925</td>
+<td>17</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">41</td>
+<td>2.445723</td>
+<td>0.138797</td>
+<td>0.078492</td>
+<td>0.027981</td>
+<td>700</td>
+<td>2</td>
+<td>None</td>
+<td>True</td>
+<td>True</td>
+<td>None</td>
+<td>(1, 1)</td>
+<td>{'randomforestclassifier__n_estimators': 700, ...</td>
+<td>0.810056</td>
+<td>0.808989</td>
+<td>0.831461</td>
+<td>0.797753</td>
+<td>0.837079</td>
+<td>0.817067</td>
+<td>0.014799</td>
+<td>18</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>2.127278</td>
+<td>0.120247</td>
+<td>0.069973</td>
+<td>0.019181</td>
+<td>500</td>
+<td>2</td>
+<td>None</td>
+<td>True</td>
+<td>False</td>
+<td>first</td>
+<td>(1, 2)</td>
+<td>{'randomforestclassifier__n_estimators': 500, ...</td>
+<td>0.815642</td>
+<td>0.808989</td>
+<td>0.837079</td>
+<td>0.780899</td>
+<td>0.842697</td>
+<td>0.817061</td>
+<td>0.022058</td>
+<td>19</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">8</td>
+<td>2.047190</td>
+<td>0.088370</td>
+<td>0.060528</td>
+<td>0.019753</td>
+<td>500</td>
+<td>2</td>
+<td>None</td>
+<td>True</td>
+<td>True</td>
+<td>None</td>
+<td>(1, 2)</td>
+<td>{'randomforestclassifier__n_estimators': 500, ...</td>
+<td>0.815642</td>
+<td>0.814607</td>
+<td>0.831461</td>
+<td>0.786517</td>
+<td>0.837079</td>
+<td>0.817061</td>
+<td>0.017601</td>
+<td>19</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Starting with n_estimators, we see that higher numbers are performing better, which is typical for n_estimators. It seems unlikely that 100 will produce the best result, so we’ll exclude that value from our grid search. And since the current best result is at 700, it seems useful to add a value of 900 to our grid search, in case increasing it further is even better.</p>
+<p>Do keep in mind that increasing n_estimators also increases the time needed to train the model. You could consider just setting a single large value for n_estimators rather than searching through multiple values, since larger values will generally produce better results up to a certain point, but I prefer to tune this value when computational resources allow for it.</p>
+<p>The next parameter to examine is min_samples_leaf. Similar to n_estimators, the lowest value of 1 seems unlikely to produce the best result, so we’ll remove it. The current best result is 3, so we’ll also try the values 4 and 5 in the grid search.</p>
+<p>For max_features, it’s clear that None is performing better, so we’re no longer going to try sqrt.</p>
+<p>For bootstrap, it’s clear that True is performing better, so we’re no longer going to try False.</p>
+<p>And finally, there aren’t any clear trends for the transformer parameters, so we’ll leave those as-is.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Trends in the randomized search results:</strong></p>
+<ul>
+<li><strong>n_estimators:</strong>
+<ul>
+<li>Higher numbers are performing better</li>
+<li>Remove 100, add 900</li>
+</ul></li>
+<li><strong>min_samples_leaf:</strong>
+<ul>
+<li>Higher numbers are performing better</li>
+<li>Remove 1, add 4 and 5</li>
+</ul></li>
+<li><strong>max_features:</strong>
+<ul>
+<li>None is performing better</li>
+<li>Remove ‘sqrt’</li>
+</ul></li>
+<li><strong>bootstrap:</strong>
+<ul>
+<li>True is performing better</li>
+<li>Remove False</li>
+</ul></li>
+<li><strong>Transformer parameters:</strong>
+<ul>
+<li>No clear trends</li>
+<li>Leave as-is</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<p>Here are the updated values we’re going to try. For max_features and bootstrap, you’ll see that we can just pass a list with a single value so that that parameter value will always get set during the search.</p>
+<div id="7d8593b4" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>rf_params[<span class="st">'randomforestclassifier__n_estimators'</span>] <span class="op">=</span> [<span class="dv">300</span>, <span class="dv">500</span>, <span class="dv">700</span>, <span class="dv">900</span>]</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>rf_params[<span class="st">'randomforestclassifier__min_samples_leaf'</span>] <span class="op">=</span> [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>rf_params[<span class="st">'randomforestclassifier__max_features'</span>] <span class="op">=</span> [<span class="va">None</span>]</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>rf_params[<span class="st">'randomforestclassifier__bootstrap'</span>] <span class="op">=</span> [<span class="va">True</span>]</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>rf_params</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>{'columntransformer__pipeline__onehotencoder__drop': [None, 'first'],
+ 'columntransformer__countvectorizer__ngram_range': [(1, 1), (1, 2)],
+ 'columntransformer__simpleimputer__add_indicator': [False, True],
+ 'randomforestclassifier__n_estimators': [300, 500, 700, 900],
+ 'randomforestclassifier__min_samples_leaf': [2, 3, 4, 5],
+ 'randomforestclassifier__max_features': [None],
+ 'randomforestclassifier__bootstrap': [True]}</code></pre>
+</div>
+</div>
+<p>At this point, you could continue to run additional randomized searches in order to study the trends further, but we’re just going to move on to grid search.</p>
+<p>We’ll create an instance of GridSearchCV called rf_grid, making sure to use the rf_pipe and rf_params objects, and then run the search.</p>
+<div id="1cb7e2a9" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">WARNING</span><span class="co">: EXTENDED RUNTIME</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>rf_grid <span class="op">=</span> GridSearchCV(rf_pipe, rf_params, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>, n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>time rf_grid.fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: user 2.06 s, sys: 221 ms, total: 2.28 s
+Wall time: 2min 53s</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="eea7418b-3543-43e1-ad01-ddc94015389c" type="checkbox"><label class="sk-toggleable__label" for="eea7418b-3543-43e1-ad01-ddc94015389c">GridSearchCV</label><div class="sk-toggleable__content"><pre>GridSearchCV(cv=5,
+             estimator=Pipeline(steps=[('columntransformer',
+                                        ColumnTransformer(transformers=[('pipeline',
+                                                                         Pipeline(steps=[('simpleimputer',
+                                                                                          SimpleImputer(fill_value='missing',
+                                                                                                        strategy='constant')),
+                                                                                         ('onehotencoder',
+                                                                                          OneHotEncoder())]),
+                                                                         ['Embarked',
+                                                                          'Sex']),
+                                                                        ('countvectorizer',
+                                                                         CountVectorizer(),
+                                                                         'Name'),
+                                                                        ('simpleimputer',
+                                                                         SimpleImputer(),
+                                                                         ['Age',
+                                                                          'Fare']),
+                                                                        (...
+                                                                              2)],
+                         'columntransformer__pipeline__onehotencoder__drop': [None,
+                                                                              'first'],
+                         'columntransformer__simpleimputer__add_indicator': [False,
+                                                                             True],
+                         'randomforestclassifier__bootstrap': [True],
+                         'randomforestclassifier__max_features': [None],
+                         'randomforestclassifier__min_samples_leaf': [2, 3, 4,
+                                                                      5],
+                         'randomforestclassifier__n_estimators': [300, 500, 700,
+                                                                  900]},
+             scoring='accuracy')</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a713760a-c202-4613-911c-14e3d1205082" type="checkbox"><label class="sk-toggleable__label" for="a713760a-c202-4613-911c-14e3d1205082">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
+                                 Pipeline(steps=[('simpleimputer',
+                                                  SimpleImputer(fill_value='missing',
+                                                                strategy='constant')),
+                                                 ('onehotencoder',
+                                                  OneHotEncoder())]),
+                                 ['Embarked', 'Sex']),
+                                ('countvectorizer', CountVectorizer(), 'Name'),
+                                ('simpleimputer', SimpleImputer(),
+                                 ['Age', 'Fare']),
+                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="36068d4f-6500-4682-be75-0660d0ef5bdc" type="checkbox"><label class="sk-toggleable__label" for="36068d4f-6500-4682-be75-0660d0ef5bdc">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f28c6ad8-ef46-4c54-8fe6-ab692945a2c4" type="checkbox"><label class="sk-toggleable__label" for="f28c6ad8-ef46-4c54-8fe6-ab692945a2c4">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="dc15924c-b5fb-4b94-bc27-7f6b326c4aff" type="checkbox"><label class="sk-toggleable__label" for="dc15924c-b5fb-4b94-bc27-7f6b326c4aff">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="34771d1d-fec6-4d90-86c1-ab6beaf84ddb" type="checkbox"><label class="sk-toggleable__label" for="34771d1d-fec6-4d90-86c1-ab6beaf84ddb">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="78d8fa70-8f94-409c-a223-81f78a33eaf8" type="checkbox"><label class="sk-toggleable__label" for="78d8fa70-8f94-409c-a223-81f78a33eaf8">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="e7c5bea1-7763-4761-afd4-a52cc4c67ac3" type="checkbox"><label class="sk-toggleable__label" for="e7c5bea1-7763-4761-afd4-a52cc4c67ac3">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="34942506-be92-4146-9d30-aa2939487fdc" type="checkbox"><label class="sk-toggleable__label" for="34942506-be92-4146-9d30-aa2939487fdc">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6d3b3e49-5fb9-4365-896a-e6513c763cb9" type="checkbox"><label class="sk-toggleable__label" for="6d3b3e49-5fb9-4365-896a-e6513c763cb9">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="fa4e99f3-36f9-4e84-9e80-79398c3ea762" type="checkbox"><label class="sk-toggleable__label" for="fa4e99f3-36f9-4e84-9e80-79398c3ea762">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b7a84984-0a62-4098-b4e2-e39c1fedd91d" type="checkbox"><label class="sk-toggleable__label" for="b7a84984-0a62-4098-b4e2-e39c1fedd91d">RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(n_jobs=-1, random_state=1)</pre></div></div></div></div></div></div></div></div></div></div></div></div>
+</div>
+</div>
+<p>The best score from our grid search is 0.829, which is just a tiny bit higher than the 0.828 score of our best logistic regression Pipeline.</p>
+<div id="480d3e4d" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>rf_grid.best_score_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>0.8294143493817087</code></pre>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Pipeline accuracy scores:</strong></p>
+<ul>
+<li><strong>Grid search (RF):</strong> 0.829 👈</li>
+<li><strong>Grid search (LR):</strong> 0.828</li>
+<li><strong>Randomized search (RF):</strong> 0.825</li>
+<li><strong>Baseline (LR):</strong> 0.811</li>
+<li><strong>Baseline (RF):</strong> 0.811</li>
+</ul>
+</div>
+</div>
+</div>
+<p>These are the best parameters that were found during the grid search. Again, it’s hard to say whether this is truly the best set of parameters, but we at least know that it’s a good set of parameters.</p>
+<div id="365e2629" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>rf_grid.best_params_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>{'columntransformer__countvectorizer__ngram_range': (1, 1),
+ 'columntransformer__pipeline__onehotencoder__drop': 'first',
+ 'columntransformer__simpleimputer__add_indicator': True,
+ 'randomforestclassifier__bootstrap': True,
+ 'randomforestclassifier__max_features': None,
+ 'randomforestclassifier__min_samples_leaf': 4,
+ 'randomforestclassifier__n_estimators': 300}</code></pre>
+</div>
+</div>
+</section>
+<section id="qa-how-do-i-tune-two-models-with-a-single-grid-search" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="qa-how-do-i-tune-two-models-with-a-single-grid-search"><span class="header-section-number">11.4</span> Q&amp;A: How do I tune two models with a single grid search?</h2>
+<p>So far, we’ve set up two separate Pipelines called pipe and rf_pipe that each end in a different model. That made it easy to grid search each Pipeline with its own set of relevant parameters. However, you can actually tune two different models using a single grid search if you like.</p>
+<p>To do this, the first step is to create a new Pipeline using the Pipeline class instead of the make_pipeline function. The reason we’re doing this is so that we can provide custom names for the steps. In this case, we’ll call the Pipeline object both_pipe, and we’ll call the step names “preprocessor” and “classifier”. We’ll set the classifier to be logistic regression, though this is just a placeholder as you’ll see in a minute.</p>
+<div id="bc100e57" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>both_pipe <span class="op">=</span> Pipeline([(<span class="st">'preprocessor'</span>, ct), (<span class="st">'classifier'</span>, logreg)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, we’ll create a new parameter dictionary called params1. For the simplicity of this example, we’re only going to tune one parameter from the preprocessor step and two parameters from the classifier step.</p>
+<p>Additionally, we’re going to add one more entry to the dictionary to indicate that the classifier we want to use with this parameter set is logistic regression. Notice that this is a logistic regression object, not a string, and also notice that we put it in brackets to make it a list. This might seem strange, but it will make more sense in a minute.</p>
+<div id="1d071661" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>params1 <span class="op">=</span> {}</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>params1[<span class="st">'preprocessor__countvectorizer__ngram_range'</span>] <span class="op">=</span> [(<span class="dv">1</span>, <span class="dv">1</span>), (<span class="dv">1</span>, <span class="dv">2</span>)]</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>params1[<span class="st">'classifier__penalty'</span>] <span class="op">=</span> [<span class="st">'l1'</span>, <span class="st">'l2'</span>]</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>params1[<span class="st">'classifier__C'</span>] <span class="op">=</span> [<span class="fl">0.1</span>, <span class="dv">1</span>, <span class="dv">10</span>]</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>params1[<span class="st">'classifier'</span>] <span class="op">=</span> [logreg]</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>params1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>{'preprocessor__countvectorizer__ngram_range': [(1, 1), (1, 2)],
+ 'classifier__penalty': ['l1', 'l2'],
+ 'classifier__C': [0.1, 1, 10],
+ 'classifier': [LogisticRegression(random_state=1, solver='liblinear')]}</code></pre>
+</div>
+</div>
+<p>Next, we’ll create another parameter dictionary called params2. Again, we’ll tune one parameter from the preprocessor step and two parameters from the classifier step. You’ll notice that the classifier parameters are random forest parameters, not logistic regression parameters.</p>
+<p>Just like above, we’ll add one more entry to the dictionary to indicate that the classifier we want to use with this parameter set is random forests. During the grid search, this will override the logistic regression classifier we specified when creating the Pipeline.</p>
+<div id="a99add56" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>params2 <span class="op">=</span> {}</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>params2[<span class="st">'preprocessor__countvectorizer__ngram_range'</span>] <span class="op">=</span> [(<span class="dv">1</span>, <span class="dv">1</span>), (<span class="dv">1</span>, <span class="dv">2</span>)]</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>params2[<span class="st">'classifier__n_estimators'</span>] <span class="op">=</span> [<span class="dv">300</span>, <span class="dv">500</span>]</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>params2[<span class="st">'classifier__min_samples_leaf'</span>] <span class="op">=</span> [<span class="dv">3</span>, <span class="dv">4</span>]</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>params2[<span class="st">'classifier'</span>] <span class="op">=</span> [rf]</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>params2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>{'preprocessor__countvectorizer__ngram_range': [(1, 1), (1, 2)],
+ 'classifier__n_estimators': [300, 500],
+ 'classifier__min_samples_leaf': [3, 4],
+ 'classifier': [RandomForestClassifier(n_jobs=-1, random_state=1)]}</code></pre>
+</div>
+</div>
+<p>Next, we’ll create a list called both_params that includes both of these parameter sets.</p>
+<div id="595228f1" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>both_params <span class="op">=</span> [params1, params2]</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>both_params</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>[{'preprocessor__countvectorizer__ngram_range': [(1, 1), (1, 2)],
+  'classifier__penalty': ['l1', 'l2'],
+  'classifier__C': [0.1, 1, 10],
+  'classifier': [LogisticRegression(random_state=1, solver='liblinear')]},
+ {'preprocessor__countvectorizer__ngram_range': [(1, 1), (1, 2)],
+  'classifier__n_estimators': [300, 500],
+  'classifier__min_samples_leaf': [3, 4],
+  'classifier': [RandomForestClassifier(n_jobs=-1, random_state=1)]}]</code></pre>
+</div>
+</div>
+<p>Finally, we’ll create an instance of GridSearchCV called both_grid, making sure to pass it the both_pipe and both_params objects.</p>
+<p>When we run the search, here’s what will happen:</p>
+<ul>
+<li>First, it will try every combination of parameters from params1, which is 2 times 2 times 3 times 1, or 12 combinations.</li>
+<li>Then, it will try every combination of parameters from params2, which is 2 times 2 times 2 times 1, or 8 combinations.</li>
+</ul>
+<p>Thus, it will run a total of 20 times.</p>
+<div id="639ed08e" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>both_grid <span class="op">=</span> GridSearchCV(both_pipe, both_params, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>,</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>                         n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>both_grid.fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="19969963-af90-4eeb-9bcd-7158fcc35a13" type="checkbox"><label class="sk-toggleable__label" for="19969963-af90-4eeb-9bcd-7158fcc35a13">GridSearchCV</label><div class="sk-toggleable__content"><pre>GridSearchCV(cv=5,
+             estimator=Pipeline(steps=[('preprocessor',
+                                        ColumnTransformer(transformers=[('pipeline',
+                                                                         Pipeline(steps=[('simpleimputer',
+                                                                                          SimpleImputer(fill_value='missing',
+                                                                                                        strategy='constant')),
+                                                                                         ('onehotencoder',
+                                                                                          OneHotEncoder())]),
+                                                                         ['Embarked',
+                                                                          'Sex']),
+                                                                        ('countvectorizer',
+                                                                         CountVectorizer(),
+                                                                         'Name'),
+                                                                        ('simpleimputer',
+                                                                         SimpleImputer(),
+                                                                         ['Age',
+                                                                          'Fare']),
+                                                                        ('pass...
+                                                            solver='liblinear')],
+                          'classifier__C': [0.1, 1, 10],
+                          'classifier__penalty': ['l1', 'l2'],
+                          'preprocessor__countvectorizer__ngram_range': [(1, 1),
+                                                                         (1,
+                                                                          2)]},
+                         {'classifier': [RandomForestClassifier(n_jobs=-1,
+                                                                random_state=1)],
+                          'classifier__min_samples_leaf': [3, 4],
+                          'classifier__n_estimators': [300, 500],
+                          'preprocessor__countvectorizer__ngram_range': [(1, 1),
+                                                                         (1,
+                                                                          2)]}],
+             scoring='accuracy')</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3ec6234a-09ba-4521-9175-4c998b65de8a" type="checkbox"><label class="sk-toggleable__label" for="3ec6234a-09ba-4521-9175-4c998b65de8a">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
+                                 Pipeline(steps=[('simpleimputer',
+                                                  SimpleImputer(fill_value='missing',
+                                                                strategy='constant')),
+                                                 ('onehotencoder',
+                                                  OneHotEncoder())]),
+                                 ['Embarked', 'Sex']),
+                                ('countvectorizer', CountVectorizer(), 'Name'),
+                                ('simpleimputer', SimpleImputer(),
+                                 ['Age', 'Fare']),
+                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6b3baa21-220b-4111-8121-babc4a516ca3" type="checkbox"><label class="sk-toggleable__label" for="6b3baa21-220b-4111-8121-babc4a516ca3">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="9a5e5049-daef-478e-b168-06d3aab060fc" type="checkbox"><label class="sk-toggleable__label" for="9a5e5049-daef-478e-b168-06d3aab060fc">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="56028b6f-37f8-4775-a9ef-0cf63b8ff6ae" type="checkbox"><label class="sk-toggleable__label" for="56028b6f-37f8-4775-a9ef-0cf63b8ff6ae">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0e3fd9da-54af-4e59-a9ef-4d521fb328e7" type="checkbox"><label class="sk-toggleable__label" for="0e3fd9da-54af-4e59-a9ef-4d521fb328e7">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="d18bc9e0-e6d2-4e38-a5e4-a75ef15adaa3" type="checkbox"><label class="sk-toggleable__label" for="d18bc9e0-e6d2-4e38-a5e4-a75ef15adaa3">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="035b14b7-dadf-4e06-b920-4d07430a3302" type="checkbox"><label class="sk-toggleable__label" for="035b14b7-dadf-4e06-b920-4d07430a3302">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6af8e40f-3c28-48ab-8aaa-1354df7a2313" type="checkbox"><label class="sk-toggleable__label" for="6af8e40f-3c28-48ab-8aaa-1354df7a2313">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="bb791f80-326b-4cc7-9225-2608f403aad0" type="checkbox"><label class="sk-toggleable__label" for="bb791f80-326b-4cc7-9225-2608f403aad0">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f64ae3d8-cd89-4bf3-831c-978d9d2fb723" type="checkbox"><label class="sk-toggleable__label" for="f64ae3d8-cd89-4bf3-831c-978d9d2fb723">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="78c1661c-9528-43ae-b0e2-cf03d757ce6b" type="checkbox"><label class="sk-toggleable__label" for="78c1661c-9528-43ae-b0e2-cf03d757ce6b">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(C=10, penalty='l1', random_state=1, solver='liblinear')</pre></div></div></div></div></div></div></div></div></div></div></div></div>
+</div>
+</div>
+<p>Let’s take a look at the results. You can see that it ran 12 times with a logistic regression model and 8 times with a random forest model. Also note that when logistic regression model runs, the random forest-related parameters are listed as NaN, and vice versa when the random forest model runs.</p>
+<div id="ade333de" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(both_grid.cv_results_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">mean_fit_time</th>
+<th data-quarto-table-cell-role="th">std_fit_time</th>
+<th data-quarto-table-cell-role="th">mean_score_time</th>
+<th data-quarto-table-cell-role="th">std_score_time</th>
+<th data-quarto-table-cell-role="th">param_classifier</th>
+<th data-quarto-table-cell-role="th">param_classifier__C</th>
+<th data-quarto-table-cell-role="th">param_classifier__penalty</th>
+<th data-quarto-table-cell-role="th">param_preprocessor__countvectorizer__ngram_range</th>
+<th data-quarto-table-cell-role="th">param_classifier__min_samples_leaf</th>
+<th data-quarto-table-cell-role="th">param_classifier__n_estimators</th>
+<th data-quarto-table-cell-role="th">params</th>
+<th data-quarto-table-cell-role="th">split0_test_score</th>
+<th data-quarto-table-cell-role="th">split1_test_score</th>
+<th data-quarto-table-cell-role="th">split2_test_score</th>
+<th data-quarto-table-cell-role="th">split3_test_score</th>
+<th data-quarto-table-cell-role="th">split4_test_score</th>
+<th data-quarto-table-cell-role="th">mean_test_score</th>
+<th data-quarto-table-cell-role="th">std_test_score</th>
+<th data-quarto-table-cell-role="th">rank_test_score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0.009023</td>
+<td>0.003034</td>
+<td>0.003685</td>
+<td>0.000874</td>
+<td>LogisticRegression(C=10, penalty='l1', random_...</td>
+<td>0.1</td>
+<td>l1</td>
+<td>(1, 1)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'classifier': LogisticRegression(C=10, penalt...</td>
+<td>0.787709</td>
+<td>0.803371</td>
+<td>0.769663</td>
+<td>0.758427</td>
+<td>0.797753</td>
+<td>0.783385</td>
+<td>0.016946</td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>0.013172</td>
+<td>0.002458</td>
+<td>0.003753</td>
+<td>0.000718</td>
+<td>LogisticRegression(C=10, penalty='l1', random_...</td>
+<td>0.1</td>
+<td>l1</td>
+<td>(1, 2)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'classifier': LogisticRegression(C=10, penalt...</td>
+<td>0.787709</td>
+<td>0.803371</td>
+<td>0.769663</td>
+<td>0.758427</td>
+<td>0.797753</td>
+<td>0.783385</td>
+<td>0.016946</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>0.012237</td>
+<td>0.003378</td>
+<td>0.002987</td>
+<td>0.000325</td>
+<td>LogisticRegression(C=10, penalty='l1', random_...</td>
+<td>0.1</td>
+<td>l2</td>
+<td>(1, 1)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'classifier': LogisticRegression(C=10, penalt...</td>
+<td>0.798883</td>
+<td>0.803371</td>
+<td>0.764045</td>
+<td>0.775281</td>
+<td>0.803371</td>
+<td>0.788990</td>
+<td>0.016258</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>0.016607</td>
+<td>0.003160</td>
+<td>0.003400</td>
+<td>0.000120</td>
+<td>LogisticRegression(C=10, penalty='l1', random_...</td>
+<td>0.1</td>
+<td>l2</td>
+<td>(1, 2)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'classifier': LogisticRegression(C=10, penalt...</td>
+<td>0.793296</td>
+<td>0.803371</td>
+<td>0.764045</td>
+<td>0.775281</td>
+<td>0.808989</td>
+<td>0.788996</td>
+<td>0.016944</td>
+<td>9</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>0.011857</td>
+<td>0.001590</td>
+<td>0.003698</td>
+<td>0.000890</td>
+<td>LogisticRegression(C=10, penalty='l1', random_...</td>
+<td>1</td>
+<td>l1</td>
+<td>(1, 1)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'classifier': LogisticRegression(C=10, penalt...</td>
+<td>0.815642</td>
+<td>0.820225</td>
+<td>0.797753</td>
+<td>0.792135</td>
+<td>0.848315</td>
+<td>0.814814</td>
+<td>0.019787</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>0.016823</td>
+<td>0.002887</td>
+<td>0.004835</td>
+<td>0.001060</td>
+<td>LogisticRegression(C=10, penalty='l1', random_...</td>
+<td>1</td>
+<td>l1</td>
+<td>(1, 2)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'classifier': LogisticRegression(C=10, penalt...</td>
+<td>0.815642</td>
+<td>0.820225</td>
+<td>0.786517</td>
+<td>0.792135</td>
+<td>0.848315</td>
+<td>0.812567</td>
+<td>0.022100</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>0.012520</td>
+<td>0.000876</td>
+<td>0.004440</td>
+<td>0.001627</td>
+<td>LogisticRegression(C=10, penalty='l1', random_...</td>
+<td>1</td>
+<td>l2</td>
+<td>(1, 1)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'classifier': LogisticRegression(C=10, penalt...</td>
+<td>0.798883</td>
+<td>0.825843</td>
+<td>0.803371</td>
+<td>0.786517</td>
+<td>0.842697</td>
+<td>0.811462</td>
+<td>0.020141</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>0.016068</td>
+<td>0.001914</td>
+<td>0.003496</td>
+<td>0.000102</td>
+<td>LogisticRegression(C=10, penalty='l1', random_...</td>
+<td>1</td>
+<td>l2</td>
+<td>(1, 2)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'classifier': LogisticRegression(C=10, penalt...</td>
+<td>0.798883</td>
+<td>0.814607</td>
+<td>0.792135</td>
+<td>0.786517</td>
+<td>0.837079</td>
+<td>0.805844</td>
+<td>0.018234</td>
+<td>8</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>0.017769</td>
+<td>0.001068</td>
+<td>0.005295</td>
+<td>0.001091</td>
+<td>LogisticRegression(C=10, penalty='l1', random_...</td>
+<td>10</td>
+<td>l1</td>
+<td>(1, 1)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'classifier': LogisticRegression(C=10, penalt...</td>
+<td>0.832402</td>
+<td>0.808989</td>
+<td>0.808989</td>
+<td>0.786517</td>
+<td>0.853933</td>
+<td>0.818166</td>
+<td>0.023031</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>0.020225</td>
+<td>0.002208</td>
+<td>0.005433</td>
+<td>0.001440</td>
+<td>LogisticRegression(C=10, penalty='l1', random_...</td>
+<td>10</td>
+<td>l1</td>
+<td>(1, 2)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'classifier': LogisticRegression(C=10, penalt...</td>
+<td>0.849162</td>
+<td>0.820225</td>
+<td>0.814607</td>
+<td>0.780899</td>
+<td>0.859551</td>
+<td>0.824889</td>
+<td>0.027760</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>0.014306</td>
+<td>0.002463</td>
+<td>0.003587</td>
+<td>0.000318</td>
+<td>LogisticRegression(C=10, penalty='l1', random_...</td>
+<td>10</td>
+<td>l2</td>
+<td>(1, 1)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'classifier': LogisticRegression(C=10, penalt...</td>
+<td>0.782123</td>
+<td>0.803371</td>
+<td>0.808989</td>
+<td>0.797753</td>
+<td>0.853933</td>
+<td>0.809234</td>
+<td>0.024080</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">11</td>
+<td>0.017853</td>
+<td>0.000362</td>
+<td>0.003578</td>
+<td>0.000097</td>
+<td>LogisticRegression(C=10, penalty='l1', random_...</td>
+<td>10</td>
+<td>l2</td>
+<td>(1, 2)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'classifier': LogisticRegression(C=10, penalt...</td>
+<td>0.787709</td>
+<td>0.814607</td>
+<td>0.820225</td>
+<td>0.780899</td>
+<td>0.837079</td>
+<td>0.808104</td>
+<td>0.020904</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">12</td>
+<td>0.336714</td>
+<td>0.027350</td>
+<td>0.053991</td>
+<td>0.014054</td>
+<td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>(1, 1)</td>
+<td>3</td>
+<td>300</td>
+<td>{'classifier': RandomForestClassifier(n_jobs=-...</td>
+<td>0.793296</td>
+<td>0.803371</td>
+<td>0.780899</td>
+<td>0.747191</td>
+<td>0.792135</td>
+<td>0.783378</td>
+<td>0.019444</td>
+<td>14</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">13</td>
+<td>0.348650</td>
+<td>0.041838</td>
+<td>0.046395</td>
+<td>0.009478</td>
+<td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>(1, 2)</td>
+<td>3</td>
+<td>300</td>
+<td>{'classifier': RandomForestClassifier(n_jobs=-...</td>
+<td>0.765363</td>
+<td>0.713483</td>
+<td>0.702247</td>
+<td>0.685393</td>
+<td>0.752809</td>
+<td>0.723859</td>
+<td>0.030381</td>
+<td>16</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">14</td>
+<td>0.580815</td>
+<td>0.119930</td>
+<td>0.067610</td>
+<td>0.034684</td>
+<td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>(1, 1)</td>
+<td>3</td>
+<td>500</td>
+<td>{'classifier': RandomForestClassifier(n_jobs=-...</td>
+<td>0.793296</td>
+<td>0.808989</td>
+<td>0.780899</td>
+<td>0.752809</td>
+<td>0.786517</td>
+<td>0.784502</td>
+<td>0.018431</td>
+<td>11</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">15</td>
+<td>0.508402</td>
+<td>0.050694</td>
+<td>0.048401</td>
+<td>0.003638</td>
+<td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>(1, 2)</td>
+<td>3</td>
+<td>500</td>
+<td>{'classifier': RandomForestClassifier(n_jobs=-...</td>
+<td>0.754190</td>
+<td>0.752809</td>
+<td>0.713483</td>
+<td>0.696629</td>
+<td>0.775281</td>
+<td>0.738478</td>
+<td>0.028923</td>
+<td>15</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16</td>
+<td>0.347210</td>
+<td>0.027297</td>
+<td>0.037239</td>
+<td>0.001846</td>
+<td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>(1, 1)</td>
+<td>4</td>
+<td>300</td>
+<td>{'classifier': RandomForestClassifier(n_jobs=-...</td>
+<td>0.692737</td>
+<td>0.702247</td>
+<td>0.735955</td>
+<td>0.646067</td>
+<td>0.730337</td>
+<td>0.701469</td>
+<td>0.032152</td>
+<td>17</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17</td>
+<td>0.339160</td>
+<td>0.039954</td>
+<td>0.042311</td>
+<td>0.007090</td>
+<td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>(1, 2)</td>
+<td>4</td>
+<td>300</td>
+<td>{'classifier': RandomForestClassifier(n_jobs=-...</td>
+<td>0.614525</td>
+<td>0.617978</td>
+<td>0.617978</td>
+<td>0.617978</td>
+<td>0.612360</td>
+<td>0.616163</td>
+<td>0.002325</td>
+<td>19</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">18</td>
+<td>0.499793</td>
+<td>0.055705</td>
+<td>0.051449</td>
+<td>0.007499</td>
+<td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>(1, 1)</td>
+<td>4</td>
+<td>500</td>
+<td>{'classifier': RandomForestClassifier(n_jobs=-...</td>
+<td>0.659218</td>
+<td>0.741573</td>
+<td>0.696629</td>
+<td>0.685393</td>
+<td>0.651685</td>
+<td>0.686900</td>
+<td>0.031914</td>
+<td>18</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">19</td>
+<td>0.429146</td>
+<td>0.023762</td>
+<td>0.036653</td>
+<td>0.008553</td>
+<td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>(1, 2)</td>
+<td>4</td>
+<td>500</td>
+<td>{'classifier': RandomForestClassifier(n_jobs=-...</td>
+<td>0.614525</td>
+<td>0.617978</td>
+<td>0.617978</td>
+<td>0.617978</td>
+<td>0.612360</td>
+<td>0.616163</td>
+<td>0.002325</td>
+<td>19</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>As usual, the best_score_ and best_params_ attributes are still available.</p>
+<div id="4f6b2266" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>both_grid.best_score_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>0.8248885820099178</code></pre>
+</div>
+</div>
+<div id="ae2bf52b" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>both_grid.best_params_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>{'classifier': LogisticRegression(C=10, penalty='l1', random_state=1, solver='liblinear'),
+ 'classifier__C': 10,
+ 'classifier__penalty': 'l1',
+ 'preprocessor__countvectorizer__ngram_range': (1, 2)}</code></pre>
+</div>
+</div>
+<p>Here are two neat extensions to what we’ve done in this lesson that you could try on your own.</p>
+<p>First, since the two models have separate parameter dictionaries, you could theoretically tune different preprocessing parameters for each model. For example, you could tune different CountVectorizer parameters for logistic regression and random forests.</p>
+<p>Taking it one step further, you could actually create two different preprocessor objects and tune them using the same grid search, just like we tuned two different models using the same grid search. That would allow you, for example, to use different encoders when preparing data for your logistic regression and random forest models.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Extensions of this approach:</strong></p>
+<ul>
+<li>Tune different preprocessing parameters for each model</li>
+<li>Tune two different preprocessor objects</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="qa-how-do-i-tune-two-models-with-a-single-randomized-search" class="level2" data-number="11.5">
+<h2 data-number="11.5" class="anchored" data-anchor-id="qa-how-do-i-tune-two-models-with-a-single-randomized-search"><span class="header-section-number">11.5</span> Q&amp;A: How do I tune two models with a single randomized search?</h2>
+<p>Starting in scikit-learn version 0.22, RandomizedSearchCV can search multiple parameter dictionaries. This allows you to do a randomized search of multiple models, in the same exact way that we did a grid search of multiple models.</p>
+<p>Here’s an example in which we pass both_pipe and both_params to RandomizedSearchCV and run it for 10 iterations.</p>
+<div id="7f48f663" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>both_rand <span class="op">=</span> RandomizedSearchCV(both_pipe, both_params, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>,</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>                               n_iter<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">1</span>, n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>both_rand.fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="4bdfd767-6f7e-4cf1-b3cf-34708f146d35" type="checkbox"><label class="sk-toggleable__label" for="4bdfd767-6f7e-4cf1-b3cf-34708f146d35">RandomizedSearchCV</label><div class="sk-toggleable__content"><pre>RandomizedSearchCV(cv=5,
+                   estimator=Pipeline(steps=[('preprocessor',
+                                              ColumnTransformer(transformers=[('pipeline',
+                                                                               Pipeline(steps=[('simpleimputer',
+                                                                                                SimpleImputer(fill_value='missing',
+                                                                                                              strategy='constant')),
+                                                                                               ('onehotencoder',
+                                                                                                OneHotEncoder())]),
+                                                                               ['Embarked',
+                                                                                'Sex']),
+                                                                              ('countvectorizer',
+                                                                               CountVectorizer(),
+                                                                               'Name'),
+                                                                              ('simpleimputer',
+                                                                               SimpleImputer(),
+                                                                               ['Age',
+                                                                                'Fare']),...
+                                         'classifier__C': [0.1, 1, 10],
+                                         'classifier__penalty': ['l1', 'l2'],
+                                         'preprocessor__countvectorizer__ngram_range': [(1,
+                                                                                         1),
+                                                                                        (1,
+                                                                                         2)]},
+                                        {'classifier': [RandomForestClassifier(n_jobs=-1,
+                                                                               random_state=1)],
+                                         'classifier__min_samples_leaf': [3, 4],
+                                         'classifier__n_estimators': [300, 500],
+                                         'preprocessor__countvectorizer__ngram_range': [(1,
+                                                                                         1),
+                                                                                        (1,
+                                                                                         2)]}],
+                   random_state=1, scoring='accuracy')</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="01b156e8-8bdb-4942-8c88-858c70b68e08" type="checkbox"><label class="sk-toggleable__label" for="01b156e8-8bdb-4942-8c88-858c70b68e08">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
+                                 Pipeline(steps=[('simpleimputer',
+                                                  SimpleImputer(fill_value='missing',
+                                                                strategy='constant')),
+                                                 ('onehotencoder',
+                                                  OneHotEncoder())]),
+                                 ['Embarked', 'Sex']),
+                                ('countvectorizer', CountVectorizer(), 'Name'),
+                                ('simpleimputer', SimpleImputer(),
+                                 ['Age', 'Fare']),
+                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f3148028-c39d-4981-ab7f-72959623ef66" type="checkbox"><label class="sk-toggleable__label" for="f3148028-c39d-4981-ab7f-72959623ef66">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="63b89630-2d5d-4c33-9efd-5a3de7a21cc4" type="checkbox"><label class="sk-toggleable__label" for="63b89630-2d5d-4c33-9efd-5a3de7a21cc4">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="cddd0274-afab-497a-981f-8441b5d727bd" type="checkbox"><label class="sk-toggleable__label" for="cddd0274-afab-497a-981f-8441b5d727bd">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="e6d27d21-c3a0-4d5b-941b-f53cc66b3a99" type="checkbox"><label class="sk-toggleable__label" for="e6d27d21-c3a0-4d5b-941b-f53cc66b3a99">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="2401ae66-c99c-4844-ab2a-57df33254a2b" type="checkbox"><label class="sk-toggleable__label" for="2401ae66-c99c-4844-ab2a-57df33254a2b">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3e5bd684-b57f-434a-9475-477b14aea0f0" type="checkbox"><label class="sk-toggleable__label" for="3e5bd684-b57f-434a-9475-477b14aea0f0">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a59e977b-4852-4e5d-b84b-264fb7072ab4" type="checkbox"><label class="sk-toggleable__label" for="a59e977b-4852-4e5d-b84b-264fb7072ab4">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="70eef66b-3064-4cf9-ba6b-f60904595bec" type="checkbox"><label class="sk-toggleable__label" for="70eef66b-3064-4cf9-ba6b-f60904595bec">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="461fbb4b-3300-45d2-b25f-0c90fc3da515" type="checkbox"><label class="sk-toggleable__label" for="461fbb4b-3300-45d2-b25f-0c90fc3da515">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="af90c383-8e0b-4cda-a03b-9467672539a7" type="checkbox"><label class="sk-toggleable__label" for="af90c383-8e0b-4cda-a03b-9467672539a7">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(C=1, penalty='l1', random_state=1, solver='liblinear')</pre></div></div></div></div></div></div></div></div></div></div></div></div>
+</div>
+</div>
+<p>If you examine the results, you’ll find that logistic regression will be chosen more often because we defined more parameter combinations for the logistic regression model. This behavior may change in a future version, such that each model is equally likely to be chosen, regardless of the number of parameter combinations.</p>
+<div id="6fc8c2e3" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(both_rand.cv_results_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">mean_fit_time</th>
+<th data-quarto-table-cell-role="th">std_fit_time</th>
+<th data-quarto-table-cell-role="th">mean_score_time</th>
+<th data-quarto-table-cell-role="th">std_score_time</th>
+<th data-quarto-table-cell-role="th">param_preprocessor__countvectorizer__ngram_range</th>
+<th data-quarto-table-cell-role="th">param_classifier__penalty</th>
+<th data-quarto-table-cell-role="th">param_classifier__C</th>
+<th data-quarto-table-cell-role="th">param_classifier</th>
+<th data-quarto-table-cell-role="th">param_classifier__n_estimators</th>
+<th data-quarto-table-cell-role="th">param_classifier__min_samples_leaf</th>
+<th data-quarto-table-cell-role="th">params</th>
+<th data-quarto-table-cell-role="th">split0_test_score</th>
+<th data-quarto-table-cell-role="th">split1_test_score</th>
+<th data-quarto-table-cell-role="th">split2_test_score</th>
+<th data-quarto-table-cell-role="th">split3_test_score</th>
+<th data-quarto-table-cell-role="th">split4_test_score</th>
+<th data-quarto-table-cell-role="th">mean_test_score</th>
+<th data-quarto-table-cell-role="th">std_test_score</th>
+<th data-quarto-table-cell-role="th">rank_test_score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0.009854</td>
+<td>0.000331</td>
+<td>0.002865</td>
+<td>0.000083</td>
+<td>(1, 2)</td>
+<td>l2</td>
+<td>0.1</td>
+<td>LogisticRegression(C=1, penalty='l1', random_s...</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'preprocessor__countvectorizer__ngram_range':...</td>
+<td>0.793296</td>
+<td>0.803371</td>
+<td>0.764045</td>
+<td>0.775281</td>
+<td>0.808989</td>
+<td>0.788996</td>
+<td>0.016944</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>0.322754</td>
+<td>0.020671</td>
+<td>0.032301</td>
+<td>0.003518</td>
+<td>(1, 1)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
+<td>300</td>
+<td>4</td>
+<td>{'preprocessor__countvectorizer__ngram_range':...</td>
+<td>0.692737</td>
+<td>0.702247</td>
+<td>0.735955</td>
+<td>0.646067</td>
+<td>0.730337</td>
+<td>0.701469</td>
+<td>0.032152</td>
+<td>9</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>0.012104</td>
+<td>0.003389</td>
+<td>0.003630</td>
+<td>0.001202</td>
+<td>(1, 1)</td>
+<td>l2</td>
+<td>1</td>
+<td>LogisticRegression(C=1, penalty='l1', random_s...</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'preprocessor__countvectorizer__ngram_range':...</td>
+<td>0.798883</td>
+<td>0.825843</td>
+<td>0.803371</td>
+<td>0.786517</td>
+<td>0.842697</td>
+<td>0.811462</td>
+<td>0.020141</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>0.010625</td>
+<td>0.001252</td>
+<td>0.003091</td>
+<td>0.000057</td>
+<td>(1, 1)</td>
+<td>l2</td>
+<td>10</td>
+<td>LogisticRegression(C=1, penalty='l1', random_s...</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'preprocessor__countvectorizer__ngram_range':...</td>
+<td>0.782123</td>
+<td>0.803371</td>
+<td>0.808989</td>
+<td>0.797753</td>
+<td>0.853933</td>
+<td>0.809234</td>
+<td>0.024080</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>0.008279</td>
+<td>0.000302</td>
+<td>0.003023</td>
+<td>0.000061</td>
+<td>(1, 1)</td>
+<td>l2</td>
+<td>0.1</td>
+<td>LogisticRegression(C=1, penalty='l1', random_s...</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'preprocessor__countvectorizer__ngram_range':...</td>
+<td>0.798883</td>
+<td>0.803371</td>
+<td>0.764045</td>
+<td>0.775281</td>
+<td>0.803371</td>
+<td>0.788990</td>
+<td>0.016258</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>0.460087</td>
+<td>0.075832</td>
+<td>0.042557</td>
+<td>0.012279</td>
+<td>(1, 1)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
+<td>500</td>
+<td>3</td>
+<td>{'preprocessor__countvectorizer__ngram_range':...</td>
+<td>0.793296</td>
+<td>0.808989</td>
+<td>0.780899</td>
+<td>0.752809</td>
+<td>0.786517</td>
+<td>0.784502</td>
+<td>0.018431</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>0.020218</td>
+<td>0.008625</td>
+<td>0.010290</td>
+<td>0.001652</td>
+<td>(1, 1)</td>
+<td>l1</td>
+<td>1</td>
+<td>LogisticRegression(C=1, penalty='l1', random_s...</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'preprocessor__countvectorizer__ngram_range':...</td>
+<td>0.815642</td>
+<td>0.820225</td>
+<td>0.797753</td>
+<td>0.792135</td>
+<td>0.848315</td>
+<td>0.814814</td>
+<td>0.019787</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>0.302770</td>
+<td>0.031318</td>
+<td>0.034362</td>
+<td>0.003524</td>
+<td>(1, 2)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
+<td>300</td>
+<td>4</td>
+<td>{'preprocessor__countvectorizer__ngram_range':...</td>
+<td>0.614525</td>
+<td>0.617978</td>
+<td>0.617978</td>
+<td>0.617978</td>
+<td>0.612360</td>
+<td>0.616163</td>
+<td>0.002325</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>0.028805</td>
+<td>0.002600</td>
+<td>0.010308</td>
+<td>0.002683</td>
+<td>(1, 2)</td>
+<td>l2</td>
+<td>1</td>
+<td>LogisticRegression(C=1, penalty='l1', random_s...</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'preprocessor__countvectorizer__ngram_range':...</td>
+<td>0.798883</td>
+<td>0.814607</td>
+<td>0.792135</td>
+<td>0.786517</td>
+<td>0.837079</td>
+<td>0.805844</td>
+<td>0.018234</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>0.037220</td>
+<td>0.005678</td>
+<td>0.012917</td>
+<td>0.003896</td>
+<td>(1, 2)</td>
+<td>l1</td>
+<td>0.1</td>
+<td>LogisticRegression(C=1, penalty='l1', random_s...</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>{'preprocessor__countvectorizer__ngram_range':...</td>
+<td>0.787709</td>
+<td>0.803371</td>
+<td>0.769663</td>
+<td>0.758427</td>
+<td>0.797753</td>
+<td>0.783385</td>
+<td>0.016946</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+            // default icon
+            link.classList.add("external");
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./ch10.html" class="pagination-link" aria-label="Evaluating and tuning a Pipeline">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Evaluating and tuning a Pipeline</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./ch12.html" class="pagination-link" aria-label="Ensembling multiple models">
+        <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Ensembling multiple models</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2025, Kevin Markham. All Rights Reserved.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

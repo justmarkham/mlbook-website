@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.29">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Kevin Markham">
+
+<title>17&nbsp; High-cardinality categorical features – Master Machine Learning with scikit-learn</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./ch18.html" rel="next">
+<link href="./ch16.html" rel="prev">
+<link href="./favicon.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-0815c480559380816a4d1ea211a47e91.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-485d01fc63b59abcd3ee1bf1e8e2748d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./ch17.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">High-cardinality categorical features</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Master Machine Learning with scikit-learn</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About this book</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Review of the Machine Learning workflow</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Encoding categorical features</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improving your workflow with ColumnTransformer and Pipeline</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Workflow review #1</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Encoding text data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Handling missing values</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fixing common workflow problems</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Workflow review #2</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Evaluating and tuning a Pipeline</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Comparing linear and non-linear models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Ensembling multiple models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Feature selection</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Feature standardization</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Feature engineering with custom transformers</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Workflow review #3</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch17.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">High-cardinality categorical features</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Class imbalance</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Class imbalance walkthrough</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Going further</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#recap-of-nominal-and-ordinal-features" id="toc-recap-of-nominal-and-ordinal-features" class="nav-link active" data-scroll-target="#recap-of-nominal-and-ordinal-features"><span class="header-section-number">17.1</span> Recap of nominal and ordinal features</a></li>
+  <li><a href="#preparing-the-census-dataset" id="toc-preparing-the-census-dataset" class="nav-link" data-scroll-target="#preparing-the-census-dataset"><span class="header-section-number">17.2</span> Preparing the census dataset</a></li>
+  <li><a href="#setting-up-the-encoders" id="toc-setting-up-the-encoders" class="nav-link" data-scroll-target="#setting-up-the-encoders"><span class="header-section-number">17.3</span> Setting up the encoders</a></li>
+  <li><a href="#encoding-nominal-features-for-a-linear-model" id="toc-encoding-nominal-features-for-a-linear-model" class="nav-link" data-scroll-target="#encoding-nominal-features-for-a-linear-model"><span class="header-section-number">17.4</span> Encoding nominal features for a linear model</a></li>
+  <li><a href="#encoding-nominal-features-for-a-non-linear-model" id="toc-encoding-nominal-features-for-a-non-linear-model" class="nav-link" data-scroll-target="#encoding-nominal-features-for-a-non-linear-model"><span class="header-section-number">17.5</span> Encoding nominal features for a non-linear model</a></li>
+  <li><a href="#combining-the-encodings" id="toc-combining-the-encodings" class="nav-link" data-scroll-target="#combining-the-encodings"><span class="header-section-number">17.6</span> Combining the encodings</a></li>
+  <li><a href="#best-practices-for-encoding" id="toc-best-practices-for-encoding" class="nav-link" data-scroll-target="#best-practices-for-encoding"><span class="header-section-number">17.7</span> Best practices for encoding</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">High-cardinality categorical features</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="recap-of-nominal-and-ordinal-features" class="level2" data-number="17.1">
+<h2 data-number="17.1" class="anchored" data-anchor-id="recap-of-nominal-and-ordinal-features"><span class="header-section-number">17.1</span> Recap of nominal and ordinal features</h2>
+<p>Let’s talk about categorical features. There are two types of categorical features that we’ve covered in the book:</p>
+<ul>
+<li>A nominal feature has categories that are unordered, such as Embarked and Sex.</li>
+<li>An ordinal feature has categories with an inherent logical ordering, such as Pclass.</li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Types of categorical features:</strong></p>
+<ul>
+<li><strong>Nominal:</strong> Unordered categories
+<ul>
+<li>Embarked</li>
+<li>Sex</li>
+</ul></li>
+<li><strong>Ordinal:</strong> Ordered categories
+<ul>
+<li>Pclass</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<p>So far, here’s the advice that I’ve given for encoding nominal and ordinal features:</p>
+<ul>
+<li>For a nominal feature, you should use OneHotEncoder, and it will output one column for each category.</li>
+<li>For an ordinal feature that is already encoded numerically, you should leave it as-is.</li>
+<li>And for an ordinal feature that is encoded as strings, you should use OrdinalEncoder, and it will output a single column using the category ordering that you define.</li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Advice for encoding categorical data:</strong></p>
+<ul>
+<li><strong>Nominal feature:</strong> Use OneHotEncoder</li>
+<li><strong>Ordinal feature stored as numbers:</strong> Leave as-is</li>
+<li><strong>Ordinal feature stored as strings:</strong> Use OrdinalEncoder</li>
+</ul>
+</div>
+</div>
+</div>
+<p>Let’s do a quick recap as to why OneHotEncoder is the preferred approach for a nominal feature, using Embarked as an example.</p>
+<p>Embarked has three categories, so OneHotEncoder would output 3 features. From each of the three features, the model can learn the relationship between the target value and whether or not a given passenger embarked at that port. For example, the model might learn from the first feature that passengers who embarked at C have a higher survival rate than passengers who didn’t embark at C.</p>
+<p>If you were to instead use OrdinalEncoder with Embarked, it would output 1 feature. This is problematic because it would imply an ordering of the categories that doesn’t inherently exist. For example, if passengers who embarked at C and S had high survival rates, and passengers who embarked at Q had low survival rates, there’s no way for a linear model to learn this relationship if Embarked is encoded as a single feature.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Why use OneHotEncoder for Embarked?</strong></p>
+<ul>
+<li><strong>OneHotEncoder:</strong>
+<ul>
+<li>Outputs 3 features</li>
+<li>Model can learn the relationship between each feature and the target value</li>
+</ul></li>
+<li><strong>OrdinalEncoder:</strong>
+<ul>
+<li>Outputs 1 feature</li>
+<li>Implies an ordering that doesn’t inherently exist</li>
+<li>Linear model can’t necessarily learn the relationships in the data</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="99bf3bb7" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Embarked'</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>S    644
+C    168
+Q     77
+Name: Embarked, dtype: int64</code></pre>
+</div>
+</div>
+<p>In this chapter, we’re going to explore whether this advice still holds when you have high-cardinality categorical features, which are categorical features with lots of unique values.</p>
+</section>
+<section id="preparing-the-census-dataset" class="level2" data-number="17.2">
+<h2 data-number="17.2" class="anchored" data-anchor-id="preparing-the-census-dataset"><span class="header-section-number">17.2</span> Preparing the census dataset</h2>
+<p>We’ll use a new dataset for this chapter, namely a dataset of US census data from 1994.</p>
+<p>We’ll read the dataset into a new DataFrame called census.</p>
+<div id="9be2844a" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>census <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/censusdataset'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We’re only going to use the categorical features, which we can explore by using the DataFrame describe method.</p>
+<div id="5a590de1" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>census.describe(include<span class="op">=</span><span class="st">'object'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">workclass</th>
+<th data-quarto-table-cell-role="th">education</th>
+<th data-quarto-table-cell-role="th">marital-status</th>
+<th data-quarto-table-cell-role="th">occupation</th>
+<th data-quarto-table-cell-role="th">relationship</th>
+<th data-quarto-table-cell-role="th">race</th>
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th">native-country</th>
+<th data-quarto-table-cell-role="th">class</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>48842</td>
+<td>48842</td>
+<td>48842</td>
+<td>48842</td>
+<td>48842</td>
+<td>48842</td>
+<td>48842</td>
+<td>48842</td>
+<td>48842</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">unique</td>
+<td>9</td>
+<td>16</td>
+<td>7</td>
+<td>15</td>
+<td>6</td>
+<td>5</td>
+<td>2</td>
+<td>42</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">top</td>
+<td>Private</td>
+<td>HS-grad</td>
+<td>Married-civ-spouse</td>
+<td>Prof-specialty</td>
+<td>Husband</td>
+<td>White</td>
+<td>Male</td>
+<td>United-States</td>
+<td>&lt;=50K</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">freq</td>
+<td>33906</td>
+<td>15784</td>
+<td>22379</td>
+<td>6172</td>
+<td>19716</td>
+<td>41762</td>
+<td>32650</td>
+<td>43832</td>
+<td>37155</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>From the row labeled “unique”, you can see that education, occupation, and native-country all have more than 10 unique values. There’s no hard-and-fast rule for what counts as a high-cardinality feature, but all three of these could be considered high-cardinality since they have a lot of unique values.</p>
+<p>You can’t tell from this display, but these 8 features are all nominal features, with the exception of education since it does have a logical ordering. However, we’re going to be treating education as nominal for this experiment.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Categorical features in census dataset:</strong></p>
+<ul>
+<li><strong>High-cardinality (3 of 8):</strong> education, occupation, native-country</li>
+<li><strong>Nominal (7 of 8):</strong> All except education</li>
+</ul>
+</div>
+</div>
+</div>
+<p>The column labeled “class” is actually our target. This column indicates whether the person has an income of more or less than fifty thousand dollars a year.</p>
+<p>We can view the class proportions by normalizing the output of value_counts.</p>
+<div id="daea2435" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>census[<span class="st">'class'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code> &lt;=50K    0.760718
+ &gt;50K     0.239282
+Name: class, dtype: float64</code></pre>
+</div>
+</div>
+<p>When defining our X DataFrame, which I’m calling census_X, we’re only going to use the 8 categorical columns, which I’ve listed out manually. And we’ll use “class” as our y Series, which I’m calling census_y.</p>
+<div id="a5512b7c" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>census_cols <span class="op">=</span> [<span class="st">'workclass'</span>, <span class="st">'education'</span>, <span class="st">'marital-status'</span>, <span class="st">'occupation'</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>               <span class="st">'relationship'</span>, <span class="st">'race'</span>, <span class="st">'sex'</span>, <span class="st">'native-country'</span>]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>census_X <span class="op">=</span> census[census_cols]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>census_y <span class="op">=</span> census[<span class="st">'class'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="setting-up-the-encoders" class="level2" data-number="17.3">
+<h2 data-number="17.3" class="anchored" data-anchor-id="setting-up-the-encoders"><span class="header-section-number">17.3</span> Setting up the encoders</h2>
+<p>We’re going to be testing the effectiveness of both OneHotEncoder and OrdinalEncoder with these 8 features. For this experiment, we would normally just create instances using the default arguments.</p>
+<div id="1cad9e82" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ohe <span class="op">=</span> OneHotEncoder()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>oe <span class="op">=</span> OrdinalEncoder()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Notice that we created an instance of OrdinalEncoder without defining the category ordering. This is because we’re treating all of the features as nominal, and as such there is no logical ordering.</p>
+<p>As a result, OrdinalEncoder would simply learn the categories for each feature in alphabetical order, which we can confirm by fitting the OrdinalEncoder and checking the categories_ attribute.</p>
+<div id="3f092abd" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>oe.fit(census_X).categories_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>[array([' ?', ' Federal-gov', ' Local-gov', ' Never-worked', ' Private',
+        ' Self-emp-inc', ' Self-emp-not-inc', ' State-gov', ' Without-pay'],
+       dtype=object),
+ array([' 10th', ' 11th', ' 12th', ' 1st-4th', ' 5th-6th', ' 7th-8th',
+        ' 9th', ' Assoc-acdm', ' Assoc-voc', ' Bachelors', ' Doctorate',
+        ' HS-grad', ' Masters', ' Preschool', ' Prof-school',
+        ' Some-college'], dtype=object),
+ array([' Divorced', ' Married-AF-spouse', ' Married-civ-spouse',
+        ' Married-spouse-absent', ' Never-married', ' Separated',
+        ' Widowed'], dtype=object),
+ array([' ?', ' Adm-clerical', ' Armed-Forces', ' Craft-repair',
+        ' Exec-managerial', ' Farming-fishing', ' Handlers-cleaners',
+        ' Machine-op-inspct', ' Other-service', ' Priv-house-serv',
+        ' Prof-specialty', ' Protective-serv', ' Sales', ' Tech-support',
+        ' Transport-moving'], dtype=object),
+ array([' Husband', ' Not-in-family', ' Other-relative', ' Own-child',
+        ' Unmarried', ' Wife'], dtype=object),
+ array([' Amer-Indian-Eskimo', ' Asian-Pac-Islander', ' Black', ' Other',
+        ' White'], dtype=object),
+ array([' Female', ' Male'], dtype=object),
+ array([' ?', ' Cambodia', ' Canada', ' China', ' Columbia', ' Cuba',
+        ' Dominican-Republic', ' Ecuador', ' El-Salvador', ' England',
+        ' France', ' Germany', ' Greece', ' Guatemala', ' Haiti',
+        ' Holand-Netherlands', ' Honduras', ' Hong', ' Hungary', ' India',
+        ' Iran', ' Ireland', ' Italy', ' Jamaica', ' Japan', ' Laos',
+        ' Mexico', ' Nicaragua', ' Outlying-US(Guam-USVI-etc)', ' Peru',
+        ' Philippines', ' Poland', ' Portugal', ' Puerto-Rico',
+        ' Scotland', ' South', ' Taiwan', ' Thailand', ' Trinadad&amp;Tobago',
+        ' United-States', ' Vietnam', ' Yugoslavia'], dtype=object)]</code></pre>
+</div>
+</div>
+<p>That being said, we’re actually going to run into a problem with encoding due to our highest cardinality feature, native-country. Let’s take a look at it and see why.</p>
+<div id="051ea2e3" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>census_X[<span class="st">'native-country'</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code> United-States                 43832
+ Mexico                          951
+ ?                               857
+ Philippines                     295
+ Germany                         206
+ Puerto-Rico                     184
+ Canada                          182
+ El-Salvador                     155
+ India                           151
+ Cuba                            138
+ England                         127
+ China                           122
+ South                           115
+ Jamaica                         106
+ Italy                           105
+ Dominican-Republic              103
+ Japan                            92
+ Guatemala                        88
+ Poland                           87
+ Vietnam                          86
+ Columbia                         85
+ Haiti                            75
+ Portugal                         67
+ Taiwan                           65
+ Iran                             59
+ Greece                           49
+ Nicaragua                        49
+ Peru                             46
+ Ecuador                          45
+ France                           38
+ Ireland                          37
+ Hong                             30
+ Thailand                         30
+ Cambodia                         28
+ Trinadad&amp;Tobago                  27
+ Laos                             23
+ Yugoslavia                       23
+ Outlying-US(Guam-USVI-etc)       23
+ Scotland                         21
+ Honduras                         20
+ Hungary                          19
+ Holand-Netherlands                1
+Name: native-country, dtype: int64</code></pre>
+</div>
+</div>
+<p>You can see that one of the categories appears only once in the dataset. As we talked about in <a href="ch15.html#sec-15-7" class="quarto-xref">lesson&nbsp;<span>15.7</span></a>, rare category values can cause problems with cross-validation.</p>
+<p>In this case, it will definitely create a problem, because that sample is guaranteed to appear in the test fold but not a training fold during one of the runs of cross-validation. That will cause an error for both OneHotEncoder and OrdinalEncoder.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Resolving the cross-validation error caused by rare categories:</strong></p>
+<ul>
+<li><strong>OneHotEncoder:</strong> Set handle_unknown=‘ignore’</li>
+<li><strong>OrdinalEncoder (before 0.24):</strong> Define the categories in advance</li>
+<li><strong>OrdinalEncoder (starting in 0.24):</strong> Set handle_unknown=‘use_encoded_value’</li>
+</ul>
+</div>
+</div>
+</div>
+<p>In the case of OneHotEncoder, the solution is simply to set the handle_unknown parameter to “ignore”.</p>
+<div id="d1ac6b84" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ohe_ignore <span class="op">=</span> OneHotEncoder(handle_unknown<span class="op">=</span><span class="st">'ignore'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Starting in scikit-learn version 0.24, OrdinalEncoder will have a similar handle_unknown parameter that could be used for this situation.</p>
+<p>But for now, the best solution is to define the categories in advance for each feature using a list comprehension. The list comprehension iterates through the feature columns, extracts the unique values from each column, and stores the result in a list called “cats”.</p>
+<div id="fa732a25" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>cats <span class="op">=</span> [census_X[col].unique() <span class="cf">for</span> col <span class="kw">in</span> census_X[census_cols]]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>cats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>[array([' Private', ' Local-gov', ' ?', ' Self-emp-not-inc',
+        ' Federal-gov', ' State-gov', ' Self-emp-inc', ' Without-pay',
+        ' Never-worked'], dtype=object),
+ array([' 11th', ' HS-grad', ' Assoc-acdm', ' Some-college', ' 10th',
+        ' Prof-school', ' 7th-8th', ' Bachelors', ' Masters', ' Doctorate',
+        ' 5th-6th', ' Assoc-voc', ' 9th', ' 12th', ' 1st-4th',
+        ' Preschool'], dtype=object),
+ array([' Never-married', ' Married-civ-spouse', ' Widowed', ' Divorced',
+        ' Separated', ' Married-spouse-absent', ' Married-AF-spouse'],
+       dtype=object),
+ array([' Machine-op-inspct', ' Farming-fishing', ' Protective-serv', ' ?',
+        ' Other-service', ' Prof-specialty', ' Craft-repair',
+        ' Adm-clerical', ' Exec-managerial', ' Tech-support', ' Sales',
+        ' Priv-house-serv', ' Transport-moving', ' Handlers-cleaners',
+        ' Armed-Forces'], dtype=object),
+ array([' Own-child', ' Husband', ' Not-in-family', ' Unmarried', ' Wife',
+        ' Other-relative'], dtype=object),
+ array([' Black', ' White', ' Asian-Pac-Islander', ' Other',
+        ' Amer-Indian-Eskimo'], dtype=object),
+ array([' Male', ' Female'], dtype=object),
+ array([' United-States', ' ?', ' Peru', ' Guatemala', ' Mexico',
+        ' Dominican-Republic', ' Ireland', ' Germany', ' Philippines',
+        ' Thailand', ' Haiti', ' El-Salvador', ' Puerto-Rico', ' Vietnam',
+        ' South', ' Columbia', ' Japan', ' India', ' Cambodia', ' Poland',
+        ' Laos', ' England', ' Cuba', ' Taiwan', ' Italy', ' Canada',
+        ' Portugal', ' China', ' Nicaragua', ' Honduras', ' Iran',
+        ' Scotland', ' Jamaica', ' Ecuador', ' Yugoslavia', ' Hungary',
+        ' Hong', ' Greece', ' Trinadad&amp;Tobago',
+        ' Outlying-US(Guam-USVI-etc)', ' France', ' Holand-Netherlands'],
+       dtype=object)]</code></pre>
+</div>
+</div>
+<p>Then, we can pass the “cats” list to the categories parameter of OrdinalEncoder when creating an instance. This solves our problem since no unknown categories will ever appear during cross-validation.</p>
+<div id="870a10de" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>oe_cats <span class="op">=</span> OrdinalEncoder(categories<span class="op">=</span>cats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="encoding-nominal-features-for-a-linear-model" class="level2" data-number="17.4">
+<h2 data-number="17.4" class="anchored" data-anchor-id="encoding-nominal-features-for-a-linear-model"><span class="header-section-number">17.4</span> Encoding nominal features for a linear model</h2>
+<p>Now that we’ve set up our OneHotEncoder, called “ohe_ignore”, and our OrdinalEncoder, called “oe_cats”, let’s see what happens when we pass census_X to fit_transform and then check the shape.</p>
+<p>As expected, the OneHotEncoder creates a lot of columns due to the high-cardinality features, whereas the OrdinalEncoder creates only one column for each of the eight features.</p>
+<div id="5fda1084" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ohe_ignore.fit_transform(census_X).shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>(48842, 102)</code></pre>
+</div>
+</div>
+<div id="4ecc83a3" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>oe_cats.fit_transform(census_X).shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>(48842, 8)</code></pre>
+</div>
+</div>
+<p>Now let’s actually test the advice that I’ve given, which is that OneHotEncoder should be used for nominal features, to see if this advice still holds for high-cardinality features.</p>
+<p>The simplest method for doing this is to create two Pipelines. One of them uses OneHotEncoder and the other uses OrdinalEncoder, and both end in a logistic regression model.</p>
+<div id="20f9f016" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ohe_logreg <span class="op">=</span> make_pipeline(ohe_ignore, logreg)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>oe_logreg <span class="op">=</span> make_pipeline(oe_cats, logreg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We’ll cross-validate each Pipeline using all features and then compare the accuracies. We’ll also time the operations to see if there are significant differences.</p>
+<div id="0e169008" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>time cross_val_score(ohe_logreg, census_X, census_y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: user 585 ms, sys: 6.4 ms, total: 591 ms
+Wall time: 594 ms</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>0.8329920571424309</code></pre>
+</div>
+</div>
+<div id="ba9ffb5b" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>time cross_val_score(oe_logreg, census_X, census_y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: user 502 ms, sys: 3.75 ms, total: 506 ms
+Wall time: 505 ms</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>0.7547398152859307</code></pre>
+</div>
+</div>
+<p>The two Pipelines take around the same amount of time to run, but the accuracy of the OneHotEncoder Pipeline is 0.833, which is significantly better than the 0.755 accuracy of the OrdinalEncoder Pipeline. This would suggest that at least for a linear model like logistic regression, OneHotEncoder should be used for nominal features, even when the features have high cardinality.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Pipeline accuracy when encoding nominal features:</strong></p>
+<ul>
+<li>Linear model:
+<ul>
+<li><strong>OneHotEncoder:</strong> 0.833</li>
+<li><strong>OrdinalEncoder:</strong> 0.755</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="encoding-nominal-features-for-a-non-linear-model" class="level2" data-number="17.5">
+<h2 data-number="17.5" class="anchored" data-anchor-id="encoding-nominal-features-for-a-non-linear-model"><span class="header-section-number">17.5</span> Encoding nominal features for a non-linear model</h2>
+<p>Let’s now do the same comparison as the previous lesson, except this time we’ll use random forests, which is a tree-based non-linear model that we used in chapter 11.</p>
+<p>First, we’ll create two more Pipelines, one using OneHotEncoder and the other using OrdinalEncoder, and both ending in a random forest model.</p>
+<div id="f4c0cc22" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>ohe_rf <span class="op">=</span> make_pipeline(ohe_ignore, rf)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>oe_rf <span class="op">=</span> make_pipeline(oe_cats, rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, we’ll cross-validate each Pipeline using all features.</p>
+<div id="e51d952d" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>time cross_val_score(ohe_rf, census_X, census_y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: user 38.5 s, sys: 336 ms, total: 38.8 s
+Wall time: 5.81 s</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>0.8260513856992514</code></pre>
+</div>
+</div>
+<div id="3e3b0e88" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>time cross_val_score(oe_rf, census_X, census_y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: user 6.18 s, sys: 299 ms, total: 6.48 s
+Wall time: 1.49 s</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>0.8245362761024548</code></pre>
+</div>
+</div>
+<p>We can see that the accuracies are about the same for the OneHotEncoder Pipeline (0.826) and the OrdinalEncoder Pipeline (0.825), even though we were using the OrdinalEncoder on nominal features, which would normally be considered improper.</p>
+<p>How can this be? Well, because of how decision trees recursively split features, the random forest model can approximately learn the relationships present in categorical features even when they’re encoded as single columns with OrdinalEncoder.</p>
+<p>It’s also worth noting that the OrdinalEncoder Pipeline is significantly faster than the OneHotEncoder Pipeline, which is due to the much smaller feature set created by the OrdinalEncoder.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Pipeline accuracy when encoding nominal features:</strong></p>
+<ul>
+<li>Linear model:
+<ul>
+<li><strong>OneHotEncoder:</strong> 0.833</li>
+<li><strong>OrdinalEncoder:</strong> 0.755</li>
+</ul></li>
+<li>Non-linear model:
+<ul>
+<li><strong>OneHotEncoder:</strong> 0.826 👈</li>
+<li><strong>OrdinalEncoder:</strong> 0.825 👈</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="combining-the-encodings" class="level2" data-number="17.6">
+<h2 data-number="17.6" class="anchored" data-anchor-id="combining-the-encodings"><span class="header-section-number">17.6</span> Combining the encodings</h2>
+<p>One final variation that we can try is to use the OneHotEncoder for all features except for education. And since education is actually an ordinal feature, we can use the OrdinalEncoder with it and define the category ordering.</p>
+<p>Here are the education categories.</p>
+<div id="95b89af2" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>census_X[<span class="st">'education'</span>].unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>array([' 11th', ' HS-grad', ' Assoc-acdm', ' Some-college', ' 10th',
+       ' Prof-school', ' 7th-8th', ' Bachelors', ' Masters', ' Doctorate',
+       ' 5th-6th', ' Assoc-voc', ' 9th', ' 12th', ' 1st-4th',
+       ' Preschool'], dtype=object)</code></pre>
+</div>
+</div>
+<p>We’ll manually define the category ordering, from “Preschool” through “Doctorate”, and then create an instance of OrdinalEncoder using that ordering.</p>
+<div id="0b5b3114" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>cats <span class="op">=</span> [[<span class="st">' Preschool'</span>, <span class="st">' 1st-4th'</span>, <span class="st">' 5th-6th'</span>, <span class="st">' 7th-8th'</span>, <span class="st">' 9th'</span>, <span class="st">' 10th'</span>,</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>         <span class="st">' 11th'</span>, <span class="st">' 12th'</span>, <span class="st">' HS-grad'</span>, <span class="st">' Some-college'</span>, <span class="st">' Assoc-voc'</span>,</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>         <span class="st">' Assoc-acdm'</span>, <span class="st">' Bachelors'</span>, <span class="st">' Masters'</span>, <span class="st">' Prof-school'</span>, <span class="st">' Doctorate'</span>]]</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>oe_cats <span class="op">=</span> OrdinalEncoder(categories<span class="op">=</span>cats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then we’ll create a ColumnTransformer that applies the OrdinalEncoder to education, and applies the OneHotEncoder to all other features.</p>
+<div id="04773250" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    (oe_cats, [<span class="st">'education'</span>]),</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    remainder<span class="op">=</span>ohe_ignore)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>When we pass census_X to the fit_transform, it creates 87 feature columns, compared to the 102 columns that were created when we only used the OneHotEncoder.</p>
+<div id="281ef2aa" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(census_X).shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>(48842, 87)</code></pre>
+</div>
+</div>
+<p>Finally, we’ll create two Pipelines. Both of them start with the same ColumnTransformer, but one ends with logistic regression while the other ends with random forests.</p>
+<div id="d095b4c5" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>oe_ohe_logreg <span class="op">=</span> make_pipeline(ct, logreg)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>oe_ohe_rf <span class="op">=</span> make_pipeline(ct, rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>When we cross-validate the first Pipeline, the accuracy is 0.832, which is nearly the same as the 0.833 achieved by the logistic regression Pipeline that used OneHotEncoding for all features.</p>
+<div id="352359f1" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>time cross_val_score(oe_ohe_logreg, census_X, census_y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: user 609 ms, sys: 7.29 ms, total: 616 ms
+Wall time: 616 ms</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>0.8315588308601922</code></pre>
+</div>
+</div>
+<p>When we cross-validate the second Pipeline, the accuracy is 0.825, which is nearly the same as the 0.826 achieved by the random forest Pipeline that used OneHotEncoding for all features.</p>
+<div id="ba9c6ad5" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>time cross_val_score(oe_ohe_rf, census_X, census_y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: user 38.7 s, sys: 329 ms, total: 39.1 s
+Wall time: 5.82 s</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<pre><code>0.8251300537921482</code></pre>
+</div>
+</div>
+<p>In summary, encoding the education feature with OrdinalEncoder and the seven other features with OneHotEncoder performed basically the same as encoding all eight features with OneHotEncoder. However, it’s certainly possible that the OrdinalEncoder could provide a benefit under other circumstances.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Pipeline accuracy when encoding nominal features:</strong></p>
+<ul>
+<li>Linear model:
+<ul>
+<li><strong>OneHotEncoder:</strong> 0.833</li>
+<li><strong>OrdinalEncoder:</strong> 0.755</li>
+<li><strong>OneHotEncoder (7 features) + OrdinalEncoder (education):</strong> 0.832 👈</li>
+</ul></li>
+<li>Non-linear model:
+<ul>
+<li><strong>OneHotEncoder:</strong> 0.826</li>
+<li><strong>OrdinalEncoder:</strong> 0.825</li>
+<li><strong>OneHotEncoder (7 features) + OrdinalEncoder (education):</strong> 0.825 👈</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="best-practices-for-encoding" class="level2" data-number="17.7">
+<h2 data-number="17.7" class="anchored" data-anchor-id="best-practices-for-encoding"><span class="header-section-number">17.7</span> Best practices for encoding</h2>
+<p>Let’s summarize what we’ve learned in this chapter.</p>
+<p>If you have nominal features, and you’re using a linear model, you should definitely use OneHotEncoder, regardless of whether the features have high cardinality.</p>
+<p>If you have nominal features, and you’re using a non-linear model, you can try using OneHotEncoder, and you can try using OrdinalEncoder without defining the category ordering, and then see which option performs better.</p>
+<p>If you have ordinal features, regardless of the type of model, you can try using OneHotEncoder, and you can try using OrdinalEncoder while defining the category ordering, and then see which option performs better.</p>
+<p>In all cases, keep in mind that if the features have high cardinality, OrdinalEncoder is likely to run significantly faster than OneHotEncoder, which may or may not matter in your particular case.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Summary of best practices:</strong></p>
+<ul>
+<li><strong>Nominal features, linear model:</strong>
+<ul>
+<li>OneHotEncoder</li>
+</ul></li>
+<li><strong>Nominal features, non-linear model:</strong>
+<ul>
+<li>OneHotEncoder</li>
+<li>OrdinalEncoder
+<ul>
+<li>Don’t define category ordering</li>
+<li>Much faster than OneHotEncoder (if features have high cardinality)</li>
+</ul></li>
+</ul></li>
+<li><strong>Ordinal features:</strong>
+<ul>
+<li>OneHotEncoder</li>
+<li>OrdinalEncoder
+<ul>
+<li>Define category ordering</li>
+<li>Much faster than OneHotEncoder (if features have high cardinality)</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+            // default icon
+            link.classList.add("external");
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./ch16.html" class="pagination-link" aria-label="Workflow review #3">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Workflow review #3</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./ch18.html" class="pagination-link" aria-label="Class imbalance">
+        <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Class imbalance</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2025, Kevin Markham. All Rights Reserved.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

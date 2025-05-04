@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.29">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Kevin Markham">
+
+<title>8&nbsp; Fixing common workflow problems – Master Machine Learning with scikit-learn</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./ch09.html" rel="next">
+<link href="./ch07.html" rel="prev">
+<link href="./favicon.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-0815c480559380816a4d1ea211a47e91.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-485d01fc63b59abcd3ee1bf1e8e2748d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./ch08.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fixing common workflow problems</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Master Machine Learning with scikit-learn</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About this book</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Review of the Machine Learning workflow</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Encoding categorical features</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improving your workflow with ColumnTransformer and Pipeline</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Workflow review #1</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Encoding text data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Handling missing values</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch08.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fixing common workflow problems</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Workflow review #2</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Evaluating and tuning a Pipeline</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Comparing linear and non-linear models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Ensembling multiple models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Feature selection</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Feature standardization</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Feature engineering with custom transformers</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Workflow review #3</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">High-cardinality categorical features</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Class imbalance</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Class imbalance walkthrough</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Going further</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#two-new-problems" id="toc-two-new-problems" class="nav-link active" data-scroll-target="#two-new-problems"><span class="header-section-number">8.1</span> Two new problems</a></li>
+  <li><a href="#problem-1-missing-values-in-a-categorical-feature" id="toc-problem-1-missing-values-in-a-categorical-feature" class="nav-link" data-scroll-target="#problem-1-missing-values-in-a-categorical-feature"><span class="header-section-number">8.2</span> Problem 1: Missing values in a categorical feature</a></li>
+  <li><a href="#problem-2-missing-values-in-the-new-data" id="toc-problem-2-missing-values-in-the-new-data" class="nav-link" data-scroll-target="#problem-2-missing-values-in-the-new-data"><span class="header-section-number">8.3</span> Problem 2: Missing values in the new data</a></li>
+  <li><a href="#sec-8-4" id="toc-sec-8-4" class="nav-link" data-scroll-target="#sec-8-4"><span class="header-section-number">8.4</span> Q&amp;A: How do I see the feature names output by the ColumnTransformer?</a></li>
+  <li><a href="#qa-why-did-we-create-a-pipeline-inside-of-the-columntransformer" id="toc-qa-why-did-we-create-a-pipeline-inside-of-the-columntransformer" class="nav-link" data-scroll-target="#qa-why-did-we-create-a-pipeline-inside-of-the-columntransformer"><span class="header-section-number">8.5</span> Q&amp;A: Why did we create a Pipeline inside of the ColumnTransformer?</a></li>
+  <li><a href="#qa-which-imputation-strategy-should-i-use-with-categorical-features" id="toc-qa-which-imputation-strategy-should-i-use-with-categorical-features" class="nav-link" data-scroll-target="#qa-which-imputation-strategy-should-i-use-with-categorical-features"><span class="header-section-number">8.6</span> Q&amp;A: Which imputation strategy should I use with categorical features?</a></li>
+  <li><a href="#qa-should-i-impute-missing-values-before-all-other-transformations" id="toc-qa-should-i-impute-missing-values-before-all-other-transformations" class="nav-link" data-scroll-target="#qa-should-i-impute-missing-values-before-all-other-transformations"><span class="header-section-number">8.7</span> Q&amp;A: Should I impute missing values before all other transformations?</a></li>
+  <li><a href="#qa-what-methods-can-i-use-with-a-pipeline" id="toc-qa-what-methods-can-i-use-with-a-pipeline" class="nav-link" data-scroll-target="#qa-what-methods-can-i-use-with-a-pipeline"><span class="header-section-number">8.8</span> Q&amp;A: What methods can I use with a Pipeline?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fixing common workflow problems</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="two-new-problems" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="two-new-problems"><span class="header-section-number">8.1</span> Two new problems</h2>
+<p>Up to now, we’ve only been working with the first 10 rows of the Titanic dataset to make it easy to examine the input and output of each workflow step. In this chapter, we’ll begin using the full Titanic dataset. This will create a few new problems that are common with real datasets, and we’ll figure out how to handle those problems appropriately.</p>
+<p>We’ll start by reading the training data into df and reading the new data into df_new, overwriting the existing objects.</p>
+<p>When examining the shapes, you can see that df_new has one less column than df because it doesn’t contain the target column of Survived.</p>
+<div id="90b94820" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/MLtrain'</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>df.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>(891, 11)</code></pre>
+</div>
+</div>
+<div id="586ab403" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df_new <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/MLnewdata'</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df_new.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>(418, 10)</code></pre>
+</div>
+</div>
+<p>We’ll check for missing values in these two DataFrames by chaining together the isna and sum methods. The results tell us how many missing values are present in each column.</p>
+<p>This reveals two problems we’ll have to handle that weren’t present in our 10-row datasets. First, Embarked contains missing values in df, and second, Fare contains a missing value in df_new. We’ll spend the rest of this chapter addressing those two problems.</p>
+<p>Note that we don’t have to worry about missing values in Cabin because we’re not yet using that as a feature, and our existing workflow already accounts for the missing values in Age.</p>
+<div id="ce8f281a" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df.isna().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>Survived      0
+Pclass        0
+Name          0
+Sex           0
+Age         177
+SibSp         0
+Parch         0
+Ticket        0
+Fare          0
+Cabin       687
+Embarked      2
+dtype: int64</code></pre>
+</div>
+</div>
+<div id="8ac64069" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df_new.isna().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>Pclass        0
+Name          0
+Sex           0
+Age          86
+SibSp         0
+Parch         0
+Ticket        0
+Fare          1
+Cabin       327
+Embarked      0
+dtype: int64</code></pre>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Features with missing values:</strong></p>
+<ul>
+<li>Problematic:
+<ul>
+<li><strong>Embarked:</strong> Missing values in df</li>
+<li><strong>Fare:</strong> Missing value in df_new</li>
+</ul></li>
+<li>Not problematic:
+<ul>
+<li><strong>Cabin:</strong> Not currently using</li>
+<li><strong>Age:</strong> Already being imputed</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-1-missing-values-in-a-categorical-feature" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="problem-1-missing-values-in-a-categorical-feature"><span class="header-section-number">8.2</span> Problem 1: Missing values in a categorical feature</h2>
+<p>In this lesson, we’re going to figure out how to handle the missing values in the Embarked column.</p>
+<p>We’ll start with a reminder of the six feature columns we’re using.</p>
+<div id="80343e50" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [<span class="st">'Parch'</span>, <span class="st">'Fare'</span>, <span class="st">'Embarked'</span>, <span class="st">'Sex'</span>, <span class="st">'Name'</span>, <span class="st">'Age'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We’ll redefine X and y to use the full dataset rather than the 10-row dataset.</p>
+<div id="c9049fb6" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[cols]</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">'Survived'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And here’s a reminder of the ColumnTransformer we created in the previous chapter.</p>
+<div id="6c4a821e" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    (ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    (vect, <span class="st">'Name'</span>),</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    (imp, [<span class="st">'Age'</span>]),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'passthrough'</span>, [<span class="st">'Parch'</span>, <span class="st">'Fare'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Normally we would pass X to the fit_transform method, but in this case it will error because the Embarked column contains missing values. Our solution will be to impute missing values for Embarked before one-hot encoding it.</p>
+<div id="c6928323" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[9], line 1</span>
+<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">ct</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">fit_transform</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">X</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/compose/_column_transformer.py:531</span>, in <span class="ansi-cyan-fg">ColumnTransformer.fit_transform</span><span class="ansi-blue-fg">(self, X, y)</span>
+<span class="ansi-green-fg ansi-bold">    528</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_validate_column_callables(X)
+<span class="ansi-green-fg ansi-bold">    529</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_validate_remainder(X)
+<span class="ansi-green-fg">--&gt; 531</span> result <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_fit_transform</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">X</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">y</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">_fit_transform_one</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    533</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="font-weight:bold;color:rgb(175,0,255)">not</span> result:
+<span class="ansi-green-fg ansi-bold">    534</span>     <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_update_fitted_transformers([])
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/compose/_column_transformer.py:458</span>, in <span class="ansi-cyan-fg">ColumnTransformer._fit_transform</span><span class="ansi-blue-fg">(self, X, y, func, fitted)</span>
+<span class="ansi-green-fg ansi-bold">    455</span> transformers <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">list</span>(
+<span class="ansi-green-fg ansi-bold">    456</span>     <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_iter(fitted<span style="color:rgb(98,98,98)">=</span>fitted, replace_strings<span style="color:rgb(98,98,98)">=</span><span style="font-weight:bold;color:rgb(0,135,0)">True</span>))
+<span class="ansi-green-fg ansi-bold">    457</span> <span style="font-weight:bold;color:rgb(0,135,0)">try</span>:
+<span class="ansi-green-fg">--&gt; 458</span>     <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">Parallel</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">n_jobs</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">n_jobs</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-fg ansi-bold">    459</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">delayed</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">func</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-fg ansi-bold">    460</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">transformer</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">clone</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">trans</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg"> </span><span style="font-weight:bold;color:rgb(0,135,0)" class="ansi-yellow-bg">if</span><span class="ansi-yellow-bg"> </span><span style="font-weight:bold;color:rgb(175,0,255)" class="ansi-yellow-bg">not</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">fitted</span><span class="ansi-yellow-bg"> </span><span style="font-weight:bold;color:rgb(0,135,0)" class="ansi-yellow-bg">else</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">trans</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    461</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">X</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">_safe_indexing</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">X</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">column</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">axis</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">1</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    462</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">y</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">y</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    463</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">weight</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">weight</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    464</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">message_clsname</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">'</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">ColumnTransformer</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">'</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    465</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">message</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_log_message</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">name</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">idx</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">len</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">transformers</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    466</span> <span class="ansi-yellow-bg">        </span><span style="font-weight:bold;color:rgb(0,135,0)" class="ansi-yellow-bg">for</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">idx</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">name</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">trans</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">column</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">weight</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg"> </span><span style="font-weight:bold;color:rgb(175,0,255)" class="ansi-yellow-bg">in</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">enumerate</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-fg ansi-bold">    467</span> <span class="ansi-yellow-bg">                </span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_iter</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">fitted</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">fitted</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">replace_strings</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="font-weight:bold;color:rgb(0,135,0)" class="ansi-yellow-bg">True</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">1</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    468</span> <span style="font-weight:bold;color:rgb(0,135,0)">except</span> <span style="font-weight:bold;color:rgb(215,95,95)">ValueError</span> <span style="font-weight:bold;color:rgb(0,135,0)">as</span> e:
+<span class="ansi-green-fg ansi-bold">    469</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">Expected 2D array, got 1D array instead</span><span style="color:rgb(175,0,0)">"</span> <span style="font-weight:bold;color:rgb(175,0,255)">in</span> <span style="color:rgb(0,135,0)">str</span>(e):
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/joblib/parallel.py:1918</span>, in <span class="ansi-cyan-fg">Parallel.__call__</span><span class="ansi-blue-fg">(self, iterable)</span>
+<span class="ansi-green-fg ansi-bold">   1916</span>     output <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_get_sequential_output(iterable)
+<span class="ansi-green-fg ansi-bold">   1917</span>     <span style="color:rgb(0,135,0)">next</span>(output)
+<span class="ansi-green-fg">-&gt; 1918</span>     <span style="font-weight:bold;color:rgb(0,135,0)">return</span> output <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>return_generator <span style="font-weight:bold;color:rgb(0,135,0)">else</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">list</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">output</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">   1920</span> <span style="font-style:italic;color:rgb(95,135,135)"># Let's create an ID that uniquely identifies the current call. If the</span>
+<span class="ansi-green-fg ansi-bold">   1921</span> <span style="font-style:italic;color:rgb(95,135,135)"># call is interrupted early and that the same instance is immediately</span>
+<span class="ansi-green-fg ansi-bold">   1922</span> <span style="font-style:italic;color:rgb(95,135,135)"># re-used, this id will be used to prevent workers that were</span>
+<span class="ansi-green-fg ansi-bold">   1923</span> <span style="font-style:italic;color:rgb(95,135,135)"># concurrently finalizing a task from the previous call to run the</span>
+<span class="ansi-green-fg ansi-bold">   1924</span> <span style="font-style:italic;color:rgb(95,135,135)"># callback.</span>
+<span class="ansi-green-fg ansi-bold">   1925</span> <span style="font-weight:bold;color:rgb(0,135,0)">with</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_lock:
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/joblib/parallel.py:1847</span>, in <span class="ansi-cyan-fg">Parallel._get_sequential_output</span><span class="ansi-blue-fg">(self, iterable)</span>
+<span class="ansi-green-fg ansi-bold">   1845</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>n_dispatched_batches <span style="color:rgb(98,98,98)">+</span><span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(98,98,98)">1</span>
+<span class="ansi-green-fg ansi-bold">   1846</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>n_dispatched_tasks <span style="color:rgb(98,98,98)">+</span><span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(98,98,98)">1</span>
+<span class="ansi-green-fg">-&gt; 1847</span> res <span style="color:rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">func</span><span class="ansi-yellow-bg">(</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">args</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">*</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">   1848</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>n_completed_tasks <span style="color:rgb(98,98,98)">+</span><span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(98,98,98)">1</span>
+<span class="ansi-green-fg ansi-bold">   1849</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>print_progress()
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/pipeline.py:740</span>, in <span class="ansi-cyan-fg">_fit_transform_one</span><span class="ansi-blue-fg">(transformer, X, y, weight, message_clsname, message, **fit_params)</span>
+<span class="ansi-green-fg ansi-bold">    738</span> <span style="font-weight:bold;color:rgb(0,135,0)">with</span> _print_elapsed_time(message_clsname, message):
+<span class="ansi-green-fg ansi-bold">    739</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">hasattr</span>(transformer, <span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">fit_transform</span><span style="color:rgb(175,0,0)">'</span>):
+<span class="ansi-green-fg">--&gt; 740</span>         res <span style="color:rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">transformer</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">fit_transform</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">X</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">y</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">*</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">fit_params</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    741</span>     <span style="font-weight:bold;color:rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg ansi-bold">    742</span>         res <span style="color:rgb(98,98,98)">=</span> transformer<span style="color:rgb(98,98,98)">.</span>fit(X, y, <span style="color:rgb(98,98,98)">*</span><span style="color:rgb(98,98,98)">*</span>fit_params)<span style="color:rgb(98,98,98)">.</span>transform(X)
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:410</span>, in <span class="ansi-cyan-fg">OneHotEncoder.fit_transform</span><span class="ansi-blue-fg">(self, X, y)</span>
+<span class="ansi-green-fg ansi-bold">    390</span> <span style="font-style:italic;color:rgb(175,0,0)">"""</span>
+<span class="ansi-green-fg ansi-bold">    391</span> <span style="font-style:italic;color:rgb(175,0,0)">Fit OneHotEncoder to X, then transform X.</span>
+<span class="ansi-green-fg ansi-bold">    392</span> 
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-fg ansi-bold">    407</span> <span style="font-style:italic;color:rgb(175,0,0)">    Transformed input.</span>
+<span class="ansi-green-fg ansi-bold">    408</span> <span style="font-style:italic;color:rgb(175,0,0)">"""</span>
+<span class="ansi-green-fg ansi-bold">    409</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_validate_keywords()
+<span class="ansi-green-fg">--&gt; 410</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">super</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">fit_transform</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">X</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">y</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/base.py:690</span>, in <span class="ansi-cyan-fg">TransformerMixin.fit_transform</span><span class="ansi-blue-fg">(self, X, y, **fit_params)</span>
+<span class="ansi-green-fg ansi-bold">    686</span> <span style="font-style:italic;color:rgb(95,135,135)"># non-optimized default implementation; override when a better</span>
+<span class="ansi-green-fg ansi-bold">    687</span> <span style="font-style:italic;color:rgb(95,135,135)"># method is possible for a given clustering algorithm</span>
+<span class="ansi-green-fg ansi-bold">    688</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> y <span style="font-weight:bold;color:rgb(175,0,255)">is</span> <span style="font-weight:bold;color:rgb(0,135,0)">None</span>:
+<span class="ansi-green-fg ansi-bold">    689</span>     <span style="font-style:italic;color:rgb(95,135,135)"># fit method of arity 1 (unsupervised transformation)</span>
+<span class="ansi-green-fg">--&gt; 690</span>     <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">fit</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">X</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">*</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">fit_params</span><span class="ansi-yellow-bg">)</span><span style="color:rgb(98,98,98)">.</span>transform(X)
+<span class="ansi-green-fg ansi-bold">    691</span> <span style="font-weight:bold;color:rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg ansi-bold">    692</span>     <span style="font-style:italic;color:rgb(95,135,135)"># fit method of arity 2 (supervised transformation)</span>
+<span class="ansi-green-fg ansi-bold">    693</span>     <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>fit(X, y, <span style="color:rgb(98,98,98)">*</span><span style="color:rgb(98,98,98)">*</span>fit_params)<span style="color:rgb(98,98,98)">.</span>transform(X)
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:385</span>, in <span class="ansi-cyan-fg">OneHotEncoder.fit</span><span class="ansi-blue-fg">(self, X, y)</span>
+<span class="ansi-green-fg ansi-bold">    368</span> <span style="font-style:italic;color:rgb(175,0,0)">"""</span>
+<span class="ansi-green-fg ansi-bold">    369</span> <span style="font-style:italic;color:rgb(175,0,0)">Fit OneHotEncoder to X.</span>
+<span class="ansi-green-fg ansi-bold">    370</span> 
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-fg ansi-bold">    382</span> <span style="font-style:italic;color:rgb(175,0,0)">self</span>
+<span class="ansi-green-fg ansi-bold">    383</span> <span style="font-style:italic;color:rgb(175,0,0)">"""</span>
+<span class="ansi-green-fg ansi-bold">    384</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_validate_keywords()
+<span class="ansi-green-fg">--&gt; 385</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_fit</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">X</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">handle_unknown</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">handle_unknown</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    386</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>drop_idx_ <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_compute_drop_idx()
+<span class="ansi-green-fg ansi-bold">    387</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span style="color:rgb(0,135,0)">self</span>
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:74</span>, in <span class="ansi-cyan-fg">_BaseEncoder._fit</span><span class="ansi-blue-fg">(self, X, handle_unknown)</span>
+<span class="ansi-green-fg ansi-bold">     73</span> <span style="font-weight:bold;color:rgb(0,135,0)">def</span><span style="color:rgb(188,188,188)"> </span><span style="color:rgb(0,0,255)">_fit</span>(<span style="color:rgb(0,135,0)">self</span>, X, handle_unknown<span style="color:rgb(98,98,98)">=</span><span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">error</span><span style="color:rgb(175,0,0)">'</span>):
+<span class="ansi-green-fg">---&gt; 74</span>     X_list, n_samples, n_features <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_check_X</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">X</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">     76</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>categories <span style="color:rgb(98,98,98)">!=</span> <span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">auto</span><span style="color:rgb(175,0,0)">'</span>:
+<span class="ansi-green-fg ansi-bold">     77</span>         <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">len</span>(<span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>categories) <span style="color:rgb(98,98,98)">!=</span> n_features:
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:60</span>, in <span class="ansi-cyan-fg">_BaseEncoder._check_X</span><span class="ansi-blue-fg">(self, X)</span>
+<span class="ansi-green-fg ansi-bold">     58</span> <span style="font-weight:bold;color:rgb(0,135,0)">for</span> i <span style="font-weight:bold;color:rgb(175,0,255)">in</span> <span style="color:rgb(0,135,0)">range</span>(n_features):
+<span class="ansi-green-fg ansi-bold">     59</span>     Xi <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_get_feature(X, feature_idx<span style="color:rgb(98,98,98)">=</span>i)
+<span class="ansi-green-fg">---&gt; 60</span>     Xi <span style="color:rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">check_array</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">Xi</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">ensure_2d</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="font-weight:bold;color:rgb(0,135,0)" class="ansi-yellow-bg">False</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">dtype</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="font-weight:bold;color:rgb(0,135,0)" class="ansi-yellow-bg">None</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">     61</span> <span class="ansi-yellow-bg">                     </span><span class="ansi-yellow-bg">force_all_finite</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">needs_validation</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">     62</span>     X_columns<span style="color:rgb(98,98,98)">.</span>append(Xi)
+<span class="ansi-green-fg ansi-bold">     64</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> X_columns, n_samples, n_features
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/utils/validation.py:72</span>, in <span class="ansi-cyan-fg">_deprecate_positional_args.&lt;locals&gt;.inner_f</span><span class="ansi-blue-fg">(*args, **kwargs)</span>
+<span class="ansi-green-fg ansi-bold">     67</span>     warnings<span style="color:rgb(98,98,98)">.</span>warn(<span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">Pass </span><span style="font-weight:bold;color:rgb(175,95,135)">{}</span><span style="color:rgb(175,0,0)"> as keyword args. From version 0.25 </span><span style="color:rgb(175,0,0)">"</span>
+<span class="ansi-green-fg ansi-bold">     68</span>                   <span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">passing these as positional arguments will </span><span style="color:rgb(175,0,0)">"</span>
+<span class="ansi-green-fg ansi-bold">     69</span>                   <span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">result in an error</span><span style="color:rgb(175,0,0)">"</span><span style="color:rgb(98,98,98)">.</span>format(<span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">, </span><span style="color:rgb(175,0,0)">"</span><span style="color:rgb(98,98,98)">.</span>join(args_msg)),
+<span class="ansi-green-fg ansi-bold">     70</span>                   <span style="font-weight:bold;color:rgb(215,95,95)">FutureWarning</span>)
+<span class="ansi-green-fg ansi-bold">     71</span> kwargs<span style="color:rgb(98,98,98)">.</span>update({k: arg <span style="font-weight:bold;color:rgb(0,135,0)">for</span> k, arg <span style="font-weight:bold;color:rgb(175,0,255)">in</span> <span style="color:rgb(0,135,0)">zip</span>(sig<span style="color:rgb(98,98,98)">.</span>parameters, args)})
+<span class="ansi-green-fg">---&gt; 72</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">f</span><span class="ansi-yellow-bg">(</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">*</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/utils/validation.py:644</span>, in <span class="ansi-cyan-fg">check_array</span><span class="ansi-blue-fg">(array, accept_sparse, accept_large_sparse, dtype, order, copy, force_all_finite, ensure_2d, allow_nd, ensure_min_samples, ensure_min_features, estimator)</span>
+<span class="ansi-green-fg ansi-bold">    640</span>         <span style="font-weight:bold;color:rgb(0,135,0)">raise</span> <span style="font-weight:bold;color:rgb(215,95,95)">ValueError</span>(<span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">Found array with dim </span><span style="font-weight:bold;color:rgb(175,95,135)">%d</span><span style="color:rgb(175,0,0)">. </span><span style="font-weight:bold;color:rgb(175,95,135)">%s</span><span style="color:rgb(175,0,0)"> expected &lt;= 2.</span><span style="color:rgb(175,0,0)">"</span>
+<span class="ansi-green-fg ansi-bold">    641</span>                          <span style="color:rgb(98,98,98)">%</span> (array<span style="color:rgb(98,98,98)">.</span>ndim, estimator_name))
+<span class="ansi-green-fg ansi-bold">    643</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> force_all_finite:
+<span class="ansi-green-fg">--&gt; 644</span>         <span class="ansi-yellow-bg">_assert_all_finite</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">array</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    645</span> <span class="ansi-yellow-bg">                           </span><span class="ansi-yellow-bg">allow_nan</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">force_all_finite</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">==</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">'</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">allow-nan</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">'</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    647</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> ensure_min_samples <span style="color:rgb(98,98,98)">&gt;</span> <span style="color:rgb(98,98,98)">0</span>:
+<span class="ansi-green-fg ansi-bold">    648</span>     n_samples <span style="color:rgb(98,98,98)">=</span> _num_samples(array)
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/utils/validation.py:104</span>, in <span class="ansi-cyan-fg">_assert_all_finite</span><span class="ansi-blue-fg">(X, allow_nan, msg_dtype)</span>
+<span class="ansi-green-fg ansi-bold">    102</span> <span style="font-weight:bold;color:rgb(0,135,0)">elif</span> X<span style="color:rgb(98,98,98)">.</span>dtype <span style="color:rgb(98,98,98)">==</span> np<span style="color:rgb(98,98,98)">.</span>dtype(<span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">object</span><span style="color:rgb(175,0,0)">'</span>) <span style="font-weight:bold;color:rgb(175,0,255)">and</span> <span style="font-weight:bold;color:rgb(175,0,255)">not</span> allow_nan:
+<span class="ansi-green-fg ansi-bold">    103</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> _object_dtype_isnan(X)<span style="color:rgb(98,98,98)">.</span>any():
+<span class="ansi-green-fg">--&gt; 104</span>         <span style="font-weight:bold;color:rgb(0,135,0)">raise</span> <span style="font-weight:bold;color:rgb(215,95,95)">ValueError</span>(<span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">Input contains NaN</span><span style="color:rgb(175,0,0)">"</span>)
+
+<span class="ansi-red-fg">ValueError</span>: Input contains NaN</pre>
+</div>
+</div>
+</div>
+<p>As an aside, OneHotEncoder will automatically handle missing values by treating them as a new category starting in scikit-learn version 0.24. I’m using version 0.23, and so I’ll be writing the code to manually treat missing values as a new category. Even if you’re using version 0.24 or later, I still recommend following my code because what I’m about to teach you will enable you to solve other similar problems that scikit-learn does not automatically handle.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>How OneHotEncoder handles missing values:</strong></p>
+<ul>
+<li><strong>Before version 0.24:</strong> Errors if the input contains missing values</li>
+<li><strong>Starting in version 0.24:</strong> Treats missing values as a new category</li>
+</ul>
+</div>
+</div>
+</div>
+<p>As I was saying, our solution is to impute missing values for Embarked and then one-hot encode it.</p>
+<p>The first step of this solution is to create a new instance of SimpleImputer, which we’ll call imp_constant. For categorical features, you can either impute the most frequent value or a constant user-defined value. We’ll choose the latter by setting the strategy parameter to constant, and the constant value we’ll impute is the string “missing”.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Imputation strategies for categorical features:</strong></p>
+<ul>
+<li>Most frequent value</li>
+<li>User-defined value</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="a12f9676" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>imp_constant <span class="op">=</span> SimpleImputer(strategy<span class="op">=</span><span class="st">'constant'</span>, fill_value<span class="op">=</span><span class="st">'missing'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, we’ll create a two-step Pipeline that only contains transformers. The first step is imputation using our new imputer, and the second step is one-hot encoding. We’ll call this Pipeline imp_ohe to remind us of the two steps it contains.</p>
+<div id="4426b58f" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>imp_ohe <span class="op">=</span> make_pipeline(imp_constant, ohe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can test out the imp_ohe Pipeline by passing the Embarked column to its fit_transform method. It outputs four columns because missing values are essentially being treated as a fourth category in addition to C, Q, and S.</p>
+<div id="5c3b289b" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>imp_ohe.fit_transform(X[[<span class="st">'Embarked'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>&lt;891x4 sparse matrix of type '&lt;class 'numpy.float64'&gt;'
+    with 891 stored elements in Compressed Sparse Row format&gt;</code></pre>
+</div>
+</div>
+<p>We can confirm this by accessing the second step of the Pipeline, which is the OneHotEncoder, and then examining the categories_ attribute.</p>
+<div id="5941f33d" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>imp_ohe[<span class="dv">1</span>].categories_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>[array(['C', 'Q', 'S', 'missing'], dtype=object)]</code></pre>
+</div>
+</div>
+<p>In case it helps you to understand the imp_ohe Pipeline better, I’m going to show you what happens “under the hood” when you fit_transform this Pipeline. To be clear, you should not actually write the following code, rather it’s just for teaching purposes.</p>
+<p>First, the imp_constant object imputes a string value of “missing” for any missing values in the Embarked column. Then, the output of the imputer is one-hot encoded by the ohe object, which outputs four columns.</p>
+<div id="c3a93f29" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ohe.fit_transform(imp_constant.fit_transform(X[[<span class="st">'Embarked'</span>]]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>&lt;891x4 sparse matrix of type '&lt;class 'numpy.float64'&gt;'
+    with 891 stored elements in Compressed Sparse Row format&gt;</code></pre>
+</div>
+</div>
+<p>Now that we’ve created a transformer-only Pipeline to handle the missing values in Embarked, we’ll simply replace the ohe transformer in our ColumnTransformer with the imp_ohe Pipeline.</p>
+<div id="d15586ac" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    (imp_ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    (vect, <span class="st">'Name'</span>),</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    (imp, [<span class="st">'Age'</span>]),</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'passthrough'</span>, [<span class="st">'Parch'</span>, <span class="st">'Fare'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There are two things I want to note about the imp_ohe Pipeline:</p>
+<ul>
+<li>First, you’re only allowed to include transformer objects in a ColumnTransformer, but the imp_ohe Pipeline is eligible because all of its steps are transformers.</li>
+<li>Second, it’s completely fine to apply the imp_ohe Pipeline to the Sex column as well as Embarked. There are no missing values in the Sex column, so the imputation step won’t affect it, and it will simply get passed along to the one-hot encoding step.</li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Notes about the imp_ohe Pipeline:</strong></p>
+<ul>
+<li>Treated like a transformer because all of its steps are transformers</li>
+<li>Imputation step won’t affect the Sex column</li>
+</ul>
+</div>
+</div>
+</div>
+<p>By replacing ohe with imp_ohe, we have now solved the problem of missing values in the Embarked column. Thus, we can pass X to the ColumnTransformer’s fit_transform method, and it will not throw an error.</p>
+<p>As an aside, the output matrix is now much wider than before because the Name column of X contains a large number of unique words.</p>
+<div id="fe239d57" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>&lt;891x1518 sparse matrix of type '&lt;class 'numpy.float64'&gt;'
+    with 7328 stored elements in Compressed Sparse Row format&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="problem-2-missing-values-in-the-new-data" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="problem-2-missing-values-in-the-new-data"><span class="header-section-number">8.3</span> Problem 2: Missing values in the new data</h2>
+<p>Now that we’ve solved our first problem, we’re going to move on to the second problem, which is the missing values in the Fare column. Recall that Fare has missing values in X_new but not in X, and thus our modeling Pipeline would error when making predictions for X_new if we don’t account for these missing values.</p>
+<p>Our solution to this problem is to impute missing values for Fare. The ColumnTransformer already contains an imputer that does mean imputation, so we’ll apply the existing imputer to the Fare column, whereas previously Fare was a passthrough column. This is actually all that is required to solve our problem.</p>
+<div id="7601f356" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    (imp_ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    (vect, <span class="st">'Name'</span>),</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    (imp, [<span class="st">'Age'</span>, <span class="st">'Fare'</span>]),</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'passthrough'</span>, [<span class="st">'Parch'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, we’ll pass X to the fit_transform method of the ColumnTransformer. It will output the same number of columns as it did before, since Fare just moved from a passthrough column to a transformed column.</p>
+<div id="5e7e074f" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>&lt;891x1518 sparse matrix of type '&lt;class 'numpy.float64'&gt;'
+    with 7328 stored elements in Compressed Sparse Row format&gt;</code></pre>
+</div>
+</div>
+<p>To be clear, the Fare column does not have any missing values in X, thus the imputer did not impute any values for Fare during the fit_transform. However, it did learn the mean of Fare in X, which is the imputation value that will be applied to the Fare column of X_new during prediction.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>What will be imputed for Fare?</strong></p>
+<ul>
+<li><strong>X:</strong> No missing Fare values, thus no imputation of Fare</li>
+<li><strong>X_new:</strong> Missing Fare value, thus <strong>impute the mean of Fare in X</strong> during prediction</li>
+</ul>
+</div>
+</div>
+</div>
+<p>Next, we’ll update our modeling Pipeline to include the revised ColumnTransformer, and fit it on X and y. You can see from the diagram that there’s now a transformer Pipeline within the ColumnTransformer, which is within the modeling Pipeline.</p>
+<div id="4c44f8cb" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> make_pipeline(ct, logreg)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>pipe.fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="cd7477ef-753b-422e-bfe3-f691e29a1167" type="checkbox"><label class="sk-toggleable__label" for="cd7477ef-753b-422e-bfe3-f691e29a1167">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('columntransformer',
+                 ColumnTransformer(transformers=[('pipeline',
+                                                  Pipeline(steps=[('simpleimputer',
+                                                                   SimpleImputer(fill_value='missing',
+                                                                                 strategy='constant')),
+                                                                  ('onehotencoder',
+                                                                   OneHotEncoder())]),
+                                                  ['Embarked', 'Sex']),
+                                                 ('countvectorizer',
+                                                  CountVectorizer(), 'Name'),
+                                                 ('simpleimputer',
+                                                  SimpleImputer(),
+                                                  ['Age', 'Fare']),
+                                                 ('passthrough', 'passthrough',
+                                                  ['Parch'])])),
+                ('logisticregression',
+                 LogisticRegression(random_state=1, solver='liblinear'))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0e08b8cf-9c17-4ac2-bdcb-585b4f43dab2" type="checkbox"><label class="sk-toggleable__label" for="0e08b8cf-9c17-4ac2-bdcb-585b4f43dab2">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
+                                 Pipeline(steps=[('simpleimputer',
+                                                  SimpleImputer(fill_value='missing',
+                                                                strategy='constant')),
+                                                 ('onehotencoder',
+                                                  OneHotEncoder())]),
+                                 ['Embarked', 'Sex']),
+                                ('countvectorizer', CountVectorizer(), 'Name'),
+                                ('simpleimputer', SimpleImputer(),
+                                 ['Age', 'Fare']),
+                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3dfc9ccf-aa3d-44cb-b78b-d2f021024116" type="checkbox"><label class="sk-toggleable__label" for="3dfc9ccf-aa3d-44cb-b78b-d2f021024116">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b8a7ac36-1f40-4fe4-94fa-89055edb1f0b" type="checkbox"><label class="sk-toggleable__label" for="b8a7ac36-1f40-4fe4-94fa-89055edb1f0b">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="725d551f-b597-49fd-9f77-3cc3ef0c9f2f" type="checkbox"><label class="sk-toggleable__label" for="725d551f-b597-49fd-9f77-3cc3ef0c9f2f">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="dcbea1b8-5d89-411c-a826-c83f47aebe29" type="checkbox"><label class="sk-toggleable__label" for="dcbea1b8-5d89-411c-a826-c83f47aebe29">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a8af573d-a7d9-4320-8c5d-3a5931c32c74" type="checkbox"><label class="sk-toggleable__label" for="a8af573d-a7d9-4320-8c5d-3a5931c32c74">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="14360a97-05ed-43a8-a28c-6a1ece4c1c0e" type="checkbox"><label class="sk-toggleable__label" for="14360a97-05ed-43a8-a28c-6a1ece4c1c0e">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f2268e8a-5c91-4e96-8b84-7ec842359fd0" type="checkbox"><label class="sk-toggleable__label" for="f2268e8a-5c91-4e96-8b84-7ec842359fd0">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="2ebc0c4f-2a1e-40ba-9efe-e791db3c1989" type="checkbox"><label class="sk-toggleable__label" for="2ebc0c4f-2a1e-40ba-9efe-e791db3c1989">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="072fb0b6-0306-4378-8c66-0a26e0e07bb8" type="checkbox"><label class="sk-toggleable__label" for="072fb0b6-0306-4378-8c66-0a26e0e07bb8">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a9dec165-82f8-4979-a04c-9ce97d3ed78f" type="checkbox"><label class="sk-toggleable__label" for="a9dec165-82f8-4979-a04c-9ce97d3ed78f">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(random_state=1, solver='liblinear')</pre></div></div></div></div></div></div></div>
+</div>
+</div>
+<p>Finally, we’ll redefine X_new to use the full dataset, and then use the fitted Pipeline to make predictions for X_new. We know that we’ve solved our second problem because the Pipeline did not throw any errors during the predict step.</p>
+<div id="0e499634" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>X_new <span class="op">=</span> df_new[cols]</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>pipe.predict(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>array([0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1,
+       1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1,
+       1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1,
+       1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1,
+       1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+       0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
+       1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1,
+       1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1,
+       0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0,
+       1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
+       1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1,
+       0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0,
+       0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1,
+       0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
+       1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0,
+       0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0,
+       1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1,
+       0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1])</code></pre>
+</div>
+</div>
+</section>
+<section id="sec-8-4" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="sec-8-4"><span class="header-section-number">8.4</span> Q&amp;A: How do I see the feature names output by the ColumnTransformer?</h2>
+<p>When we pass X to the ColumnTransformer’s fit_transform method, it outputs a matrix with 1518 columns. How can we find out the names of these columns?</p>
+<div id="cce3af9e" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>&lt;891x1518 sparse matrix of type '&lt;class 'numpy.float64'&gt;'
+    with 7328 stored elements in Compressed Sparse Row format&gt;</code></pre>
+</div>
+</div>
+<p>Earlier in the book, we used the get_feature_names method for this purpose, which, as I mentioned previously, will be replaced by get_feature_names_out starting in scikit-learn 1.0. However, get_feature_names will only work if all of the underlying transformers have a get_feature_names method. In this case, it errors because neither Pipeline transformers nor SimpleImputer transformers have a get_feature_names method.</p>
+<div id="2c15b478" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>ct.get_feature_names()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[22], line 1</span>
+<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">ct</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">get_feature_names</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/compose/_column_transformer.py:371</span>, in <span class="ansi-cyan-fg">ColumnTransformer.get_feature_names</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-fg ansi-bold">    369</span>         <span style="font-weight:bold;color:rgb(0,135,0)">continue</span>
+<span class="ansi-green-fg ansi-bold">    370</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="font-weight:bold;color:rgb(175,0,255)">not</span> <span style="color:rgb(0,135,0)">hasattr</span>(trans, <span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">get_feature_names</span><span style="color:rgb(175,0,0)">'</span>):
+<span class="ansi-green-fg">--&gt; 371</span>         <span style="font-weight:bold;color:rgb(0,135,0)">raise</span> <span style="font-weight:bold;color:rgb(215,95,95)">AttributeError</span>(<span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">Transformer </span><span style="font-weight:bold;color:rgb(175,95,135)">%s</span><span style="color:rgb(175,0,0)"> (type </span><span style="font-weight:bold;color:rgb(175,95,135)">%s</span><span style="color:rgb(175,0,0)">) does not </span><span style="color:rgb(175,0,0)">"</span>
+<span class="ansi-green-fg ansi-bold">    372</span>                              <span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">provide get_feature_names.</span><span style="color:rgb(175,0,0)">"</span>
+<span class="ansi-green-fg ansi-bold">    373</span>                              <span style="color:rgb(98,98,98)">%</span> (<span style="color:rgb(0,135,0)">str</span>(name), <span style="color:rgb(0,135,0)">type</span>(trans)<span style="color:rgb(98,98,98)">.</span><span style="color:rgb(0,0,135)">__name__</span>))
+<span class="ansi-green-fg ansi-bold">    374</span>     feature_names<span style="color:rgb(98,98,98)">.</span>extend([name <span style="color:rgb(98,98,98)">+</span> <span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">__</span><span style="color:rgb(175,0,0)">"</span> <span style="color:rgb(98,98,98)">+</span> f <span style="font-weight:bold;color:rgb(0,135,0)">for</span> f <span style="font-weight:bold;color:rgb(175,0,255)">in</span>
+<span class="ansi-green-fg ansi-bold">    375</span>                           trans<span style="color:rgb(98,98,98)">.</span>get_feature_names()])
+<span class="ansi-green-fg ansi-bold">    376</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> feature_names
+
+<span class="ansi-red-fg">AttributeError</span>: Transformer pipeline (type Pipeline) does not provide get_feature_names.</pre>
+</div>
+</div>
+</div>
+<p>The good news is that starting in scikit-learn 1.1, the get_feature_names_out method will be available for all transformers, which means that retrieving the feature names will no longer error.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Changes to get_feature_names:</strong></p>
+<ul>
+<li><strong>Starting in version 1.0:</strong> get_feature_names replaced with get_feature_names_out</li>
+<li><strong>Starting in version 1.1:</strong> get_feature_names_out available for all transformers</li>
+</ul>
+</div>
+</div>
+</div>
+<p>In the meantime, our only solution for figuring out the column names is to inspect the transformers one-by-one.</p>
+<p>When we print out the transformers_ attribute, we can see that there are 4 transformers.</p>
+<div id="71aac907" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>ct.transformers_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>[('pipeline',
+  Pipeline(steps=[('simpleimputer',
+                   SimpleImputer(fill_value='missing', strategy='constant')),
+                  ('onehotencoder', OneHotEncoder())]),
+  ['Embarked', 'Sex']),
+ ('countvectorizer', CountVectorizer(), 'Name'),
+ ('simpleimputer', SimpleImputer(), ['Age', 'Fare']),
+ ('passthrough', 'passthrough', ['Parch'])]</code></pre>
+</div>
+</div>
+<p>The first transformer is a Pipeline of SimpleImputer and OneHotEncoder. OneHotEncoder has a get_feature_names method, which we can access by selecting the “pipeline” transformer and then its “onehotencoder” step. get_feature_names outputs 6 features, which we know are the first 6 features in the matrix because this is the first transformer in the ColumnTransformer.</p>
+<div id="4bd1727e" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>ct.named_transformers_[<span class="st">'pipeline'</span>].named_steps[<span class="st">'onehotencoder'</span>].get_feature_names()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>array(['x0_C', 'x0_Q', 'x0_S', 'x0_missing', 'x1_female', 'x1_male'],
+      dtype=object)</code></pre>
+</div>
+</div>
+<p>The second transformer is a CountVectorizer. It also has a get_feature_names method, which we can access by selecting the “countvectorizer” transformer. We could print out all of the feature names, but instead we’ll pass it to the len function, which indicates that the next 1509 features in the matrix came from CountVectorizer.</p>
+<div id="570b5e7c" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(ct.named_transformers_[<span class="st">'countvectorizer'</span>].get_feature_names())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<pre><code>1509</code></pre>
+</div>
+</div>
+<p>The third transformer is a SimpleImputer, which doesn’t change the number of columns since we’re not adding a missing indicator, so we know that the next two features in the matrix are Age and Fare.</p>
+<p>The fourth transformer is a passthrough transformer, which also doesn’t change the number of columns, so we know that the final feature in the matrix is Parch.</p>
+<p>We’ve now accounted for all 1518 features: 6 from the Pipeline transformer, 1509 from the CountVectorizer, 2 from the SimpleImputer, and 1 from the passthrough transformer.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Features output by each transformer:</strong></p>
+<ul>
+<li><strong>Pipeline:</strong> 6 features (Embarked and Sex)</li>
+<li><strong>CountVectorizer:</strong> 1509 features (Name)</li>
+<li><strong>SimpleImputer:</strong> 2 features (Age and Fare)</li>
+<li><strong>passthrough:</strong> 1 feature (Parch)</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="qa-why-did-we-create-a-pipeline-inside-of-the-columntransformer" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="qa-why-did-we-create-a-pipeline-inside-of-the-columntransformer"><span class="header-section-number">8.5</span> Q&amp;A: Why did we create a Pipeline inside of the ColumnTransformer?</h2>
+<p>Earlier in this chapter, since the Embarked column contained missing values and needed one-hot encoding, we created a two-step Pipeline called imp_ohe. The first step of this Pipeline is imputation of a constant value, and the second step is one-hot encoding.</p>
+<div id="9205b3bc" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>imp_ohe <span class="op">=</span> make_pipeline(imp_constant, ohe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We included the imp_ohe Pipeline in the ColumnTransformer, and applied it to both the Embarked and Sex columns. Here’s what it would look like if the ColumnTransformer only contained the imp_ohe Pipeline.</p>
+<div id="6cf53590" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    (imp_ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>When you run the fit_transform method, Embarked turns into 4 columns and Sex turns into 2 columns, and the results are stacked side-by-side.</p>
+<div id="ea0781d3" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>array([[0., 0., 1., 0., 0., 1.],
+       [1., 0., 0., 0., 1., 0.],
+       [0., 0., 1., 0., 1., 0.],
+       ...,
+       [0., 0., 1., 0., 1., 0.],
+       [1., 0., 0., 0., 0., 1.],
+       [0., 1., 0., 0., 0., 1.]])</code></pre>
+</div>
+</div>
+<p>Because the Sex column didn’t contain any missing values and only needed one-hot encoding, we could have achieved the exact same results by applying imp_ohe just to Embarked and then separately applying ohe to Sex.</p>
+<div id="a49971fd" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    (imp_ohe, [<span class="st">'Embarked'</span>]),</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    (ohe, [<span class="st">'Sex'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The fit_transform does indeed output the same results as above, though I personally prefer the first ColumnTransformer.</p>
+<div id="73b8408a" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<pre><code>array([[0., 0., 1., 0., 0., 1.],
+       [1., 0., 0., 0., 1., 0.],
+       [0., 0., 1., 0., 1., 0.],
+       ...,
+       [0., 0., 1., 0., 1., 0.],
+       [1., 0., 0., 0., 0., 1.],
+       [0., 1., 0., 0., 0., 1.]])</code></pre>
+</div>
+</div>
+<p>One common question is whether you can avoid using the imp_ohe Pipeline entirely by making a ColumnTransformer like this instead, in which the imputation of a constant value is applied to Embarked, and one-hot encoding is applied to both Embarked and Sex.</p>
+<div id="6ecea198" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>    (imp_constant, [<span class="st">'Embarked'</span>]),</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    (ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The answer is no, you cannot. The fit_transform method throws an error because Embarked contains missing values, and the ohe transformer is not able to handle missing values.</p>
+<div id="36160c03" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[32], line 1</span>
+<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">ct</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">fit_transform</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">X</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/compose/_column_transformer.py:531</span>, in <span class="ansi-cyan-fg">ColumnTransformer.fit_transform</span><span class="ansi-blue-fg">(self, X, y)</span>
+<span class="ansi-green-fg ansi-bold">    528</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_validate_column_callables(X)
+<span class="ansi-green-fg ansi-bold">    529</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_validate_remainder(X)
+<span class="ansi-green-fg">--&gt; 531</span> result <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_fit_transform</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">X</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">y</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">_fit_transform_one</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    533</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="font-weight:bold;color:rgb(175,0,255)">not</span> result:
+<span class="ansi-green-fg ansi-bold">    534</span>     <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_update_fitted_transformers([])
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/compose/_column_transformer.py:458</span>, in <span class="ansi-cyan-fg">ColumnTransformer._fit_transform</span><span class="ansi-blue-fg">(self, X, y, func, fitted)</span>
+<span class="ansi-green-fg ansi-bold">    455</span> transformers <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">list</span>(
+<span class="ansi-green-fg ansi-bold">    456</span>     <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_iter(fitted<span style="color:rgb(98,98,98)">=</span>fitted, replace_strings<span style="color:rgb(98,98,98)">=</span><span style="font-weight:bold;color:rgb(0,135,0)">True</span>))
+<span class="ansi-green-fg ansi-bold">    457</span> <span style="font-weight:bold;color:rgb(0,135,0)">try</span>:
+<span class="ansi-green-fg">--&gt; 458</span>     <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">Parallel</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">n_jobs</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">n_jobs</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-fg ansi-bold">    459</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">delayed</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">func</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-fg ansi-bold">    460</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">transformer</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">clone</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">trans</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg"> </span><span style="font-weight:bold;color:rgb(0,135,0)" class="ansi-yellow-bg">if</span><span class="ansi-yellow-bg"> </span><span style="font-weight:bold;color:rgb(175,0,255)" class="ansi-yellow-bg">not</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">fitted</span><span class="ansi-yellow-bg"> </span><span style="font-weight:bold;color:rgb(0,135,0)" class="ansi-yellow-bg">else</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">trans</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    461</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">X</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">_safe_indexing</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">X</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">column</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">axis</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">1</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    462</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">y</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">y</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    463</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">weight</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">weight</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    464</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">message_clsname</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">'</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">ColumnTransformer</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">'</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    465</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">message</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_log_message</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">name</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">idx</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">len</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">transformers</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    466</span> <span class="ansi-yellow-bg">        </span><span style="font-weight:bold;color:rgb(0,135,0)" class="ansi-yellow-bg">for</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">idx</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">name</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">trans</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">column</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">weight</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg"> </span><span style="font-weight:bold;color:rgb(175,0,255)" class="ansi-yellow-bg">in</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">enumerate</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-fg ansi-bold">    467</span> <span class="ansi-yellow-bg">                </span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_iter</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">fitted</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">fitted</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">replace_strings</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="font-weight:bold;color:rgb(0,135,0)" class="ansi-yellow-bg">True</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">1</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    468</span> <span style="font-weight:bold;color:rgb(0,135,0)">except</span> <span style="font-weight:bold;color:rgb(215,95,95)">ValueError</span> <span style="font-weight:bold;color:rgb(0,135,0)">as</span> e:
+<span class="ansi-green-fg ansi-bold">    469</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">Expected 2D array, got 1D array instead</span><span style="color:rgb(175,0,0)">"</span> <span style="font-weight:bold;color:rgb(175,0,255)">in</span> <span style="color:rgb(0,135,0)">str</span>(e):
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/joblib/parallel.py:1918</span>, in <span class="ansi-cyan-fg">Parallel.__call__</span><span class="ansi-blue-fg">(self, iterable)</span>
+<span class="ansi-green-fg ansi-bold">   1916</span>     output <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_get_sequential_output(iterable)
+<span class="ansi-green-fg ansi-bold">   1917</span>     <span style="color:rgb(0,135,0)">next</span>(output)
+<span class="ansi-green-fg">-&gt; 1918</span>     <span style="font-weight:bold;color:rgb(0,135,0)">return</span> output <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>return_generator <span style="font-weight:bold;color:rgb(0,135,0)">else</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">list</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">output</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">   1920</span> <span style="font-style:italic;color:rgb(95,135,135)"># Let's create an ID that uniquely identifies the current call. If the</span>
+<span class="ansi-green-fg ansi-bold">   1921</span> <span style="font-style:italic;color:rgb(95,135,135)"># call is interrupted early and that the same instance is immediately</span>
+<span class="ansi-green-fg ansi-bold">   1922</span> <span style="font-style:italic;color:rgb(95,135,135)"># re-used, this id will be used to prevent workers that were</span>
+<span class="ansi-green-fg ansi-bold">   1923</span> <span style="font-style:italic;color:rgb(95,135,135)"># concurrently finalizing a task from the previous call to run the</span>
+<span class="ansi-green-fg ansi-bold">   1924</span> <span style="font-style:italic;color:rgb(95,135,135)"># callback.</span>
+<span class="ansi-green-fg ansi-bold">   1925</span> <span style="font-weight:bold;color:rgb(0,135,0)">with</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_lock:
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/joblib/parallel.py:1847</span>, in <span class="ansi-cyan-fg">Parallel._get_sequential_output</span><span class="ansi-blue-fg">(self, iterable)</span>
+<span class="ansi-green-fg ansi-bold">   1845</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>n_dispatched_batches <span style="color:rgb(98,98,98)">+</span><span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(98,98,98)">1</span>
+<span class="ansi-green-fg ansi-bold">   1846</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>n_dispatched_tasks <span style="color:rgb(98,98,98)">+</span><span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(98,98,98)">1</span>
+<span class="ansi-green-fg">-&gt; 1847</span> res <span style="color:rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">func</span><span class="ansi-yellow-bg">(</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">args</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">*</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">   1848</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>n_completed_tasks <span style="color:rgb(98,98,98)">+</span><span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(98,98,98)">1</span>
+<span class="ansi-green-fg ansi-bold">   1849</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>print_progress()
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/pipeline.py:740</span>, in <span class="ansi-cyan-fg">_fit_transform_one</span><span class="ansi-blue-fg">(transformer, X, y, weight, message_clsname, message, **fit_params)</span>
+<span class="ansi-green-fg ansi-bold">    738</span> <span style="font-weight:bold;color:rgb(0,135,0)">with</span> _print_elapsed_time(message_clsname, message):
+<span class="ansi-green-fg ansi-bold">    739</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">hasattr</span>(transformer, <span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">fit_transform</span><span style="color:rgb(175,0,0)">'</span>):
+<span class="ansi-green-fg">--&gt; 740</span>         res <span style="color:rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">transformer</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">fit_transform</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">X</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">y</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">*</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">fit_params</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    741</span>     <span style="font-weight:bold;color:rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg ansi-bold">    742</span>         res <span style="color:rgb(98,98,98)">=</span> transformer<span style="color:rgb(98,98,98)">.</span>fit(X, y, <span style="color:rgb(98,98,98)">*</span><span style="color:rgb(98,98,98)">*</span>fit_params)<span style="color:rgb(98,98,98)">.</span>transform(X)
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:410</span>, in <span class="ansi-cyan-fg">OneHotEncoder.fit_transform</span><span class="ansi-blue-fg">(self, X, y)</span>
+<span class="ansi-green-fg ansi-bold">    390</span> <span style="font-style:italic;color:rgb(175,0,0)">"""</span>
+<span class="ansi-green-fg ansi-bold">    391</span> <span style="font-style:italic;color:rgb(175,0,0)">Fit OneHotEncoder to X, then transform X.</span>
+<span class="ansi-green-fg ansi-bold">    392</span> 
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-fg ansi-bold">    407</span> <span style="font-style:italic;color:rgb(175,0,0)">    Transformed input.</span>
+<span class="ansi-green-fg ansi-bold">    408</span> <span style="font-style:italic;color:rgb(175,0,0)">"""</span>
+<span class="ansi-green-fg ansi-bold">    409</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_validate_keywords()
+<span class="ansi-green-fg">--&gt; 410</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">super</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">fit_transform</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">X</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">y</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/base.py:690</span>, in <span class="ansi-cyan-fg">TransformerMixin.fit_transform</span><span class="ansi-blue-fg">(self, X, y, **fit_params)</span>
+<span class="ansi-green-fg ansi-bold">    686</span> <span style="font-style:italic;color:rgb(95,135,135)"># non-optimized default implementation; override when a better</span>
+<span class="ansi-green-fg ansi-bold">    687</span> <span style="font-style:italic;color:rgb(95,135,135)"># method is possible for a given clustering algorithm</span>
+<span class="ansi-green-fg ansi-bold">    688</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> y <span style="font-weight:bold;color:rgb(175,0,255)">is</span> <span style="font-weight:bold;color:rgb(0,135,0)">None</span>:
+<span class="ansi-green-fg ansi-bold">    689</span>     <span style="font-style:italic;color:rgb(95,135,135)"># fit method of arity 1 (unsupervised transformation)</span>
+<span class="ansi-green-fg">--&gt; 690</span>     <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">fit</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">X</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">*</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">fit_params</span><span class="ansi-yellow-bg">)</span><span style="color:rgb(98,98,98)">.</span>transform(X)
+<span class="ansi-green-fg ansi-bold">    691</span> <span style="font-weight:bold;color:rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg ansi-bold">    692</span>     <span style="font-style:italic;color:rgb(95,135,135)"># fit method of arity 2 (supervised transformation)</span>
+<span class="ansi-green-fg ansi-bold">    693</span>     <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>fit(X, y, <span style="color:rgb(98,98,98)">*</span><span style="color:rgb(98,98,98)">*</span>fit_params)<span style="color:rgb(98,98,98)">.</span>transform(X)
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:385</span>, in <span class="ansi-cyan-fg">OneHotEncoder.fit</span><span class="ansi-blue-fg">(self, X, y)</span>
+<span class="ansi-green-fg ansi-bold">    368</span> <span style="font-style:italic;color:rgb(175,0,0)">"""</span>
+<span class="ansi-green-fg ansi-bold">    369</span> <span style="font-style:italic;color:rgb(175,0,0)">Fit OneHotEncoder to X.</span>
+<span class="ansi-green-fg ansi-bold">    370</span> 
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-fg ansi-bold">    382</span> <span style="font-style:italic;color:rgb(175,0,0)">self</span>
+<span class="ansi-green-fg ansi-bold">    383</span> <span style="font-style:italic;color:rgb(175,0,0)">"""</span>
+<span class="ansi-green-fg ansi-bold">    384</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_validate_keywords()
+<span class="ansi-green-fg">--&gt; 385</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_fit</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">X</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">handle_unknown</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">handle_unknown</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    386</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>drop_idx_ <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_compute_drop_idx()
+<span class="ansi-green-fg ansi-bold">    387</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span style="color:rgb(0,135,0)">self</span>
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:74</span>, in <span class="ansi-cyan-fg">_BaseEncoder._fit</span><span class="ansi-blue-fg">(self, X, handle_unknown)</span>
+<span class="ansi-green-fg ansi-bold">     73</span> <span style="font-weight:bold;color:rgb(0,135,0)">def</span><span style="color:rgb(188,188,188)"> </span><span style="color:rgb(0,0,255)">_fit</span>(<span style="color:rgb(0,135,0)">self</span>, X, handle_unknown<span style="color:rgb(98,98,98)">=</span><span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">error</span><span style="color:rgb(175,0,0)">'</span>):
+<span class="ansi-green-fg">---&gt; 74</span>     X_list, n_samples, n_features <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_check_X</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">X</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">     76</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>categories <span style="color:rgb(98,98,98)">!=</span> <span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">auto</span><span style="color:rgb(175,0,0)">'</span>:
+<span class="ansi-green-fg ansi-bold">     77</span>         <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">len</span>(<span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>categories) <span style="color:rgb(98,98,98)">!=</span> n_features:
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:60</span>, in <span class="ansi-cyan-fg">_BaseEncoder._check_X</span><span class="ansi-blue-fg">(self, X)</span>
+<span class="ansi-green-fg ansi-bold">     58</span> <span style="font-weight:bold;color:rgb(0,135,0)">for</span> i <span style="font-weight:bold;color:rgb(175,0,255)">in</span> <span style="color:rgb(0,135,0)">range</span>(n_features):
+<span class="ansi-green-fg ansi-bold">     59</span>     Xi <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_get_feature(X, feature_idx<span style="color:rgb(98,98,98)">=</span>i)
+<span class="ansi-green-fg">---&gt; 60</span>     Xi <span style="color:rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">check_array</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">Xi</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">ensure_2d</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="font-weight:bold;color:rgb(0,135,0)" class="ansi-yellow-bg">False</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">dtype</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="font-weight:bold;color:rgb(0,135,0)" class="ansi-yellow-bg">None</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">     61</span> <span class="ansi-yellow-bg">                     </span><span class="ansi-yellow-bg">force_all_finite</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">needs_validation</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">     62</span>     X_columns<span style="color:rgb(98,98,98)">.</span>append(Xi)
+<span class="ansi-green-fg ansi-bold">     64</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> X_columns, n_samples, n_features
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/utils/validation.py:72</span>, in <span class="ansi-cyan-fg">_deprecate_positional_args.&lt;locals&gt;.inner_f</span><span class="ansi-blue-fg">(*args, **kwargs)</span>
+<span class="ansi-green-fg ansi-bold">     67</span>     warnings<span style="color:rgb(98,98,98)">.</span>warn(<span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">Pass </span><span style="font-weight:bold;color:rgb(175,95,135)">{}</span><span style="color:rgb(175,0,0)"> as keyword args. From version 0.25 </span><span style="color:rgb(175,0,0)">"</span>
+<span class="ansi-green-fg ansi-bold">     68</span>                   <span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">passing these as positional arguments will </span><span style="color:rgb(175,0,0)">"</span>
+<span class="ansi-green-fg ansi-bold">     69</span>                   <span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">result in an error</span><span style="color:rgb(175,0,0)">"</span><span style="color:rgb(98,98,98)">.</span>format(<span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">, </span><span style="color:rgb(175,0,0)">"</span><span style="color:rgb(98,98,98)">.</span>join(args_msg)),
+<span class="ansi-green-fg ansi-bold">     70</span>                   <span style="font-weight:bold;color:rgb(215,95,95)">FutureWarning</span>)
+<span class="ansi-green-fg ansi-bold">     71</span> kwargs<span style="color:rgb(98,98,98)">.</span>update({k: arg <span style="font-weight:bold;color:rgb(0,135,0)">for</span> k, arg <span style="font-weight:bold;color:rgb(175,0,255)">in</span> <span style="color:rgb(0,135,0)">zip</span>(sig<span style="color:rgb(98,98,98)">.</span>parameters, args)})
+<span class="ansi-green-fg">---&gt; 72</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">f</span><span class="ansi-yellow-bg">(</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">*</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">*</span><span class="ansi-yellow-bg">kwargs</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/utils/validation.py:644</span>, in <span class="ansi-cyan-fg">check_array</span><span class="ansi-blue-fg">(array, accept_sparse, accept_large_sparse, dtype, order, copy, force_all_finite, ensure_2d, allow_nd, ensure_min_samples, ensure_min_features, estimator)</span>
+<span class="ansi-green-fg ansi-bold">    640</span>         <span style="font-weight:bold;color:rgb(0,135,0)">raise</span> <span style="font-weight:bold;color:rgb(215,95,95)">ValueError</span>(<span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">Found array with dim </span><span style="font-weight:bold;color:rgb(175,95,135)">%d</span><span style="color:rgb(175,0,0)">. </span><span style="font-weight:bold;color:rgb(175,95,135)">%s</span><span style="color:rgb(175,0,0)"> expected &lt;= 2.</span><span style="color:rgb(175,0,0)">"</span>
+<span class="ansi-green-fg ansi-bold">    641</span>                          <span style="color:rgb(98,98,98)">%</span> (array<span style="color:rgb(98,98,98)">.</span>ndim, estimator_name))
+<span class="ansi-green-fg ansi-bold">    643</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> force_all_finite:
+<span class="ansi-green-fg">--&gt; 644</span>         <span class="ansi-yellow-bg">_assert_all_finite</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">array</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    645</span> <span class="ansi-yellow-bg">                           </span><span class="ansi-yellow-bg">allow_nan</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">force_all_finite</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">==</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">'</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">allow-nan</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">'</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    647</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> ensure_min_samples <span style="color:rgb(98,98,98)">&gt;</span> <span style="color:rgb(98,98,98)">0</span>:
+<span class="ansi-green-fg ansi-bold">    648</span>     n_samples <span style="color:rgb(98,98,98)">=</span> _num_samples(array)
+
+File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/utils/validation.py:104</span>, in <span class="ansi-cyan-fg">_assert_all_finite</span><span class="ansi-blue-fg">(X, allow_nan, msg_dtype)</span>
+<span class="ansi-green-fg ansi-bold">    102</span> <span style="font-weight:bold;color:rgb(0,135,0)">elif</span> X<span style="color:rgb(98,98,98)">.</span>dtype <span style="color:rgb(98,98,98)">==</span> np<span style="color:rgb(98,98,98)">.</span>dtype(<span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">object</span><span style="color:rgb(175,0,0)">'</span>) <span style="font-weight:bold;color:rgb(175,0,255)">and</span> <span style="font-weight:bold;color:rgb(175,0,255)">not</span> allow_nan:
+<span class="ansi-green-fg ansi-bold">    103</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> _object_dtype_isnan(X)<span style="color:rgb(98,98,98)">.</span>any():
+<span class="ansi-green-fg">--&gt; 104</span>         <span style="font-weight:bold;color:rgb(0,135,0)">raise</span> <span style="font-weight:bold;color:rgb(215,95,95)">ValueError</span>(<span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">Input contains NaN</span><span style="color:rgb(175,0,0)">"</span>)
+
+<span class="ansi-red-fg">ValueError</span>: Input contains NaN</pre>
+</div>
+</div>
+</div>
+<p>The key insight here is that there’s no interaction between the transformers of a ColumnTransformer. In other words, there’s no flow of data from one transformer to the next, meaning the output of the imp_constant transformer does not become the input to the ohe transformer. Thus, the ohe transformer is operating on the original Embarked column, not a transformed Embarked column in which missing values have been imputed.</p>
+<p>If that’s confusing, it might be useful to recall the key differences between a Pipeline and a ColumnTransformer:</p>
+<ul>
+<li>In a Pipeline, the output of one step becomes the input to the next step. This is precisely why we created the imp_ohe Pipeline: We needed the output of the imputer to become the input to the ohe-hot encoder.</li>
+<li>In contrast, a ColumnTransformer does not have steps. Instead, it has transformers that operate in parallel, and the output of each transformer is stacked beside the other transformer outputs.</li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Pipeline vs ColumnTransformer:</strong></p>
+<ul>
+<li><strong>Pipeline:</strong>
+<ul>
+<li>Output of one step becomes the input to the next step</li>
+<li><strong>imp_ohe:</strong> Output of <strong>imp_constant</strong> becomes the input to <strong>ohe</strong></li>
+</ul></li>
+<li><strong>ColumnTransformer:</strong>
+<ul>
+<li>Transformers operate in parallel</li>
+<li><strong>ct:</strong> Output of each transformer is stacked beside the other transformer outputs</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="qa-which-imputation-strategy-should-i-use-with-categorical-features" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="qa-which-imputation-strategy-should-i-use-with-categorical-features"><span class="header-section-number">8.6</span> Q&amp;A: Which imputation strategy should I use with categorical features?</h2>
+<p>When imputing missing values for a categorical feature, you can either impute the most frequent value or a constant user-defined value. In this lesson, I’m going to discuss how you might choose between these two strategies.</p>
+<p>Imputing a constant value essentially treats the missing values as a new category, which I believe is the better choice regardless of whether the values are missing at random or not at random. Imputing a constant value is especially important if the majority of values are missing, since imputing the most frequent value in that case would more than double the size of the category that was imputed, which would be quite misleading to the model.</p>
+<p>That being said, imputing the most frequent value is much more acceptable when you have only a small number of missing values for a given feature, since the imputation won’t have much of an impact on the model anyway.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Imputation strategies for categorical features:</strong></p>
+<ul>
+<li><strong>Constant user-defined value:</strong>
+<ul>
+<li>Treats missing values as a new category (recommended)</li>
+<li>Important if the majority of values are missing</li>
+</ul></li>
+<li><strong>Most frequent value:</strong>
+<ul>
+<li>Acceptable if only a small number of values are missing</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<p>It’s important to note that if you impute a constant value for a feature, and that feature has missing values in the new data but not the training data, then you’ll need to set the OneHotEncoder’s handle_unknown parameter to “ignore”. That’s because the missing values category won’t be learned during the OneHotEncoder’s fit step, and thus unknown values seen during the transform step need to be ignored in order to avoid an error.</p>
+<p>The alternative here is just to impute the most frequent value for that feature, in which case you can leave the handle_unknown parameter set to its default value of “error”.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Possible problem with imputing a constant value:</strong></p>
+<ul>
+<li><strong>Condition:</strong> The feature only has missing values in the new data</li>
+<li><strong>Solution:</strong> Set handle_unknown to ‘ignore’ for the OneHotEncoder</li>
+<li><strong>Alternative:</strong> Impute the most frequent value, and leave handle_unknown set to ‘error’</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="qa-should-i-impute-missing-values-before-all-other-transformations" class="level2" data-number="8.7">
+<h2 data-number="8.7" class="anchored" data-anchor-id="qa-should-i-impute-missing-values-before-all-other-transformations"><span class="header-section-number">8.7</span> Q&amp;A: Should I impute missing values before all other transformations?</h2>
+<p>Here’s the Pipeline that we’ve built throughout the book. The strategy I’ve used throughout is to include all data transformations within a single ColumnTransformer, including any missing value imputation, and then use that ColumnTransformer as the first step in a two-step Pipeline.</p>
+<div id="29a06621" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>pipe</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="33">
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="09eb79c1-73ac-4141-92b6-343baf1dd438" type="checkbox"><label class="sk-toggleable__label" for="09eb79c1-73ac-4141-92b6-343baf1dd438">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('columntransformer',
+                 ColumnTransformer(transformers=[('pipeline',
+                                                  Pipeline(steps=[('simpleimputer',
+                                                                   SimpleImputer(fill_value='missing',
+                                                                                 strategy='constant')),
+                                                                  ('onehotencoder',
+                                                                   OneHotEncoder())]),
+                                                  ['Embarked', 'Sex']),
+                                                 ('countvectorizer',
+                                                  CountVectorizer(), 'Name'),
+                                                 ('simpleimputer',
+                                                  SimpleImputer(),
+                                                  ['Age', 'Fare']),
+                                                 ('passthrough', 'passthrough',
+                                                  ['Parch'])])),
+                ('logisticregression',
+                 LogisticRegression(random_state=1, solver='liblinear'))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="23bfb00f-ab1b-4d50-8296-1efb5657e6ab" type="checkbox"><label class="sk-toggleable__label" for="23bfb00f-ab1b-4d50-8296-1efb5657e6ab">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
+                                 Pipeline(steps=[('simpleimputer',
+                                                  SimpleImputer(fill_value='missing',
+                                                                strategy='constant')),
+                                                 ('onehotencoder',
+                                                  OneHotEncoder())]),
+                                 ['Embarked', 'Sex']),
+                                ('countvectorizer', CountVectorizer(), 'Name'),
+                                ('simpleimputer', SimpleImputer(),
+                                 ['Age', 'Fare']),
+                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ef8f3d55-31c4-4465-bcc7-901fb3edd71e" type="checkbox"><label class="sk-toggleable__label" for="ef8f3d55-31c4-4465-bcc7-901fb3edd71e">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="640f7314-92b2-4f00-8df3-ae825fca4697" type="checkbox"><label class="sk-toggleable__label" for="640f7314-92b2-4f00-8df3-ae825fca4697">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="1c613d9e-15a9-457b-b233-fe36890061a9" type="checkbox"><label class="sk-toggleable__label" for="1c613d9e-15a9-457b-b233-fe36890061a9">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8e389e24-db17-4fcc-a0d1-65e9cc010400" type="checkbox"><label class="sk-toggleable__label" for="8e389e24-db17-4fcc-a0d1-65e9cc010400">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6aae2379-b007-4124-9bab-5204483ae936" type="checkbox"><label class="sk-toggleable__label" for="6aae2379-b007-4124-9bab-5204483ae936">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0c61cbce-8f90-45af-aab6-4cac2f463609" type="checkbox"><label class="sk-toggleable__label" for="0c61cbce-8f90-45af-aab6-4cac2f463609">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="de62d291-30d4-4662-86b7-5a74a3f104c4" type="checkbox"><label class="sk-toggleable__label" for="de62d291-30d4-4662-86b7-5a74a3f104c4">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0569d1f7-229d-400b-a0ab-51a42f674c31" type="checkbox"><label class="sk-toggleable__label" for="0569d1f7-229d-400b-a0ab-51a42f674c31">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="348d77f4-69e7-4a80-9f6b-185549e86889" type="checkbox"><label class="sk-toggleable__label" for="348d77f4-69e7-4a80-9f6b-185549e86889">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="112a964f-a4ec-4ef9-ae1d-d2f848cf70d7" type="checkbox"><label class="sk-toggleable__label" for="112a964f-a4ec-4ef9-ae1d-d2f848cf70d7">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(random_state=1, solver='liblinear')</pre></div></div></div></div></div></div></div>
+</div>
+</div>
+<p>However, an alternative approach would to create a three-step Pipeline in which the first step is missing value imputation, the second step includes all other data transformations, and the third step is the model. Let’s try it out to see if this is a better approach.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Impute missing values as a first step?</strong></p>
+<ul>
+<li><strong>Current Pipeline:</strong>
+<ul>
+<li><strong>Step 1:</strong> All data transformations</li>
+<li><strong>Step 2:</strong> Model</li>
+</ul></li>
+<li><strong>Alternative Pipeline:</strong>
+<ul>
+<li><strong>Step 1:</strong> Missing value imputation</li>
+<li><strong>Step 2:</strong> All other data transformations</li>
+<li><strong>Step 3:</strong> Model</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<p>This would be the first ColumnTransformer, which only does missing value imputation. Constant value imputation is applied to Embarked, mean imputation is applied to Age and Fare, and the other columns are passed through because they don’t contain any missing values in the training or new data. It would be the first step in the Pipeline.</p>
+<div id="d8a4b91e" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>ct1 <span class="op">=</span> make_column_transformer(</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>    (imp_constant, [<span class="st">'Embarked'</span>]),</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    (imp, [<span class="st">'Age'</span>, <span class="st">'Fare'</span>]),</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'passthrough'</span>, [<span class="st">'Sex'</span>, <span class="st">'Name'</span>, <span class="st">'Parch'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This would be the second ColumnTransformer, which handles all other data transformations. It would be the second step in the Pipeline, and thus it would operate on the output of the first ColumnTransformer. However, a ColumnTransformer outputs a NumPy array, not a DataFrame, and thus in this ColumnTransformer we would have to reference the columns by position instead of by name.</p>
+<p>We know the order of the columns from the first ColumnTransformer, and thus Embarked and Sex would be columns 0 and 3 and Name would be column 4. Embarked and Sex are one-hot encoded, Name is vectorized, and the other columns are passed through.</p>
+<div id="0203a6e3" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>ct2 <span class="op">=</span> make_column_transformer(</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>    (ohe, [<span class="dv">0</span>, <span class="dv">3</span>]),</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    (vect, <span class="dv">4</span>),</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'passthrough'</span>, [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now that we’ve created the ColumnTransformers, we can include them in a three-step Pipeline and fit the Pipeline to X and y.</p>
+<div id="b88d4418" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> make_pipeline(ct1, ct2, logreg)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>pipe.fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f114d191-7e96-47d7-bad4-0775b4a9710f" type="checkbox"><label class="sk-toggleable__label" for="f114d191-7e96-47d7-bad4-0775b4a9710f">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('columntransformer-1',
+                 ColumnTransformer(transformers=[('simpleimputer-1',
+                                                  SimpleImputer(fill_value='missing',
+                                                                strategy='constant'),
+                                                  ['Embarked']),
+                                                 ('simpleimputer-2',
+                                                  SimpleImputer(),
+                                                  ['Age', 'Fare']),
+                                                 ('passthrough', 'passthrough',
+                                                  ['Sex', 'Name', 'Parch'])])),
+                ('columntransformer-2',
+                 ColumnTransformer(transformers=[('onehotencoder',
+                                                  OneHotEncoder(), [0, 3]),
+                                                 ('countvectorizer',
+                                                  CountVectorizer(), 4),
+                                                 ('passthrough', 'passthrough',
+                                                  [1, 2, 5])])),
+                ('logisticregression',
+                 LogisticRegression(random_state=1, solver='liblinear'))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="1bcd970c-b251-4168-bd0e-57c9833bf4cf" type="checkbox"><label class="sk-toggleable__label" for="1bcd970c-b251-4168-bd0e-57c9833bf4cf">columntransformer-1: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('simpleimputer-1',
+                                 SimpleImputer(fill_value='missing',
+                                               strategy='constant'),
+                                 ['Embarked']),
+                                ('simpleimputer-2', SimpleImputer(),
+                                 ['Age', 'Fare']),
+                                ('passthrough', 'passthrough',
+                                 ['Sex', 'Name', 'Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8b09d8c8-54c8-4029-af99-6d2b60b995df" type="checkbox"><label class="sk-toggleable__label" for="8b09d8c8-54c8-4029-af99-6d2b60b995df">simpleimputer-1</label><div class="sk-toggleable__content"><pre>['Embarked']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f0191c30-8a94-4690-be1b-b8ae7d6b1018" type="checkbox"><label class="sk-toggleable__label" for="f0191c30-8a94-4690-be1b-b8ae7d6b1018">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="d77d8aab-e90b-43f6-8e37-c06ddb2266cf" type="checkbox"><label class="sk-toggleable__label" for="d77d8aab-e90b-43f6-8e37-c06ddb2266cf">simpleimputer-2</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="1dc6687c-2240-4a76-8b2f-9becdf2a957a" type="checkbox"><label class="sk-toggleable__label" for="1dc6687c-2240-4a76-8b2f-9becdf2a957a">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="cb776903-aba9-41bb-b63b-9dac0dc5a171" type="checkbox"><label class="sk-toggleable__label" for="cb776903-aba9-41bb-b63b-9dac0dc5a171">passthrough</label><div class="sk-toggleable__content"><pre>['Sex', 'Name', 'Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="e5c8295f-28a5-427b-9062-cb087527ae2e" type="checkbox"><label class="sk-toggleable__label" for="e5c8295f-28a5-427b-9062-cb087527ae2e">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8a474a4d-4d0a-4fc6-8d94-787758789c29" type="checkbox"><label class="sk-toggleable__label" for="8a474a4d-4d0a-4fc6-8d94-787758789c29">columntransformer-2: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('onehotencoder', OneHotEncoder(), [0, 3]),
+                                ('countvectorizer', CountVectorizer(), 4),
+                                ('passthrough', 'passthrough', [1, 2, 5])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="c506d2de-2ea9-4c81-a420-15c2a0e70441" type="checkbox"><label class="sk-toggleable__label" for="c506d2de-2ea9-4c81-a420-15c2a0e70441">onehotencoder</label><div class="sk-toggleable__content"><pre>[0, 3]</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="550fcbe1-e9da-4657-b3f0-e6979b07e45c" type="checkbox"><label class="sk-toggleable__label" for="550fcbe1-e9da-4657-b3f0-e6979b07e45c">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="530b12d9-070b-418f-b755-a0ae3403416d" type="checkbox"><label class="sk-toggleable__label" for="530b12d9-070b-418f-b755-a0ae3403416d">countvectorizer</label><div class="sk-toggleable__content"><pre>4</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="cb70c08f-60d6-44f3-b7cb-98bc5faa3a51" type="checkbox"><label class="sk-toggleable__label" for="cb70c08f-60d6-44f3-b7cb-98bc5faa3a51">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="fcc80d2e-400b-4c8d-95b7-9761f23376bf" type="checkbox"><label class="sk-toggleable__label" for="fcc80d2e-400b-4c8d-95b7-9761f23376bf">passthrough</label><div class="sk-toggleable__content"><pre>[1, 2, 5]</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0e8d6c1a-321c-4a40-8003-18d930aa2e9b" type="checkbox"><label class="sk-toggleable__label" for="0e8d6c1a-321c-4a40-8003-18d930aa2e9b">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="5e677d58-afe4-4b02-bb51-eb940b002301" type="checkbox"><label class="sk-toggleable__label" for="5e677d58-afe4-4b02-bb51-eb940b002301">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(random_state=1, solver='liblinear')</pre></div></div></div></div></div></div></div>
+</div>
+</div>
+<p>Finally, we can use this three-step Pipeline to make predictions, and it does indeed make the same predictions as our original two-step Pipeline.</p>
+<div id="cd5c8c56" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>pipe.predict(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="37">
+<pre><code>array([0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1,
+       1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1,
+       1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1,
+       1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1,
+       1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+       0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
+       1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1,
+       1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1,
+       0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0,
+       1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
+       1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1,
+       0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0,
+       0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1,
+       0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
+       1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0,
+       0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0,
+       1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1,
+       0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1])</code></pre>
+</div>
+</div>
+<p>Using a three-step Pipeline like this is certainly a valid approach. However, I find the original two-step Pipeline easier to write and to read, and thus I prefer the two-step approach.</p>
+</section>
+<section id="qa-what-methods-can-i-use-with-a-pipeline" class="level2" data-number="8.8">
+<h2 data-number="8.8" class="anchored" data-anchor-id="qa-what-methods-can-i-use-with-a-pipeline"><span class="header-section-number">8.8</span> Q&amp;A: What methods can I use with a Pipeline?</h2>
+<p>The rules for Pipelines are that all Pipeline steps other than the final step must be a transformer, and the final step can be a model or a transformer.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Rules for Pipeline steps:</strong></p>
+<ul>
+<li>All steps other than the final step must be a <strong>transformer</strong></li>
+<li>Final step can be a <strong>model</strong> or a <strong>transformer</strong></li>
+</ul>
+</div>
+</div>
+</div>
+<p>If a Pipeline ends in a model, such as our “pipe” object, you can use the Pipeline’s fit and predict methods:</p>
+<ul>
+<li>If you run the fit method, all steps before the final one run fit_transform, and the final step runs fit.</li>
+<li>If you run the predict method, all steps before the final one run transform, and the final step runs predict.</li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Pipeline ends in a model:</strong></p>
+<ul>
+<li><strong>fit:</strong>
+<ul>
+<li>All steps before the final step run <strong>fit_transform</strong></li>
+<li>Final step runs <strong>fit</strong></li>
+</ul></li>
+<li><strong>predict:</strong>
+<ul>
+<li>All steps before the final step run <strong>transform</strong></li>
+<li>Final step runs <strong>predict</strong></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<p>If a Pipeline ends in a transformer, such as our “imp_ohe” object, you generally use the Pipeline’s fit_transform and transform methods, but you can also use the fit method:</p>
+<ul>
+<li>If you run the fit_transform method, all steps run fit_transform.</li>
+<li>If you run the transform method, all steps run transform.</li>
+<li>If you run the fit method, all steps before the final one run fit_transform, and the final step runs fit.</li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Pipeline ends in a transformer:</strong></p>
+<ul>
+<li><strong>fit_transform:</strong>
+<ul>
+<li>All steps run <strong>fit_transform</strong></li>
+</ul></li>
+<li><strong>transform:</strong>
+<ul>
+<li>All steps run <strong>transform</strong></li>
+</ul></li>
+<li><strong>fit:</strong>
+<ul>
+<li>All steps before the final step run <strong>fit_transform</strong></li>
+<li>Final step runs <strong>fit</strong></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<p>Although this is a lot of information to take in, developing this level of understanding will definitely make it easier for you to test and debug your future Pipelines.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+            // default icon
+            link.classList.add("external");
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./ch07.html" class="pagination-link" aria-label="Handling missing values">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Handling missing values</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./ch09.html" class="pagination-link" aria-label="Workflow review #2">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Workflow review #2</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2025, Kevin Markham. All Rights Reserved.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

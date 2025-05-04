@@ -1,0 +1,2069 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.29">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Kevin Markham">
+
+<title>2&nbsp; Review of the Machine Learning workflow – Master Machine Learning with scikit-learn</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./ch03.html" rel="next">
+<link href="./ch01.html" rel="prev">
+<link href="./favicon.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-0815c480559380816a4d1ea211a47e91.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-485d01fc63b59abcd3ee1bf1e8e2748d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./ch02.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Review of the Machine Learning workflow</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Master Machine Learning with scikit-learn</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About this book</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch02.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Review of the Machine Learning workflow</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Encoding categorical features</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improving your workflow with ColumnTransformer and Pipeline</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Workflow review #1</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Encoding text data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Handling missing values</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fixing common workflow problems</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Workflow review #2</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Evaluating and tuning a Pipeline</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Comparing linear and non-linear models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Ensembling multiple models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Feature selection</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Feature standardization</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Feature engineering with custom transformers</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Workflow review #3</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">High-cardinality categorical features</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Class imbalance</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Class imbalance walkthrough</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Going further</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#loading-and-exploring-a-dataset" id="toc-loading-and-exploring-a-dataset" class="nav-link active" data-scroll-target="#loading-and-exploring-a-dataset"><span class="header-section-number">2.1</span> Loading and exploring a dataset</a></li>
+  <li><a href="#building-and-evaluating-a-model" id="toc-building-and-evaluating-a-model" class="nav-link" data-scroll-target="#building-and-evaluating-a-model"><span class="header-section-number">2.2</span> Building and evaluating a model</a></li>
+  <li><a href="#using-the-model-to-make-predictions" id="toc-using-the-model-to-make-predictions" class="nav-link" data-scroll-target="#using-the-model-to-make-predictions"><span class="header-section-number">2.3</span> Using the model to make predictions</a></li>
+  <li><a href="#qa-how-do-i-adapt-this-workflow-to-a-regression-problem" id="toc-qa-how-do-i-adapt-this-workflow-to-a-regression-problem" class="nav-link" data-scroll-target="#qa-how-do-i-adapt-this-workflow-to-a-regression-problem"><span class="header-section-number">2.4</span> Q&amp;A: How do I adapt this workflow to a regression problem?</a></li>
+  <li><a href="#qa-how-do-i-adapt-this-workflow-to-a-multiclass-problem" id="toc-qa-how-do-i-adapt-this-workflow-to-a-multiclass-problem" class="nav-link" data-scroll-target="#qa-how-do-i-adapt-this-workflow-to-a-multiclass-problem"><span class="header-section-number">2.5</span> Q&amp;A: How do I adapt this workflow to a multiclass problem?</a></li>
+  <li><a href="#qa-why-should-i-select-a-series-for-the-target" id="toc-qa-why-should-i-select-a-series-for-the-target" class="nav-link" data-scroll-target="#qa-why-should-i-select-a-series-for-the-target"><span class="header-section-number">2.6</span> Q&amp;A: Why should I select a Series for the target?</a></li>
+  <li><a href="#qa-how-do-i-add-the-models-predictions-to-a-dataframe" id="toc-qa-how-do-i-add-the-models-predictions-to-a-dataframe" class="nav-link" data-scroll-target="#qa-how-do-i-add-the-models-predictions-to-a-dataframe"><span class="header-section-number">2.7</span> Q&amp;A: How do I add the model’s predictions to a DataFrame?</a></li>
+  <li><a href="#qa-how-do-i-determine-the-confidence-level-of-each-prediction" id="toc-qa-how-do-i-determine-the-confidence-level-of-each-prediction" class="nav-link" data-scroll-target="#qa-how-do-i-determine-the-confidence-level-of-each-prediction"><span class="header-section-number">2.8</span> Q&amp;A: How do I determine the confidence level of each prediction?</a></li>
+  <li><a href="#qa-how-do-i-check-the-accuracy-of-the-models-predictions" id="toc-qa-how-do-i-check-the-accuracy-of-the-models-predictions" class="nav-link" data-scroll-target="#qa-how-do-i-check-the-accuracy-of-the-models-predictions"><span class="header-section-number">2.9</span> Q&amp;A: How do I check the accuracy of the model’s predictions?</a></li>
+  <li><a href="#qa-what-do-the-solver-and-random_state-parameters-do" id="toc-qa-what-do-the-solver-and-random_state-parameters-do" class="nav-link" data-scroll-target="#qa-what-do-the-solver-and-random_state-parameters-do"><span class="header-section-number">2.10</span> Q&amp;A: What do the “solver” and “random_state” parameters do?</a></li>
+  <li><a href="#qa-how-do-i-show-all-of-the-model-parameters" id="toc-qa-how-do-i-show-all-of-the-model-parameters" class="nav-link" data-scroll-target="#qa-how-do-i-show-all-of-the-model-parameters"><span class="header-section-number">2.11</span> Q&amp;A: How do I show all of the model parameters?</a></li>
+  <li><a href="#qa-should-i-shuffle-the-samples-when-using-cross-validation" id="toc-qa-should-i-shuffle-the-samples-when-using-cross-validation" class="nav-link" data-scroll-target="#qa-should-i-shuffle-the-samples-when-using-cross-validation"><span class="header-section-number">2.12</span> Q&amp;A: Should I shuffle the samples when using cross-validation?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Review of the Machine Learning workflow</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="loading-and-exploring-a-dataset" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="loading-and-exploring-a-dataset"><span class="header-section-number">2.1</span> Loading and exploring a dataset</h2>
+<p>In this chapter, we’re going to do a quick review of the basic Machine Learning workflow, from loading and exploring a dataset to building and evaluating a model, and then finally using that model to making predictions.</p>
+<p>We’ll start by importing the pandas library and then using its read_csv function to read a dataset directly from a URL.</p>
+<p>We specified that only the first 10 rows should be read in. We’ll work with the entire dataset later in the book, but by starting with just 10 rows, we can more easily examine the input and output of each step.</p>
+<div id="822e64fc" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/MLtrain'</span>, nrows<span class="op">=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s print out these 10 rows.</p>
+<p>This is the famous Titanic dataset. There’s a lot we can learn by working with this dataset because it contains a diversity of feature types, lots of missing values, and other problems we’ll need to solve.</p>
+<p>The Titanic ship sank in 1912, and each row in this dataset represents one passenger. Some of the passengers survived, represented by a 1 in the Survived column, whereas others did not, represented by a 0.</p>
+<div id="4bf3158f" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Survived</th>
+<th data-quarto-table-cell-role="th">Pclass</th>
+<th data-quarto-table-cell-role="th">Name</th>
+<th data-quarto-table-cell-role="th">Sex</th>
+<th data-quarto-table-cell-role="th">Age</th>
+<th data-quarto-table-cell-role="th">SibSp</th>
+<th data-quarto-table-cell-role="th">Parch</th>
+<th data-quarto-table-cell-role="th">Ticket</th>
+<th data-quarto-table-cell-role="th">Fare</th>
+<th data-quarto-table-cell-role="th">Cabin</th>
+<th data-quarto-table-cell-role="th">Embarked</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0</td>
+<td>3</td>
+<td>Braund, Mr. Owen Harris</td>
+<td>male</td>
+<td>22.0</td>
+<td>1</td>
+<td>0</td>
+<td>A/5 21171</td>
+<td>7.2500</td>
+<td>NaN</td>
+<td>S</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1</td>
+<td>1</td>
+<td>Cumings, Mrs. John Bradley (Florence Briggs Th...</td>
+<td>female</td>
+<td>38.0</td>
+<td>1</td>
+<td>0</td>
+<td>PC 17599</td>
+<td>71.2833</td>
+<td>C85</td>
+<td>C</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>1</td>
+<td>3</td>
+<td>Heikkinen, Miss. Laina</td>
+<td>female</td>
+<td>26.0</td>
+<td>0</td>
+<td>0</td>
+<td>STON/O2. 3101282</td>
+<td>7.9250</td>
+<td>NaN</td>
+<td>S</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>1</td>
+<td>1</td>
+<td>Futrelle, Mrs. Jacques Heath (Lily May Peel)</td>
+<td>female</td>
+<td>35.0</td>
+<td>1</td>
+<td>0</td>
+<td>113803</td>
+<td>53.1000</td>
+<td>C123</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>0</td>
+<td>3</td>
+<td>Allen, Mr. William Henry</td>
+<td>male</td>
+<td>35.0</td>
+<td>0</td>
+<td>0</td>
+<td>373450</td>
+<td>8.0500</td>
+<td>NaN</td>
+<td>S</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>0</td>
+<td>3</td>
+<td>Moran, Mr. James</td>
+<td>male</td>
+<td>NaN</td>
+<td>0</td>
+<td>0</td>
+<td>330877</td>
+<td>8.4583</td>
+<td>NaN</td>
+<td>Q</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>0</td>
+<td>1</td>
+<td>McCarthy, Mr. Timothy J</td>
+<td>male</td>
+<td>54.0</td>
+<td>0</td>
+<td>0</td>
+<td>17463</td>
+<td>51.8625</td>
+<td>E46</td>
+<td>S</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>0</td>
+<td>3</td>
+<td>Palsson, Master. Gosta Leonard</td>
+<td>male</td>
+<td>2.0</td>
+<td>3</td>
+<td>1</td>
+<td>349909</td>
+<td>21.0750</td>
+<td>NaN</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>1</td>
+<td>3</td>
+<td>Johnson, Mrs. Oscar W (Elisabeth Vilhelmina Berg)</td>
+<td>female</td>
+<td>27.0</td>
+<td>0</td>
+<td>2</td>
+<td>347742</td>
+<td>11.1333</td>
+<td>NaN</td>
+<td>S</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>1</td>
+<td>2</td>
+<td>Nasser, Mrs. Nicholas (Adele Achem)</td>
+<td>female</td>
+<td>14.0</td>
+<td>1</td>
+<td>0</td>
+<td>237736</td>
+<td>30.0708</td>
+<td>NaN</td>
+<td>C</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Let’s review some basic terminology:</p>
+<ul>
+<li>The Survived column is the target column, which is what we are trying to predict.</li>
+<li>The target column is categorical, and thus this is a classification problem. More specifically, it’s called binary classification because there are only two classes, 0 and 1.</li>
+<li>All other columns are possible features, meaning inputs to the model.</li>
+<li>Each row is known as a sample or observation, and represents a passenger. At the moment, we have 10 samples.</li>
+<li>And this is known as our training data because we know the actual target values.</li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Machine Learning terminology:</strong></p>
+<ul>
+<li><strong>Target:</strong> Goal of prediction</li>
+<li><strong>Classification:</strong> Problem with a categorical target</li>
+<li><strong>Feature:</strong> Input to the model (column)</li>
+<li><strong>Sample:</strong> Single observation (row)</li>
+<li><strong>Training data:</strong> Data with known target values</li>
+</ul>
+</div>
+</div>
+</div>
+<p>Next, let’s select some features. There are many valid methods for feature selection, such as:</p>
+<ul>
+<li>Human intuition, meaning what makes sense as a feature</li>
+<li>Domain knowledge, meaning what you know because of your expertise in that field</li>
+<li>Data exploration, meaning relationships in the data that you discover</li>
+<li>And finally, there are automated methods that we’ll cover later in the book.</li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Feature selection methods:</strong></p>
+<ul>
+<li>Human intuition</li>
+<li>Domain knowledge</li>
+<li>Data exploration</li>
+<li>Automated methods</li>
+</ul>
+</div>
+</div>
+</div>
+<p>To start, we’re going to use intuition and start with Parch and Fare as our features:</p>
+<ul>
+<li>Parch is the number of parents or children aboard with that passenger. Our intuition is that families may have gotten priority access to lifeboats, and thus Parch may be predictive of who survived, which is our target.</li>
+<li>Fare is the amount the passenger paid. Our intuition is that people who paid more may have gotten priority access to lifeboats, and again it may be predictive of our target.</li>
+</ul>
+<p>As you can see above, both Parch and Fare are numeric features.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Currently selected features:</strong></p>
+<ul>
+<li><strong>Parch:</strong> Number of parents or children aboard with that passenger</li>
+<li><strong>Fare:</strong> Amount the passenger paid</li>
+</ul>
+</div>
+</div>
+</div>
+<p>Let’s now define our X and our y:</p>
+<ul>
+<li>X is the feature matrix, and we’ll use double brackets to select those two columns as a DataFrame.</li>
+<li>y is the target, and we’ll use single brackets to select this column as a Series.</li>
+</ul>
+<div id="c93d5650" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[[<span class="st">'Parch'</span>, <span class="st">'Fare'</span>]]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Parch</th>
+<th data-quarto-table-cell-role="th">Fare</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0</td>
+<td>7.2500</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>0</td>
+<td>71.2833</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>0</td>
+<td>7.9250</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>0</td>
+<td>53.1000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>0</td>
+<td>8.0500</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>0</td>
+<td>8.4583</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>0</td>
+<td>51.8625</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>1</td>
+<td>21.0750</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>2</td>
+<td>11.1333</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>0</td>
+<td>30.0708</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="a20a8ef7" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">'Survived'</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>0    0
+1    1
+2    1
+3    1
+4    0
+5    0
+6    0
+7    0
+8    1
+9    1
+Name: Survived, dtype: int64</code></pre>
+</div>
+</div>
+<p>Object shape is important in scikit-learn, and so we’ll check the shapes of both X and y:</p>
+<ul>
+<li>X is a pandas DataFrame with 2 columns, thus it has 2 dimensions.</li>
+<li>y is a pandas Series, thus it has 1 dimension.</li>
+</ul>
+<p>By convention, you use an uppercase “X” because it has 2 dimensions, and you use a lowercase “y” because it has 1 dimension.</p>
+<div id="ddf0fb2e" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>X.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>(10, 2)</code></pre>
+</div>
+</div>
+<div id="657f8840" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>y.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>(10,)</code></pre>
+</div>
+</div>
+</section>
+<section id="building-and-evaluating-a-model" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="building-and-evaluating-a-model"><span class="header-section-number">2.2</span> Building and evaluating a model</h2>
+<p>Now that we’ve defined X and y, our next step is to build and evaluate a model.</p>
+<p>To start, we’re going to use logistic regression as our model. It’s a good default choice for classification problems because it’s both fast and interpretable.</p>
+<p>We import it from the linear_model module, and then we create an instance called logreg. This is our model object.</p>
+<p>The default solver for logistic regression has changed between different scikit-learn versions, but in this book I’m going to set the solver to liblinear. I’m specifying the solver explicitly and setting a value for random_state so that if you run the same code at home, you will most likely get the same results as me.</p>
+<div id="d6933671" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>logreg <span class="op">=</span> LogisticRegression(solver<span class="op">=</span><span class="st">'liblinear'</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s now talk about model evaluation. The goal of model evaluation is to simulate how a model will perform on future data so that we can choose between models today. To do model evaluation, we need both an evaluation procedure and an evaluation metric.</p>
+<p>The procedure we will use is K-fold cross-validation. Another option is to use train/test split, but cross-validation is generally superior because it gives a lower variance estimate of model performance.</p>
+<p>The metric we will use is classification accuracy. There are many other classification metrics we could have chosen, but accuracy is suitable for this problem for two reasons:</p>
+<ul>
+<li>First, there is not significant class imbalance.</li>
+<li>And second, predicting the positive class correctly is just as important to us as predicting the negative class correctly.</li>
+</ul>
+<p>That being said, I will cover other classification metrics in the chapters on class imbalance.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Requirements for model evaluation:</strong></p>
+<ul>
+<li><strong>Procedure:</strong> K-fold cross-validation</li>
+<li><strong>Metric:</strong> Classification accuracy</li>
+</ul>
+</div>
+</div>
+</div>
+<p>With such a small dataset, we’re going to use 3-fold cross-validation, rather than 5 or 10 folds which is more typical. Let me briefly review what happens during 3-fold cross-validation:</p>
+<ul>
+<li>The rows are split into 3 subsets, which we’ll call A, B, and C.</li>
+<li>First, A and B together become the training set, and C becomes the testing set. The model is trained on the training set, the trained model makes predictions for the testing set, and those predictions are evaluated.</li>
+<li>Next, A and C together become the training set, and B becomes the testing set. Again, the model is trained, it makes predictions, and the predictions are evaluated.</li>
+<li>Finally, B and C together become the training set, and A becomes the testing set. The training, predicting, and evaluation process happens one final time.</li>
+<li>Because the evaluation process occurred 3 times, it returns 3 scores, and we will usually take the mean of those scores.</li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Steps of 3-fold cross-validation:</strong></p>
+<ol type="1">
+<li>Split rows into 3 subsets (A, B, C)</li>
+<li>A &amp; B is training set, C is testing set</li>
+</ol>
+<ul>
+<li>Train model on training set</li>
+<li>Make predictions on testing set</li>
+<li>Evaluate predictions</li>
+</ul>
+<ol start="3" type="1">
+<li>Repeat with A &amp; C as training set, B as testing set</li>
+<li>Repeat with B &amp; C as training set, A as testing set</li>
+<li>Calculate the mean of the scores</li>
+</ol>
+</div>
+</div>
+</div>
+<p>Let’s go ahead and use cross-validation to evaluate our model:</p>
+<ul>
+<li>First we import the cross_val_score function from the model_selection module.</li>
+<li>Then we pass it the model object, X and y, the number of cross-validation folds, and the evaluation metric. Although the default metric for classification problems is accuracy, I recommend specifying it explicitly so that there’s no ambiguity.</li>
+<li>When we run cross_val_score, it does the dataset splitting, training, predicting, and evaluation. 3 accuracy scores are returned, and the mean of those scores is 69%.</li>
+</ul>
+<div id="bc1129aa" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>cross_val_score(logreg, X, y, cv<span class="op">=</span><span class="dv">3</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>0.6944444444444443</code></pre>
+</div>
+</div>
+<p>If you received a different result, that’s not a problem. The results can vary based on your scikit-learn version due to changes in the default parameters, algorithm changes, bug fixes, and so on.</p>
+<p>Unfortunately, we can’t take these results seriously because the dataset is so small. There’s actually no reliable evaluation procedure when your training data only contains 10 rows, but I did want to demonstrate it anyway to emphasize that model evaluation is a normal part of the Machine Learning workflow.</p>
+</section>
+<section id="using-the-model-to-make-predictions" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="using-the-model-to-make-predictions"><span class="header-section-number">2.3</span> Using the model to make predictions</h2>
+<p>At this point in the workflow, we would typically try making changes in order to achieve a better accuracy, such as:</p>
+<ul>
+<li>Tuning the the model’s hyperparameters</li>
+<li>Adding or removing features</li>
+<li>Or trying a different classification model other than logistic regression.</li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Ways to improve the model:</strong></p>
+<ul>
+<li>Hyperparameter tuning</li>
+<li>Adding or removing features</li>
+<li>Trying a different model</li>
+</ul>
+</div>
+</div>
+</div>
+<p>We’ll cover these topics in detail later in the book, but for now, let’s assume that we’re happy with the model as-is. Thus, our next steps are to train the model and then use it to make predictions on new data.</p>
+<p>We use the model’s fit method, which instructs the model to try to learn the relationship between X and y.</p>
+<div id="8e00c35d" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>logreg.fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>LogisticRegression(random_state=1, solver='liblinear')</code></pre>
+</div>
+</div>
+<p>There are four important points I want to note here:</p>
+<ul>
+<li>First, you should train your model on the entire dataset before using it to make predictions, otherwise you are throwing away valuable training data. In truth, we do have more than 10 rows, but for now we are considering our entire training dataset to be these 10 rows.</li>
+<li>Second, the model object is modified in-place when you run the fit method, and so there’s no need to overwrite the logreg object using an assignment statement.</li>
+<li>Third, scikit-learn understands how to work with pandas objects, and so we can pass X and y directly to the fit method.</li>
+<li>And finally, if you’re using scikit-learn 0.23 or later, you will only see the parameters that have changed from the defaults when you print or fit a model. That’s why it only displays the random_state and solver parameters, whereas in previous versions of scikit-learn, all model parameters would have been displayed.</li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Important points about model fitting:</strong></p>
+<ul>
+<li>Train your model on the entire dataset before making predictions</li>
+<li>Assignment statement is unnecessary</li>
+<li>Passing pandas objects is fine</li>
+<li>Only prints parameters that have changed (version 0.23 or later)</li>
+</ul>
+</div>
+</div>
+</div>
+<p>Now, let’s read in a new dataset for which we don’t know the target values. Again, we are only going to keep the first 10 rows.</p>
+<p>You’ll notice that it has the same columns as the df DataFrame, except that there’s no Survived column, which is the column that we’re going to predict.</p>
+<div id="db0a4c1e" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df_new <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/MLnewdata'</span>, nrows<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>df_new</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Pclass</th>
+<th data-quarto-table-cell-role="th">Name</th>
+<th data-quarto-table-cell-role="th">Sex</th>
+<th data-quarto-table-cell-role="th">Age</th>
+<th data-quarto-table-cell-role="th">SibSp</th>
+<th data-quarto-table-cell-role="th">Parch</th>
+<th data-quarto-table-cell-role="th">Ticket</th>
+<th data-quarto-table-cell-role="th">Fare</th>
+<th data-quarto-table-cell-role="th">Cabin</th>
+<th data-quarto-table-cell-role="th">Embarked</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>3</td>
+<td>Kelly, Mr. James</td>
+<td>male</td>
+<td>34.5</td>
+<td>0</td>
+<td>0</td>
+<td>330911</td>
+<td>7.8292</td>
+<td>NaN</td>
+<td>Q</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>3</td>
+<td>Wilkes, Mrs. James (Ellen Needs)</td>
+<td>female</td>
+<td>47.0</td>
+<td>1</td>
+<td>0</td>
+<td>363272</td>
+<td>7.0000</td>
+<td>NaN</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2</td>
+<td>Myles, Mr. Thomas Francis</td>
+<td>male</td>
+<td>62.0</td>
+<td>0</td>
+<td>0</td>
+<td>240276</td>
+<td>9.6875</td>
+<td>NaN</td>
+<td>Q</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>3</td>
+<td>Wirz, Mr. Albert</td>
+<td>male</td>
+<td>27.0</td>
+<td>0</td>
+<td>0</td>
+<td>315154</td>
+<td>8.6625</td>
+<td>NaN</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>3</td>
+<td>Hirvonen, Mrs. Alexander (Helga E Lindqvist)</td>
+<td>female</td>
+<td>22.0</td>
+<td>1</td>
+<td>1</td>
+<td>3101298</td>
+<td>12.2875</td>
+<td>NaN</td>
+<td>S</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>3</td>
+<td>Svensson, Mr. Johan Cervin</td>
+<td>male</td>
+<td>14.0</td>
+<td>0</td>
+<td>0</td>
+<td>7538</td>
+<td>9.2250</td>
+<td>NaN</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>3</td>
+<td>Connolly, Miss. Kate</td>
+<td>female</td>
+<td>30.0</td>
+<td>0</td>
+<td>0</td>
+<td>330972</td>
+<td>7.6292</td>
+<td>NaN</td>
+<td>Q</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>2</td>
+<td>Caldwell, Mr. Albert Francis</td>
+<td>male</td>
+<td>26.0</td>
+<td>1</td>
+<td>1</td>
+<td>248738</td>
+<td>29.0000</td>
+<td>NaN</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>3</td>
+<td>Abrahim, Mrs. Joseph (Sophie Halaut Easu)</td>
+<td>female</td>
+<td>18.0</td>
+<td>0</td>
+<td>0</td>
+<td>2657</td>
+<td>7.2292</td>
+<td>NaN</td>
+<td>C</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>3</td>
+<td>Davies, Mr. John Samuel</td>
+<td>male</td>
+<td>21.0</td>
+<td>2</td>
+<td>0</td>
+<td>A/4 48871</td>
+<td>24.1500</td>
+<td>NaN</td>
+<td>S</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Before we make predictions, we have to define X_new. It has to have the same columns as X, and those columns have to be in the same order.</p>
+<div id="ae86ecc4" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>X_new <span class="op">=</span> df_new[[<span class="st">'Parch'</span>, <span class="st">'Fare'</span>]]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>X_new</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Parch</th>
+<th data-quarto-table-cell-role="th">Fare</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0</td>
+<td>7.8292</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>0</td>
+<td>7.0000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>0</td>
+<td>9.6875</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>0</td>
+<td>8.6625</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>1</td>
+<td>12.2875</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>0</td>
+<td>9.2250</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>0</td>
+<td>7.6292</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>1</td>
+<td>29.0000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>0</td>
+<td>7.2292</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>0</td>
+<td>24.1500</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Finally, we’ll use the trained model to make predictions by passing X_new to the predict method, which outputs a NumPy array. There are 10 predictions because it makes 1 prediction for each sample in X_new.</p>
+<p>The predictions are in the same order as the samples in X_new, meaning the first prediction is for the first row in X_new, the second prediction is for the second row in X_new, and so on.</p>
+<div id="47ae0435" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>logreg.predict(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>array([0, 0, 0, 0, 1, 0, 0, 1, 0, 1])</code></pre>
+</div>
+</div>
+<p>Note that we can’t actually evaluate the accuracy of these predictions because we don’t know the true target values for the samples in X_new.</p>
+</section>
+<section id="qa-how-do-i-adapt-this-workflow-to-a-regression-problem" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="qa-how-do-i-adapt-this-workflow-to-a-regression-problem"><span class="header-section-number">2.4</span> Q&amp;A: How do I adapt this workflow to a regression problem?</h2>
+<p>In this book, we’re going to be focusing on classification problems, which means that the target you’re trying to predict is categorical. The other main type of prediction problem is regression, in which your target value is continuous.</p>
+<p>If you’re planning to work on a regression problem, the good news is that the workflow I’m teaching will work just as well to solve classification or regression problems. There are only two changes you will need to make to adapt this workflow for regression:</p>
+<ul>
+<li>First, you will need to choose a different Machine Learning model. For example, you might choose linear regression instead of logistic regression, since linear regression predicts continuous values whereas logistic regression predicts class values.</li>
+<li>Second, you will need to choose a different model evaluation metric. For example, you might choose mean squared error instead of accuracy, since mean squared error is appropriate for continuous values whereas accuracy is only appropriate for categorical values.</li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Adapting this workflow for regression:</strong></p>
+<ol type="1">
+<li>Choose a different model</li>
+<li>Choose a different evaluation metric</li>
+</ol>
+</div>
+</div>
+</div>
+</section>
+<section id="qa-how-do-i-adapt-this-workflow-to-a-multiclass-problem" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="qa-how-do-i-adapt-this-workflow-to-a-multiclass-problem"><span class="header-section-number">2.5</span> Q&amp;A: How do I adapt this workflow to a multiclass problem?</h2>
+<p>In this chapter, we worked on a binary classification problem, which means there are only two possible output classes.</p>
+<p>Multiclass problems are ones in which there are more than two output classes. The classic example of this is the iris dataset, in which each iris plant can be classified as one of three possible species.</p>
+<p>Thankfully, in scikit-learn, all classifiers automatically handle multiclass problems with no changes to the workflow. It automatically detects the number of classes from the data, thus you don’t even have to inform scikit-learn that you’re working on a multiclass problem.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Types of classification problems:</strong></p>
+<ul>
+<li><strong>Binary:</strong> Two output classes</li>
+<li><strong>Multiclass:</strong> More than two output classes</li>
+</ul>
+</div>
+</div>
+</div>
+<p>So how do classifiers handle multiclass problems?</p>
+<ul>
+<li>Many classifiers are inherently multiclass, meaning that they work exactly the same regardless of the number of classes.</li>
+<li>For classifiers that only work in the binary case, they can be extended to the multiclass case using the so-called “one-vs-one” or “one-vs-rest” strategies, in which multiple models are fit and the results are combined. You can research more about these strategies if you’re interested, but the key point is that this is handled for you automatically by scikit-learn without you needing to do anything special.</li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>How classifiers handle multiclass problems:</strong></p>
+<ul>
+<li>Many are inherently multiclass</li>
+<li>Others can be extended using “one-vs-one” or “one-vs-rest” strategies</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="qa-why-should-i-select-a-series-for-the-target" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="qa-why-should-i-select-a-series-for-the-target"><span class="header-section-number">2.6</span> Q&amp;A: Why should I select a Series for the target?</h2>
+<p>From our DataFrame, there are two ways you could imagine selecting the target variable of Survived:</p>
+<ul>
+<li>The first way is as a pandas Series, which we can do using a single set of brackets.</li>
+<li>The second way is as a pandas DataFrame with one column, which we can do using two sets of brackets.</li>
+</ul>
+<div id="71f89175" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Survived'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>0    0
+1    1
+2    1
+3    1
+4    0
+5    0
+6    0
+7    0
+8    1
+9    1
+Name: Survived, dtype: int64</code></pre>
+</div>
+</div>
+<div id="e9f650c2" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">'Survived'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Survived</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>These two objects look similar, but they actually have different shapes. The Series is a one-dimensional object, while the DataFrame is a two-dimensional object.</p>
+<div id="56d6f71d" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Survived'</span>].shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>(10,)</code></pre>
+</div>
+</div>
+<div id="146e04ad" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">'Survived'</span>]].shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>(10, 1)</code></pre>
+</div>
+</div>
+<p>The difference between these two objects is more clear if you convert them to NumPy arrays using the to_numpy method.</p>
+<div id="3fba405f" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Survived'</span>].to_numpy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>array([0, 1, 1, 1, 0, 0, 0, 0, 1, 1])</code></pre>
+</div>
+</div>
+<div id="9c1be306" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">'Survived'</span>]].to_numpy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>array([[0],
+       [1],
+       [1],
+       [1],
+       [0],
+       [0],
+       [0],
+       [0],
+       [1],
+       [1]])</code></pre>
+</div>
+</div>
+<p>Now that you’ve seen that these two objects are different, the question is: Why does it matter which object you use for the target?</p>
+<p>To answer this question, I have to briefly explain multilabel classification. A multilabel classification problem is one in which each sample can simultaneously have more than one label. The classic example of this is classifying the topic of a document. For example, a document might be about politics, religion, or law, or it might fit into multiple topics at once.</p>
+<p>This is different from multiclass classification because multiclass only allows a sample to have a single label, whereas multilabel allows a single sample to have multiple labels.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Multilabel vs multiclass problems:</strong></p>
+<ul>
+<li><strong>Multilabel:</strong> Each sample can have more than one label</li>
+<li><strong>Multiclass:</strong> Each sample can have one label</li>
+</ul>
+</div>
+</div>
+</div>
+<p>Anyway, scikit-learn supports multilabel classification by allowing you to represent the target as a two-dimensional object. For example, if you had 10 documents and there were 3 possible labels, you would actually use a 10 by 3 DataFrame as your y value.</p>
+<p>That is all to say that using a two-dimensional DataFrame as your y value signals to scikit-learn that you are working on a multilabel problem. Our classification problem is not multilabel, and thus we use a one-dimensional Series as our y value to signal that we are working on a single-label problem.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Multilabel vs multiclass targets:</strong></p>
+<ul>
+<li><strong>Multilabel:</strong> 2-dimensional y (DataFrame)</li>
+<li><strong>Multiclass:</strong> 1-dimensional y (Series)</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="qa-how-do-i-add-the-models-predictions-to-a-dataframe" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="qa-how-do-i-add-the-models-predictions-to-a-dataframe"><span class="header-section-number">2.7</span> Q&amp;A: How do I add the model’s predictions to a DataFrame?</h2>
+<p>Let’s say that you wanted to match up the 10 predictions output by the model with the 10 rows of the X_new DataFrame so that you can see the predictions next to the features.</p>
+<p>To do this, you would first convert the predictions from a NumPy array to a pandas Series. Note that we are setting the Series index to match the index of X_new, and we’re giving the Series a name.</p>
+<div id="03751817" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>predictions <span class="op">=</span> pd.Series(logreg.predict(X_new), index<span class="op">=</span>X_new.index,</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>                        name<span class="op">=</span><span class="st">'Prediction'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, you use the concat function to concatenate the X_new DataFrame and the predictions Series along the columns axis, which outputs a DataFrame. Note that the name of the Series became the name of that DataFrame column.</p>
+<div id="a1beeb68" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>pd.concat([X_new, predictions], axis<span class="op">=</span><span class="st">'columns'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Parch</th>
+<th data-quarto-table-cell-role="th">Fare</th>
+<th data-quarto-table-cell-role="th">Prediction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0</td>
+<td>7.8292</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>0</td>
+<td>7.0000</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>0</td>
+<td>9.6875</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>0</td>
+<td>8.6625</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>1</td>
+<td>12.2875</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>0</td>
+<td>9.2250</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>0</td>
+<td>7.6292</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>1</td>
+<td>29.0000</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>0</td>
+<td>7.2292</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>0</td>
+<td>24.1500</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="qa-how-do-i-determine-the-confidence-level-of-each-prediction" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="qa-how-do-i-determine-the-confidence-level-of-each-prediction"><span class="header-section-number">2.8</span> Q&amp;A: How do I determine the confidence level of each prediction?</h2>
+<p>For some classification problems, you are only interested in the predicted class labels.</p>
+<div id="ce9643a7" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>logreg.predict(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>array([0, 0, 0, 0, 1, 0, 0, 1, 0, 1])</code></pre>
+</div>
+</div>
+<p>However, sometimes it’s useful to output the predicted probabilities of class membership using the predict_proba method.</p>
+<p>The output array has 10 rows because the model made predictions for 10 samples, and it has 2 columns because there are 2 possible classes. The left column represents class 0, and the right column represents class 1.</p>
+<div id="1452b6aa" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>logreg.predict_proba(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>array([[0.57804075, 0.42195925],
+       [0.58275546, 0.41724454],
+       [0.56742414, 0.43257586],
+       [0.57328835, 0.42671165],
+       [0.48357081, 0.51642919],
+       [0.57007262, 0.42992738],
+       [0.57917926, 0.42082074],
+       [0.38795132, 0.61204868],
+       [0.58145374, 0.41854626],
+       [0.48342837, 0.51657163]])</code></pre>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Array of predicted probabilities:</strong></p>
+<ul>
+<li>One row for each sample</li>
+<li>One column for each class</li>
+</ul>
+</div>
+</div>
+</div>
+<p>Let’s talk about how to interpret this array, using the first row as an example:</p>
+<ul>
+<li>The model calculated a likelihood of 58% that the first sample in X_new was class 0 and a 42% likelihood that it was class 1.</li>
+<li>Because class 0 had a higher likelihood, the model predicted class 0 for this sample.</li>
+<li>And as you might imagine, the values in every row will always add up to 1.</li>
+</ul>
+<p>If you need just the second column, meaning the predicted probabilities of class 1, then you can extract it using NumPy’s slicing notation. The colon means select all rows, and the 1 means select the column in the 1 position, which is the second column.</p>
+<div id="55fbac17" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>logreg.predict_proba(X_new)[:, <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>array([0.42195925, 0.41724454, 0.43257586, 0.42671165, 0.51642919,
+       0.42992738, 0.42082074, 0.61204868, 0.41854626, 0.51657163])</code></pre>
+</div>
+</div>
+<p>Some classifiers, such as logistic regression, are known as well-calibrated classifiers, which means that their predicted probabilities can be directly interpreted as the model’s confidence level in that prediction. So for example, it’s more confident that the 8th sample is class 1 than it is that the 10th sample is class 1.</p>
+<p>Knowing these confidence levels can be useful if you’re most interested in the samples with the highest predicted probabilities. For example, if you were trying to predict who might be interested in purchasing a specific product, you might focus all of your marketing budget on reaching those customers with the highest predicted probabilities of purchase.</p>
+<p>Keep in mind that there are other classifiers which are not as well-calibrated, such as Naive Bayes. In those cases, it’s less appropriate to interpret their predicted probabilities as confidence levels. Thus if you know you’re going to be interested in these confidence levels, it’s best to use a well-calibrated classifier like logistic regression.</p>
+</section>
+<section id="qa-how-do-i-check-the-accuracy-of-the-models-predictions" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="qa-how-do-i-check-the-accuracy-of-the-models-predictions"><span class="header-section-number">2.9</span> Q&amp;A: How do I check the accuracy of the model’s predictions?</h2>
+<p>At the end of this chapter, we made predictions for the 10 samples in X_new, though we couldn’t check the accuracy of these predictions because we don’t know the true target values for those samples. That will sometimes be the case in the real world.</p>
+<p>For example, if you built a model to predict what medical conditions someone might develop based on their genetic information, you may not ever find out whether the model’s predictions were correct, either because that data is not being collected or because that data is protected by privacy laws.</p>
+<p>In other cases, you can actually check the accuracy of your predictions. For example, if you built a model to predict the outcome of all US Supreme Court cases, you would make those predictions before those cases were decided, and then you could check the model’s accuracy once the court’s rulings were publicly announced.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Checking model accuracy:</strong></p>
+<ul>
+<li><strong>Not possible:</strong> Target value is unknown or is private data</li>
+<li><strong>Possible:</strong> Target value is known</li>
+</ul>
+</div>
+</div>
+</div>
+<p>Ideally, the actual accuracy of your model will be close to the accuracy that you estimated using your training data during model evaluation. If it’s not close, that could indicate a problem with your model evaluation procedure, or it could indicate that there are some important differences between your training data and the new data.</p>
+<p>In all cases, you can incorporate this new data into your training data since you know the true target values, which should help the model to make better predictions in the future.</p>
+</section>
+<section id="qa-what-do-the-solver-and-random_state-parameters-do" class="level2" data-number="2.10">
+<h2 data-number="2.10" class="anchored" data-anchor-id="qa-what-do-the-solver-and-random_state-parameters-do"><span class="header-section-number">2.10</span> Q&amp;A: What do the “solver” and “random_state” parameters do?</h2>
+<p>In this chapter, when creating the model object, I set the logistic regression’s solver to liblinear, and I set the random_state to 1. I set these values so that if you ran the same code at home, you would most likely get the same results as me. In this lesson, I’ll explain what these two parameters actually do.</p>
+<div id="a63db407" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>logreg <span class="op">=</span> LogisticRegression(solver<span class="op">=</span><span class="st">'liblinear'</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The solver is the algorithm used to solve the optimization problem of calculating the logistic regression’s coefficients. In other words, given the features and the target, the solver figures out the coefficients. The solvers have different strengths and weaknesses, different properties, and ultimately may come up with different results. Here’s a comparison chart from the scikit-learn documentation.</p>
+<p><img src="solver_comparison.png" class="img-fluid" style="width:100.0%"></p>
+<p>I recommend reviewing this chart and reading the documentation to decide which solver to use for your particular problem, but ultimately it’s fine to just try each one and see what happens.</p>
+<p>liblinear used to be the default solver for logistic regression, but in scikit-learn version 0.22, they changed the default to lbfgs instead. I’m having all of us use liblinear in this book so that we will tend to get the same results, regardless of scikit-learn version. Keep in mind that we still aren’t guaranteed to get the exact same results, because with each new version, bugs are fixed and other algorithm parameters are sometimes changed.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Default solver for logistic regression:</strong></p>
+<ul>
+<li><strong>Before version 0.22:</strong> liblinear</li>
+<li><strong>Starting in version 0.22:</strong> lbfgs</li>
+</ul>
+</div>
+</div>
+</div>
+<p>One final note about the solver is that if you ever get a convergence warning when using logistic regression, the best solution is usually just to use a different solver.</p>
+<p>Next, let’s talk about the random_state parameter. It happens that there is some randomness involved in three of the solvers, including liblinear. That means you may get different results each time you fit the model. By setting the random_state, you ensure that your model will output the same results every time.</p>
+<p>More generally, any time you’re running a scikit-learn function that involves a random process, I recommend setting the random_state parameter to any integer. That allows your code to be reproducible, both by you and others. Keep in mind that the only way to know whether a given function involves a random process is by reading the documentation.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Advice for random_state:</strong></p>
+<ul>
+<li>Set random_state to any integer when a random process is involved</li>
+<li>Allows your code to be reproducible</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="qa-how-do-i-show-all-of-the-model-parameters" class="level2" data-number="2.11">
+<h2 data-number="2.11" class="anchored" data-anchor-id="qa-how-do-i-show-all-of-the-model-parameters"><span class="header-section-number">2.11</span> Q&amp;A: How do I show all of the model parameters?</h2>
+<p>Starting in scikit-learn version 0.23, when you print any estimator (such as a model, a transformer, or a pipeline), it will only show you the parameters that are not set to their default values. For example, when we print out the logreg model object, it only shows the random_state and solver parameters because we set those explicitly.</p>
+<div id="a66f9fba" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>logreg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<pre><code>LogisticRegression(random_state=1, solver='liblinear')</code></pre>
+</div>
+</div>
+<p>However, you can still see all parameters by running the get_params method.</p>
+<div id="c93db2b2" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>logreg.get_params()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>{'C': 1.0,
+ 'class_weight': None,
+ 'dual': False,
+ 'fit_intercept': True,
+ 'intercept_scaling': 1,
+ 'l1_ratio': None,
+ 'max_iter': 100,
+ 'multi_class': 'auto',
+ 'n_jobs': None,
+ 'penalty': 'l2',
+ 'random_state': 1,
+ 'solver': 'liblinear',
+ 'tol': 0.0001,
+ 'verbose': 0,
+ 'warm_start': False}</code></pre>
+</div>
+</div>
+<p>If you like, you can restore the behavior from previous scikit-learn versions by importing the set_config function and then setting the print_changed_only parameter to False.</p>
+<div id="1be52d7a" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> set_config</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>set_config(print_changed_only<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, all parameters will be printed, regardless of whether you’ve changed them.</p>
+<div id="6be67aa3" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>logreg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
+                   intercept_scaling=1, l1_ratio=None, max_iter=100,
+                   multi_class='auto', n_jobs=None, penalty='l2',
+                   random_state=1, solver='liblinear', tol=0.0001, verbose=0,
+                   warm_start=False)</code></pre>
+</div>
+</div>
+<p>I prefer the new behavior, so I’m going to set print_changed_only back to True.</p>
+<div id="fece5619" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>set_config(print_changed_only<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="qa-should-i-shuffle-the-samples-when-using-cross-validation" class="level2" data-number="2.12">
+<h2 data-number="2.12" class="anchored" data-anchor-id="qa-should-i-shuffle-the-samples-when-using-cross-validation"><span class="header-section-number">2.12</span> Q&amp;A: Should I shuffle the samples when using cross-validation?</h2>
+<p>When I ran cross_val_score earlier in this chapter, I passed an integer, 3 in this case, that specified the number of cross-validation folds.</p>
+<div id="52f111a1" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>cross_val_score(logreg, X, y, cv<span class="op">=</span><span class="dv">3</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<pre><code>array([0.75      , 0.66666667, 0.66666667])</code></pre>
+</div>
+</div>
+<p>This code shows you what happens “under the hood” when you specify cv=3 for a classification problem. I’m going to walk through this code so you understand what’s happening and you can modify it when needed.</p>
+<p>First, you’ll notice that we’re importing a class called StratifiedKFold. It’s known as a cross-validation splitter, which means that its role is to split datasets. We create an instance of this class and pass it a 3 so that it will create 3 folds. And then we can pass this instance to cross_val_score instead of an integer.</p>
+<div id="d7f239d4" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> StratifiedKFold</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>kf <span class="op">=</span> StratifiedKFold(<span class="dv">3</span>)</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>cross_val_score(logreg, X, y, cv<span class="op">=</span>kf, scoring<span class="op">=</span><span class="st">'accuracy'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<pre><code>array([0.75      , 0.66666667, 0.66666667])</code></pre>
+</div>
+</div>
+<p>It’s called StratifiedKFold because it uses stratified sampling to ensure that the class proportions are approximately equal in each fold. For example, if 40% of the passengers in the dataset survived, then stratified sampling ensures that about 40% of each fold is survived passengers.</p>
+<p>In other words, it ensures that each fold is representative of the entire dataset. Stratified sampling is desirable because it produces more reliable cross-validation scores, and again, scikit-learn will do this for you by default.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Stratified sampling:</strong></p>
+<ul>
+<li>Ensures that each fold is representative of the dataset</li>
+<li>Produces more reliable cross-validation scores</li>
+</ul>
+</div>
+</div>
+</div>
+<p>Another good thing to know about StratifiedKFold is that by default, it does not shuffle the samples before splitting. Thus, there is nothing random about this process, and as such you will get the same results every time you run cross_val_score.</p>
+<p>In most cases, it doesn’t matter whether you shuffle the samples before splitting. However, if the order of the samples in your dataset is not arbitrary, then it’s important to randomly shuffle the samples when cross-validating.</p>
+<p>For example, you could imagine that if your dataset was sorted by one of the features, then some folds would only have high values of that feature and other folds would only have low values of that feature, which could result in unreliable cross-validation scores.</p>
+<p>If you do need to shuffle the samples, you simply modify the cross-validation splitter by setting shuffle to True, and then pass that splitter object to cross_val_score. Note that because you are introducing randomness into the process by shuffling, you should also set a random_state to ensure reproducibility.</p>
+<div id="cbf34413" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>kf <span class="op">=</span> StratifiedKFold(<span class="dv">3</span>, shuffle<span class="op">=</span><span class="va">True</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>cross_val_score(logreg, X, y, cv<span class="op">=</span>kf, scoring<span class="op">=</span><span class="st">'accuracy'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="32">
+<pre><code>array([0.75      , 0.33333333, 0.66666667])</code></pre>
+</div>
+</div>
+<p>In summary, if you have a classification problem and the samples are in an arbitrary order, you can just pass an integer to the cv parameter of cross_val_score, and it will use stratified sampling without shuffling.</p>
+<p>If your samples are not in an arbitrary order, you should use StratifiedKFold as your splitter and set shuffle to True, and then pass the splitter object to the cv parameter of cross_val_score, as I did above.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>When to shuffle your samples:</strong></p>
+<ul>
+<li><strong>Samples in arbitrary order:</strong> Shuffling not needed</li>
+<li><strong>Samples are ordered:</strong> Shuffling needed</li>
+</ul>
+</div>
+</div>
+</div>
+<p>Finally, it’s worth mentioning that if you’re working on a regression problem instead, and you need to shuffle the samples, you should use the KFold class instead of the StratifiedKFold class, because stratified sampling does not apply to regression problems.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>How to shuffle your samples:</strong></p>
+<ul>
+<li><strong>Classification:</strong> StratifiedKFold</li>
+<li><strong>Regression:</strong> KFold</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+            // default icon
+            link.classList.add("external");
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./ch01.html" class="pagination-link" aria-label="Introduction">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./ch03.html" class="pagination-link" aria-label="Encoding categorical features">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Encoding categorical features</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2025, Kevin Markham. All Rights Reserved.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

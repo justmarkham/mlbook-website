@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.29">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Kevin Markham">
+
+<title>12&nbsp; Ensembling multiple models – Master Machine Learning with scikit-learn</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./ch13.html" rel="next">
+<link href="./ch11.html" rel="prev">
+<link href="./favicon.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-0815c480559380816a4d1ea211a47e91.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-485d01fc63b59abcd3ee1bf1e8e2748d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./ch12.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Ensembling multiple models</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Master Machine Learning with scikit-learn</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About this book</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Review of the Machine Learning workflow</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Encoding categorical features</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improving your workflow with ColumnTransformer and Pipeline</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Workflow review #1</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Encoding text data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Handling missing values</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fixing common workflow problems</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Workflow review #2</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Evaluating and tuning a Pipeline</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Comparing linear and non-linear models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch12.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Ensembling multiple models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Feature selection</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Feature standardization</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Feature engineering with custom transformers</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Workflow review #3</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">High-cardinality categorical features</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Class imbalance</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Class imbalance walkthrough</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Going further</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction-to-ensembling" id="toc-introduction-to-ensembling" class="nav-link active" data-scroll-target="#introduction-to-ensembling"><span class="header-section-number">12.1</span> Introduction to ensembling</a></li>
+  <li><a href="#ensembling-logistic-regression-and-random-forests" id="toc-ensembling-logistic-regression-and-random-forests" class="nav-link" data-scroll-target="#ensembling-logistic-regression-and-random-forests"><span class="header-section-number">12.2</span> Ensembling logistic regression and random forests</a></li>
+  <li><a href="#combining-predicted-probabilities" id="toc-combining-predicted-probabilities" class="nav-link" data-scroll-target="#combining-predicted-probabilities"><span class="header-section-number">12.3</span> Combining predicted probabilities</a></li>
+  <li><a href="#combining-class-predictions" id="toc-combining-class-predictions" class="nav-link" data-scroll-target="#combining-class-predictions"><span class="header-section-number">12.4</span> Combining class predictions</a></li>
+  <li><a href="#choosing-a-voting-strategy" id="toc-choosing-a-voting-strategy" class="nav-link" data-scroll-target="#choosing-a-voting-strategy"><span class="header-section-number">12.5</span> Choosing a voting strategy</a></li>
+  <li><a href="#tuning-an-ensemble-with-grid-search" id="toc-tuning-an-ensemble-with-grid-search" class="nav-link" data-scroll-target="#tuning-an-ensemble-with-grid-search"><span class="header-section-number">12.6</span> Tuning an ensemble with grid search</a></li>
+  <li><a href="#qa-when-should-i-use-ensembling" id="toc-qa-when-should-i-use-ensembling" class="nav-link" data-scroll-target="#qa-when-should-i-use-ensembling"><span class="header-section-number">12.7</span> Q&amp;A: When should I use ensembling?</a></li>
+  <li><a href="#qa-how-do-i-apply-different-weights-to-the-models-in-an-ensemble" id="toc-qa-how-do-i-apply-different-weights-to-the-models-in-an-ensemble" class="nav-link" data-scroll-target="#qa-how-do-i-apply-different-weights-to-the-models-in-an-ensemble"><span class="header-section-number">12.8</span> Q&amp;A: How do I apply different weights to the models in an ensemble?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Ensembling multiple models</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction-to-ensembling" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="introduction-to-ensembling"><span class="header-section-number">12.1</span> Introduction to ensembling</h2>
+<p>So far, we’ve been trying to choose between two different models, namely logistic regression and random forests. However, you can actually use a process called ensembling to combine multiple models. The goal of ensembling is to produce a combined model, known as an ensemble, that is more accurate than any of the individual models.</p>
+<p>The process for ensembling is simple:</p>
+<ul>
+<li>For a regression problem, you calculate the average of the predictions made by the individual regressors and use that as your prediction.</li>
+<li>For a classification problem, you can either average the predicted probabilities output by the classifiers, or you can let the classifiers vote on which class to predict. We’ll see examples of this below.</li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>How to create an ensemble:</strong></p>
+<ul>
+<li><strong>Regression:</strong> Average the predictions</li>
+<li><strong>Classification:</strong> Average the predicted probabilities, or let the classifiers vote on the class</li>
+</ul>
+</div>
+</div>
+</div>
+<p>The idea behind ensembling is that if you have a collection of individually imperfect models, the “one-off” errors made by each model are probably not going to be made by the rest of the models. Thus, the errors will be discarded (or at least reduced) when ensembling the models. Another way of saying this is that ensembling produces better predictions because the ensemble has a lower variance than any of the individual models.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Why does ensembling work?</strong></p>
+<ul>
+<li>“One-off” errors made by each model will be discarded when ensembling</li>
+<li>Ensemble has a lower variance than any individual model</li>
+</ul>
+</div>
+</div>
+</div>
+<p>In this chapter, we’ll ensemble our classification models two different ways, and then we’ll tune the ensemble to try to achieve even better performance.</p>
+</section>
+<section id="ensembling-logistic-regression-and-random-forests" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="ensembling-logistic-regression-and-random-forests"><span class="header-section-number">12.2</span> Ensembling logistic regression and random forests</h2>
+<p>In this lesson, we’re going to ensemble logistic regression and random forests. Because their predictions are generated using completely different processes, they’re likely to make different types of errors and thus they’re good candidates for ensembling.</p>
+<p>Let’s see a reminder of their cross-validation scores. Both the logistic regression Pipeline and the random forest Pipeline have an accuracy of 0.811, so our goal with ensembling is to increase this score.</p>
+<div id="8dec22d6" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>logreg <span class="op">=</span> LogisticRegression(solver<span class="op">=</span><span class="st">'liblinear'</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> make_pipeline(ct, logreg)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>cross_val_score(pipe, X, y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>0.8114619295712762</code></pre>
+</div>
+</div>
+<div id="5f1c4825" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rf <span class="op">=</span> RandomForestClassifier(random_state<span class="op">=</span><span class="dv">1</span>, n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>rf_pipe <span class="op">=</span> make_pipeline(ct, rf)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>cross_val_score(rf_pipe, X, y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>0.811436821291821</code></pre>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Pipeline accuracy scores:</strong></p>
+<ul>
+<li><strong>Grid search (RF):</strong> 0.829</li>
+<li><strong>Grid search (LR):</strong> 0.828</li>
+<li><strong>Baseline (LR):</strong> 0.811 👈</li>
+<li><strong>Baseline (RF):</strong> 0.811 👈</li>
+</ul>
+</div>
+</div>
+</div>
+<p>We’ll create the ensemble using the VotingClassifier class, which we’ll import from the ensemble module. We’ll create an instance called “vc” and pass it a list of tuples, in which the first element of the tuple is a name and the second element is a classifier object.</p>
+<p>The options for the voting parameter are ‘soft’, in which predicted probabilities are averaged, and ‘hard’, in which only class predictions are taken into account. We’ll try soft voting first. Also, we’ll set n_jobs to -1 to enable parallel processing.</p>
+<div id="8a897c68" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> VotingClassifier</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>vc <span class="op">=</span> VotingClassifier([(<span class="st">'clf1'</span>, logreg), (<span class="st">'clf2'</span>, rf)], voting<span class="op">=</span><span class="st">'soft'</span>, n_jobs<span class="op">=-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Voting options for VotingClassifier:</strong></p>
+<ul>
+<li><strong>soft:</strong> Average the predicted probabilities</li>
+<li><strong>hard:</strong> Majority vote using class predictions</li>
+</ul>
+</div>
+</div>
+</div>
+<p>Then, we’ll create a new Pipeline called “vc_pipe” in which the VotingClassifier is the second step instead of a model.</p>
+<div id="c2877578" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>vc_pipe <span class="op">=</span> make_pipeline(ct, vc)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>vc_pipe</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="21f54bb9-1e35-4190-9fd5-88342dde6f2f" type="checkbox"><label class="sk-toggleable__label" for="21f54bb9-1e35-4190-9fd5-88342dde6f2f">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('columntransformer',
+                 ColumnTransformer(transformers=[('pipeline',
+                                                  Pipeline(steps=[('simpleimputer',
+                                                                   SimpleImputer(fill_value='missing',
+                                                                                 strategy='constant')),
+                                                                  ('onehotencoder',
+                                                                   OneHotEncoder())]),
+                                                  ['Embarked', 'Sex']),
+                                                 ('countvectorizer',
+                                                  CountVectorizer(), 'Name'),
+                                                 ('simpleimputer',
+                                                  SimpleImputer(),
+                                                  ['Age', 'Fare']),
+                                                 ('passthrough', 'passthrough',
+                                                  ['Parch'])])),
+                ('votingclassifier',
+                 VotingClassifier(estimators=[('clf1',
+                                               LogisticRegression(random_state=1,
+                                                                  solver='liblinear')),
+                                              ('clf2',
+                                               RandomForestClassifier(n_jobs=-1,
+                                                                      random_state=1))],
+                                  n_jobs=-1, voting='soft'))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8fcb8a4c-9e99-40b6-8773-8b79f890be9b" type="checkbox"><label class="sk-toggleable__label" for="8fcb8a4c-9e99-40b6-8773-8b79f890be9b">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
+                                 Pipeline(steps=[('simpleimputer',
+                                                  SimpleImputer(fill_value='missing',
+                                                                strategy='constant')),
+                                                 ('onehotencoder',
+                                                  OneHotEncoder())]),
+                                 ['Embarked', 'Sex']),
+                                ('countvectorizer', CountVectorizer(), 'Name'),
+                                ('simpleimputer', SimpleImputer(),
+                                 ['Age', 'Fare']),
+                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="cb15dc17-dd14-43d2-80d2-59fefe83b26e" type="checkbox"><label class="sk-toggleable__label" for="cb15dc17-dd14-43d2-80d2-59fefe83b26e">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="5e2314fb-e8ec-43b7-a09b-5cce44f80ca3" type="checkbox"><label class="sk-toggleable__label" for="5e2314fb-e8ec-43b7-a09b-5cce44f80ca3">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="9122a0fa-8c99-433a-8fbe-7cfac2637e40" type="checkbox"><label class="sk-toggleable__label" for="9122a0fa-8c99-433a-8fbe-7cfac2637e40">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6e6878fd-e7f1-484f-b84f-01386193e4f9" type="checkbox"><label class="sk-toggleable__label" for="6e6878fd-e7f1-484f-b84f-01386193e4f9">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ff9082e5-a7cf-4aeb-b53e-87dd2083bebe" type="checkbox"><label class="sk-toggleable__label" for="ff9082e5-a7cf-4aeb-b53e-87dd2083bebe">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="36a00118-430d-4107-8214-fdb6f0702a22" type="checkbox"><label class="sk-toggleable__label" for="36a00118-430d-4107-8214-fdb6f0702a22">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f7161dfc-9233-4114-8610-d328ec853ed4" type="checkbox"><label class="sk-toggleable__label" for="f7161dfc-9233-4114-8610-d328ec853ed4">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="85eaebf2-173c-4606-85d7-338adf77f775" type="checkbox"><label class="sk-toggleable__label" for="85eaebf2-173c-4606-85d7-338adf77f775">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f09765eb-6b82-4a3c-abfd-44772eb861ba" type="checkbox"><label class="sk-toggleable__label" for="f09765eb-6b82-4a3c-abfd-44772eb861ba">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="fcfb0d31-581e-4211-89c9-5fda3fed0487" type="checkbox"><label class="sk-toggleable__label" for="fcfb0d31-581e-4211-89c9-5fda3fed0487">votingclassifier: VotingClassifier</label><div class="sk-toggleable__content"><pre>VotingClassifier(estimators=[('clf1',
+                              LogisticRegression(random_state=1,
+                                                 solver='liblinear')),
+                             ('clf2',
+                              RandomForestClassifier(n_jobs=-1,
+                                                     random_state=1))],
+                 n_jobs=-1, voting='soft')</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>clf1</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="07b7e233-379a-4871-8cff-6c9b1899bb6c" type="checkbox"><label class="sk-toggleable__label" for="07b7e233-379a-4871-8cff-6c9b1899bb6c">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(random_state=1, solver='liblinear')</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>clf2</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6a2082f3-4d59-491c-8688-9d2fa6f9619b" type="checkbox"><label class="sk-toggleable__label" for="6a2082f3-4d59-491c-8688-9d2fa6f9619b">RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(n_jobs=-1, random_state=1)</pre></div></div></div></div></div></div></div></div></div></div></div></div>
+</div>
+</div>
+</section>
+<section id="combining-predicted-probabilities" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="combining-predicted-probabilities"><span class="header-section-number">12.3</span> Combining predicted probabilities</h2>
+<p>Let’s examine how the VotingClassifier makes predictions when using soft voting. We’ll do this by examining the predicted probabilities output by the logistic regression-based Pipeline and the random forest-based Pipeline for the first 3 samples in X_new.</p>
+<p>As a reminder, the left column is the predicted probability of class 0 (for each sample), and the right column is the predicted probability of class 1.</p>
+<div id="3e23f582" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pipe.fit(X, y)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pipe.predict_proba(X_new)[:<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>array([[0.88916549, 0.11083451],
+       [0.14200691, 0.85799309],
+       [0.9190551 , 0.0809449 ]])</code></pre>
+</div>
+</div>
+<div id="a91844ba" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>rf_pipe.fit(X, y)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>rf_pipe.predict_proba(X_new)[:<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>array([[0.99, 0.01],
+       [0.24, 0.76],
+       [0.97, 0.03]])</code></pre>
+</div>
+</div>
+<p>Now let’s use the VotingClassifier to output predicted probabilities. It uses the fit and predict_proba methods, just like any other classifier.</p>
+<p>If you examine its predicted probabilities, you will see that it’s simply averaging the two sets of probabilities from logistic regression and random forests. For example, the average of 0.14 and 0.24 is 0.19.</p>
+<div id="b671e5cb" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>vc_pipe.fit(X, y)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>vc_pipe.predict_proba(X_new)[:<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>array([[0.93958275, 0.06041725],
+       [0.19100345, 0.80899655],
+       [0.94452755, 0.05547245]])</code></pre>
+</div>
+</div>
+<p>In order to make class predictions for X_new, you use the predict method, which simply chooses whichever class has the higher predicted probability. In this case, it predicted 0, 1, and 0, because those classes had the higher predicted probability.</p>
+<div id="83ba5b5c" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>vc_pipe.predict(X_new)[:<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>array([0, 1, 0])</code></pre>
+</div>
+</div>
+<p>In the 3 cases we just examined, logistic regression and random forests agreed on the class predictions. Let’s now examine a case in which the two models disagreed. One example of this is sample 80.</p>
+<p>As you can see, logistic regression predicted class 0 but without much confidence.</p>
+<div id="8bdf534d" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pipe.predict_proba(X_new)[<span class="dv">80</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>array([0.51799634, 0.48200366])</code></pre>
+</div>
+</div>
+<p>Random forests predicted class 1 with more confidence.</p>
+<div id="a5183f81" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>rf_pipe.predict_proba(X_new)[<span class="dv">80</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>array([0.29, 0.71])</code></pre>
+</div>
+</div>
+<p>When VotingClassifier averages the predicted probabilities for this sample, the class 1 value is higher, thus it will predict class 1.</p>
+<div id="875f8e43" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>vc_pipe.predict_proba(X_new)[<span class="dv">80</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>array([0.40399817, 0.59600183])</code></pre>
+</div>
+</div>
+<p>Let’s move on to cross-validation to see how the VotingClassifier Pipeline with soft voting performs. Its score is 0.818, which is better than either model alone.</p>
+<div id="8d7654cf" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>cross_val_score(vc_pipe, X, y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>0.8181846713953927</code></pre>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Pipeline accuracy scores:</strong></p>
+<ul>
+<li><strong>Grid search (RF):</strong> 0.829</li>
+<li><strong>Grid search (LR):</strong> 0.828</li>
+<li><strong>Baseline (VC soft voting):</strong> 0.818 👈</li>
+<li><strong>Baseline (LR):</strong> 0.811</li>
+<li><strong>Baseline (RF):</strong> 0.811</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="combining-class-predictions" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="combining-class-predictions"><span class="header-section-number">12.4</span> Combining class predictions</h2>
+<p>Now let’s modify the VotingClassifier to use hard voting, which means that it ignores predicted probabilities and just takes a majority vote based on class predictions.</p>
+<div id="e10a18b0" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>vc <span class="op">=</span> VotingClassifier([(<span class="st">'clf1'</span>, logreg), (<span class="st">'clf2'</span>, rf)], voting<span class="op">=</span><span class="st">'hard'</span>, n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>vc_pipe <span class="op">=</span> make_pipeline(ct, vc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>When we cross-validate the Pipeline with hard voting, it performs a bit better, scoring 0.820.</p>
+<div id="bf306b19" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>cross_val_score(vc_pipe, X, y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>0.8204255853367648</code></pre>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Pipeline accuracy scores:</strong></p>
+<ul>
+<li><strong>Grid search (RF):</strong> 0.829</li>
+<li><strong>Grid search (LR):</strong> 0.828</li>
+<li><strong>Baseline (VC hard voting):</strong> 0.820 👈</li>
+<li><strong>Baseline (VC soft voting):</strong> 0.818</li>
+<li><strong>Baseline (LR):</strong> 0.811</li>
+<li><strong>Baseline (RF):</strong> 0.811</li>
+</ul>
+</div>
+</div>
+</div>
+<p>However, this result is actually misleading:</p>
+<ul>
+<li>When you use hard voting with VotingClassifier, and there’s a tie, it always chooses the lowest numbered class. In other words, every time the two models disagreed, it chose class 0.</li>
+<li>This means that hard voting is performing better than soft voting purely by chance. If the tiebreaking algorithm instead chose the highest numbered class, hard voting would be performing worse than soft voting.</li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Why is this result misleading?</strong></p>
+<ul>
+<li>In the case of a tie, hard voting always chooses class 0</li>
+<li>Thus hard voting is performing better than soft voting by chance</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="choosing-a-voting-strategy" class="level2" data-number="12.5">
+<h2 data-number="12.5" class="anchored" data-anchor-id="choosing-a-voting-strategy"><span class="header-section-number">12.5</span> Choosing a voting strategy</h2>
+<p>The previous lesson brings up the obvious question: When should you use soft voting, and when should you use hard voting?</p>
+<ul>
+<li>Soft voting is preferred if you have an even number of models in the ensemble, and especially if you only have two models.</li>
+<li>Soft voting is preferred if all of your models output well-calibrated predicted probabilities, whereas hard voting is preferred otherwise.</li>
+<li>Hard voting will always work, whereas soft voting will only work if all of the models in the ensemble include the predict_proba method. For example, LinearSVC and Perceptron don’t include the predict_proba method.</li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Soft voting vs hard voting:</strong></p>
+<ul>
+<li><strong>Soft voting:</strong>
+<ul>
+<li>Preferred if you have an even number of models (especially two)</li>
+<li>Preferred if all models are well-calibrated</li>
+<li>Only works if all models have the predict_proba method</li>
+</ul></li>
+<li><strong>Hard voting:</strong>
+<ul>
+<li>Preferred if some models are not well-calibrated</li>
+<li>Does not require the predict_proba method</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<p>Ultimately, you can just try both soft and hard voting and see which works better, keeping in mind that hard voting results can be misleading if you have an even number of classifiers.</p>
+<p>Because we’re using an even number of classifiers, we’ll change back to soft voting.</p>
+<div id="e4c4116b" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>vc <span class="op">=</span> VotingClassifier([(<span class="st">'clf1'</span>, logreg), (<span class="st">'clf2'</span>, rf)], voting<span class="op">=</span><span class="st">'soft'</span>, n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>vc_pipe <span class="op">=</span> make_pipeline(ct, vc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="tuning-an-ensemble-with-grid-search" class="level2" data-number="12.6">
+<h2 data-number="12.6" class="anchored" data-anchor-id="tuning-an-ensemble-with-grid-search"><span class="header-section-number">12.6</span> Tuning an ensemble with grid search</h2>
+<p>Like with any model, we can tune the VotingClassifier’s hyperparameters using a grid search to try to improve its accuracy. Keep in mind that the best parameters for the VotingClassifier Pipeline might be different than the parameters for either model when they were tuned separately.</p>
+<p>We’ll start by creating a vc_params dictionary that only includes the ColumnTransformer parameters.</p>
+<div id="9c13a838" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>vc_params <span class="op">=</span> {k:v <span class="cf">for</span> k, v <span class="kw">in</span> params.items() <span class="cf">if</span> k.startswith(<span class="st">'col'</span>)}</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>vc_params</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>{'columntransformer__pipeline__onehotencoder__drop': [None, 'first'],
+ 'columntransformer__countvectorizer__ngram_range': [(1, 1), (1, 2)],
+ 'columntransformer__simpleimputer__add_indicator': [False, True]}</code></pre>
+</div>
+</div>
+<p>We can look at the named_steps attribute of vc_pipe to confirm that the second step name is votingclassifier (all lowercase).</p>
+<div id="9282e5b4" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>vc_pipe.named_steps.keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>dict_keys(['columntransformer', 'votingclassifier'])</code></pre>
+</div>
+</div>
+<p>And you may recall that we assigned the names clf1 and clf2 to our two models within the VotingClassifier.</p>
+<div id="14d8fc20" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>vc_pipe.named_steps[<span class="st">'votingclassifier'</span>].named_estimators</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>{'clf1': LogisticRegression(random_state=1, solver='liblinear'),
+ 'clf2': RandomForestClassifier(n_jobs=-1, random_state=1)}</code></pre>
+</div>
+</div>
+<p>Knowing those names, we can now add some model parameters to vc_params. For simplicity and speed, we’ll just tune a smaller selection of parameters and values.</p>
+<div id="c83b2894" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>vc_params[<span class="st">'votingclassifier__clf1__penalty'</span>] <span class="op">=</span> [<span class="st">'l1'</span>, <span class="st">'l2'</span>]</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>vc_params[<span class="st">'votingclassifier__clf1__C'</span>] <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">10</span>]</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>vc_params[<span class="st">'votingclassifier__clf2__n_estimators'</span>] <span class="op">=</span> [<span class="dv">100</span>, <span class="dv">300</span>]</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>vc_params[<span class="st">'votingclassifier__clf2__min_samples_leaf'</span>] <span class="op">=</span> [<span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>vc_params</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>{'columntransformer__pipeline__onehotencoder__drop': [None, 'first'],
+ 'columntransformer__countvectorizer__ngram_range': [(1, 1), (1, 2)],
+ 'columntransformer__simpleimputer__add_indicator': [False, True],
+ 'votingclassifier__clf1__penalty': ['l1', 'l2'],
+ 'votingclassifier__clf1__C': [1, 10],
+ 'votingclassifier__clf2__n_estimators': [100, 300],
+ 'votingclassifier__clf2__min_samples_leaf': [2, 3]}</code></pre>
+</div>
+</div>
+<p>Finally, we’ll create a GridSearchCV object called vc_grid, making sure to use the vc_pipe and vc_params objects, and then run the search.</p>
+<div id="f998b53b" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>vc_grid <span class="op">=</span> GridSearchCV(vc_pipe, vc_params, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>, n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>vc_grid.fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="2c40ed7a-47b5-4f32-9c18-687d2ca998cb" type="checkbox"><label class="sk-toggleable__label" for="2c40ed7a-47b5-4f32-9c18-687d2ca998cb">GridSearchCV</label><div class="sk-toggleable__content"><pre>GridSearchCV(cv=5,
+             estimator=Pipeline(steps=[('columntransformer',
+                                        ColumnTransformer(transformers=[('pipeline',
+                                                                         Pipeline(steps=[('simpleimputer',
+                                                                                          SimpleImputer(fill_value='missing',
+                                                                                                        strategy='constant')),
+                                                                                         ('onehotencoder',
+                                                                                          OneHotEncoder())]),
+                                                                         ['Embarked',
+                                                                          'Sex']),
+                                                                        ('countvectorizer',
+                                                                         CountVectorizer(),
+                                                                         'Name'),
+                                                                        ('simpleimputer',
+                                                                         SimpleImputer(),
+                                                                         ['Age',
+                                                                          'Fare']),
+                                                                        (...
+             param_grid={'columntransformer__countvectorizer__ngram_range': [(1,
+                                                                              1),
+                                                                             (1,
+                                                                              2)],
+                         'columntransformer__pipeline__onehotencoder__drop': [None,
+                                                                              'first'],
+                         'columntransformer__simpleimputer__add_indicator': [False,
+                                                                             True],
+                         'votingclassifier__clf1__C': [1, 10],
+                         'votingclassifier__clf1__penalty': ['l1', 'l2'],
+                         'votingclassifier__clf2__min_samples_leaf': [2, 3],
+                         'votingclassifier__clf2__n_estimators': [100, 300]},
+             scoring='accuracy')</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="97181c71-a7ee-4156-9696-a620ba3a897c" type="checkbox"><label class="sk-toggleable__label" for="97181c71-a7ee-4156-9696-a620ba3a897c">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
+                                 Pipeline(steps=[('simpleimputer',
+                                                  SimpleImputer(fill_value='missing',
+                                                                strategy='constant')),
+                                                 ('onehotencoder',
+                                                  OneHotEncoder())]),
+                                 ['Embarked', 'Sex']),
+                                ('countvectorizer', CountVectorizer(), 'Name'),
+                                ('simpleimputer', SimpleImputer(),
+                                 ['Age', 'Fare']),
+                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6db127a7-2875-43ff-b5aa-f63c32e64f37" type="checkbox"><label class="sk-toggleable__label" for="6db127a7-2875-43ff-b5aa-f63c32e64f37">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="9d260285-b7ab-4689-9e17-31c167bbf8be" type="checkbox"><label class="sk-toggleable__label" for="9d260285-b7ab-4689-9e17-31c167bbf8be">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="eec8dd2a-01f3-4972-afcf-c4d1e0d0ab1b" type="checkbox"><label class="sk-toggleable__label" for="eec8dd2a-01f3-4972-afcf-c4d1e0d0ab1b">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="7675bf9d-338c-4aa9-88f5-71c26e6989d2" type="checkbox"><label class="sk-toggleable__label" for="7675bf9d-338c-4aa9-88f5-71c26e6989d2">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="589423b5-4c6b-4dc8-846b-7b0e6e04ff5a" type="checkbox"><label class="sk-toggleable__label" for="589423b5-4c6b-4dc8-846b-7b0e6e04ff5a">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="e646844d-55a2-4a75-a177-9b47a084e82d" type="checkbox"><label class="sk-toggleable__label" for="e646844d-55a2-4a75-a177-9b47a084e82d">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f4c45cb6-4626-49e7-9357-5c8f4146583a" type="checkbox"><label class="sk-toggleable__label" for="f4c45cb6-4626-49e7-9357-5c8f4146583a">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="9a64d016-2d14-4707-a657-db858a91014e" type="checkbox"><label class="sk-toggleable__label" for="9a64d016-2d14-4707-a657-db858a91014e">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="278c93ae-1460-4208-bc50-ed26f1b00950" type="checkbox"><label class="sk-toggleable__label" for="278c93ae-1460-4208-bc50-ed26f1b00950">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="639f6052-40a4-476e-9f9b-94d0a7e95de3" type="checkbox"><label class="sk-toggleable__label" for="639f6052-40a4-476e-9f9b-94d0a7e95de3">votingclassifier: VotingClassifier</label><div class="sk-toggleable__content"><pre>VotingClassifier(estimators=[('clf1',
+                              LogisticRegression(random_state=1,
+                                                 solver='liblinear')),
+                             ('clf2',
+                              RandomForestClassifier(n_jobs=-1,
+                                                     random_state=1))],
+                 n_jobs=-1, voting='soft')</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>clf1</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ba09f9ac-0bb1-4a11-bf0a-6d4b09774b41" type="checkbox"><label class="sk-toggleable__label" for="ba09f9ac-0bb1-4a11-bf0a-6d4b09774b41">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(random_state=1, solver='liblinear')</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><label>clf2</label></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0f3b15e8-2cdc-4a2a-9719-b6c7b4ddd03d" type="checkbox"><label class="sk-toggleable__label" for="0f3b15e8-2cdc-4a2a-9719-b6c7b4ddd03d">RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(n_jobs=-1, random_state=1)</pre></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div>
+</div>
+</div>
+<p>You can see that the best score has improved significantly, to 0.834.</p>
+<div id="e7b629f8" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>vc_grid.best_score_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>0.833864791915134</code></pre>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Pipeline accuracy scores:</strong></p>
+<ul>
+<li><strong>Grid search (VC soft voting):</strong> 0.834 👈</li>
+<li><strong>Grid search (RF):</strong> 0.829</li>
+<li><strong>Grid search (LR):</strong> 0.828</li>
+<li><strong>Baseline (VC hard voting):</strong> 0.820</li>
+<li><strong>Baseline (VC soft voting):</strong> 0.818</li>
+<li><strong>Baseline (LR):</strong> 0.811</li>
+<li><strong>Baseline (RF):</strong> 0.811</li>
+</ul>
+</div>
+</div>
+</div>
+<p>Here’s the best set of parameters that it found.</p>
+<div id="939349ec" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>vc_grid.best_params_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>{'columntransformer__countvectorizer__ngram_range': (1, 2),
+ 'columntransformer__pipeline__onehotencoder__drop': None,
+ 'columntransformer__simpleimputer__add_indicator': True,
+ 'votingclassifier__clf1__C': 10,
+ 'votingclassifier__clf1__penalty': 'l1',
+ 'votingclassifier__clf2__min_samples_leaf': 3,
+ 'votingclassifier__clf2__n_estimators': 100}</code></pre>
+</div>
+</div>
+<p>And finally, using the tuned grid to make predictions for new data is the same as always.</p>
+<div id="c2922b48" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>vc_grid.predict(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>array([0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1,
+       1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1,
+       1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1,
+       1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1,
+       1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+       0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0,
+       0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
+       1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1,
+       1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1,
+       0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0,
+       1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
+       1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1,
+       0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0,
+       0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1,
+       0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0,
+       1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0,
+       0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0,
+       1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1,
+       0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1])</code></pre>
+</div>
+</div>
+</section>
+<section id="qa-when-should-i-use-ensembling" class="level2" data-number="12.7">
+<h2 data-number="12.7" class="anchored" data-anchor-id="qa-when-should-i-use-ensembling"><span class="header-section-number">12.7</span> Q&amp;A: When should I use ensembling?</h2>
+<p>Ensembling generally improves the performance of your model, and so it’s a useful technique any time that performance is your highest priority. Keep in mind, however, that ensembling adds more complexity to your process, and the ensemble is also less interpretable than a single model.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Should you ensemble?</strong></p>
+<ul>
+<li><strong>Advantages:</strong>
+<ul>
+<li>Improves model performance</li>
+</ul></li>
+<li><strong>Disadvantages:</strong>
+<ul>
+<li>Adds more complexity</li>
+<li>Decreases interpretability</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<p>If you do decide to use ensembling, my advice is to include at least 3 models in the ensemble. It’s important that all models you include are performing reasonably well on their own. And as mentioned before, it’s ideal if they generate their predictions using different processes.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Advice for ensembling:</strong></p>
+<ul>
+<li>Include at least 3 models</li>
+<li>Models should be performing well on their own</li>
+<li>Ideal if they generate predictions using different processes</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="qa-how-do-i-apply-different-weights-to-the-models-in-an-ensemble" class="level2" data-number="12.8">
+<h2 data-number="12.8" class="anchored" data-anchor-id="qa-how-do-i-apply-different-weights-to-the-models-in-an-ensemble"><span class="header-section-number">12.8</span> Q&amp;A: How do I apply different weights to the models in an ensemble?</h2>
+<p>By default, each model within an ensemble is given equal weight. However, you can try weighting certain models more than others to give them more “voting power” when determining the predicted class labels or predicted probabilities.</p>
+<p>For example, we could give the logistic regression model double the voting power of the random forest model by setting the weights parameter of the VotingClassifier.</p>
+<div id="4c66baf9" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>vc <span class="op">=</span> VotingClassifier([(<span class="st">'clf1'</span>, logreg), (<span class="st">'clf2'</span>, rf)], voting<span class="op">=</span><span class="st">'soft'</span>,</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>                      weights<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">1</span>], n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>vc_pipe <span class="op">=</span> make_pipeline(ct, vc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s see how that affects the predicted probabilities. Once again, here are the predicted probabilities output by the logistic regression and random forest models for the first 3 samples in X_new.</p>
+<div id="ae01f692" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>pipe.predict_proba(X_new)[:<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>array([[0.88916549, 0.11083451],
+       [0.14200691, 0.85799309],
+       [0.9190551 , 0.0809449 ]])</code></pre>
+</div>
+</div>
+<div id="7f2a164f" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>rf_pipe.predict_proba(X_new)[:<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<pre><code>array([[0.99, 0.01],
+       [0.24, 0.76],
+       [0.97, 0.03]])</code></pre>
+</div>
+</div>
+<p>And here are the predicted probabilities output by the VotingClassifier. As you can see, the predicted probabilities are closer to the ones output by logistic regression because we gave that model twice the weight. For example, 0.94 is closer to 0.92 than it is to 0.97.</p>
+<div id="0e4bbf11" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>vc_pipe.fit(X, y)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>vc_pipe.predict_proba(X_new)[:<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>array([[0.92277699, 0.07722301],
+       [0.17467127, 0.82532873],
+       [0.93603673, 0.06396327]])</code></pre>
+</div>
+</div>
+<p>You can confirm whether the weights are helping or hurting the ensemble by using cross-validation. In this case, the score is 0.816, which is slightly worse than our baseline VotingClassifier.</p>
+<div id="b960d329" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>cross_val_score(vc_pipe, X, y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+<pre><code>0.8159437574540205</code></pre>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Pipeline accuracy scores:</strong></p>
+<ul>
+<li><strong>Grid search (VC soft voting):</strong> 0.834</li>
+<li><strong>Grid search (RF):</strong> 0.829</li>
+<li><strong>Grid search (LR):</strong> 0.828</li>
+<li><strong>Baseline (VC hard voting):</strong> 0.820</li>
+<li><strong>Baseline (VC soft voting):</strong> 0.818</li>
+<li><strong>Baseline (VC soft voting with LR weighted):</strong> 0.816 👈</li>
+<li><strong>Baseline (LR):</strong> 0.811</li>
+<li><strong>Baseline (RF):</strong> 0.811</li>
+</ul>
+</div>
+</div>
+</div>
+<p>You can also search for the optimal weights using a grid search. Here’s how you might add that to the vc_params dictionary.</p>
+<div id="d1cafdc1" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>vc_params[<span class="st">'votingclassifier__weights'</span>] <span class="op">=</span> [(<span class="dv">1</span>, <span class="dv">1</span>), (<span class="dv">2</span>, <span class="dv">1</span>), (<span class="dv">1</span>, <span class="dv">2</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+            // default icon
+            link.classList.add("external");
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./ch11.html" class="pagination-link" aria-label="Comparing linear and non-linear models">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Comparing linear and non-linear models</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./ch13.html" class="pagination-link" aria-label="Feature selection">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Feature selection</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2025, Kevin Markham. All Rights Reserved.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
