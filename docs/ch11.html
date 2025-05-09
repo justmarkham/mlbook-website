@@ -355,16 +355,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>We start out by importing the RandomForestClassifier class from the ensemble module, and creating an instance called rf. Because there’s randomness involved in a random forest, we’ll set a random state for reproducibility. And because building a random forest can be computationally expensive, it has its own n_jobs parameter (just like grid search and randomized search), which we’ll set to -1 to enable parallel processing.</p>
-<div id="165a852b" class="cell" data-execution_count="2">
+<div id="cc2f805e" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>rf <span class="op">=</span> RandomForestClassifier(random_state<span class="op">=</span><span class="dv">1</span>, n_jobs<span class="op">=-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We’ll create a new Pipeline object called rf_pipe that uses random forests instead of logistic regression.</p>
-<div id="09b65907" class="cell" data-execution_count="3">
+<div id="43373398" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rf_pipe <span class="op">=</span> make_pipeline(ct, rf)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>rf_pipe</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
-<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0c76727c-cac7-4275-8e3f-30d5f50caa5a" type="checkbox"><label class="sk-toggleable__label" for="0c76727c-cac7-4275-8e3f-30d5f50caa5a">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('columntransformer',
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ebebcb7f-55b8-4e55-a34a-f2c2a5eb37db" type="checkbox"><label class="sk-toggleable__label" for="ebebcb7f-55b8-4e55-a34a-f2c2a5eb37db">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('columntransformer',
                  ColumnTransformer(transformers=[('pipeline',
                                                   Pipeline(steps=[('simpleimputer',
                                                                    SimpleImputer(fill_value='missing',
@@ -380,7 +380,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                                                  ('passthrough', 'passthrough',
                                                   ['Parch'])])),
                 ('randomforestclassifier',
-                 RandomForestClassifier(n_jobs=-1, random_state=1))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="725711bf-16ad-44ab-be48-56eb45ac6d99" type="checkbox"><label class="sk-toggleable__label" for="725711bf-16ad-44ab-be48-56eb45ac6d99">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
+                 RandomForestClassifier(n_jobs=-1, random_state=1))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="49dabf3c-a55f-428d-991e-753e52ac4398" type="checkbox"><label class="sk-toggleable__label" for="49dabf3c-a55f-428d-991e-753e52ac4398">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
                                  Pipeline(steps=[('simpleimputer',
                                                   SimpleImputer(fill_value='missing',
                                                                 strategy='constant')),
@@ -390,11 +390,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                                 ('countvectorizer', CountVectorizer(), 'Name'),
                                 ('simpleimputer', SimpleImputer(),
                                  ['Age', 'Fare']),
-                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a59b0238-3a09-41e7-be72-24c8afd6df4b" type="checkbox"><label class="sk-toggleable__label" for="a59b0238-3a09-41e7-be72-24c8afd6df4b">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="c7a276d9-f3a6-4b69-bd0a-9697a6987e8e" type="checkbox"><label class="sk-toggleable__label" for="c7a276d9-f3a6-4b69-bd0a-9697a6987e8e">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0368b3cf-91c0-4467-afe6-7ee935c86799" type="checkbox"><label class="sk-toggleable__label" for="0368b3cf-91c0-4467-afe6-7ee935c86799">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f7ce907f-5d71-4e9c-8c5d-020b9bb0f3bc" type="checkbox"><label class="sk-toggleable__label" for="f7ce907f-5d71-4e9c-8c5d-020b9bb0f3bc">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="718d7133-f1f4-49ed-ad00-ac81adb8f83c" type="checkbox"><label class="sk-toggleable__label" for="718d7133-f1f4-49ed-ad00-ac81adb8f83c">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f914e1a4-d444-48be-8b4f-6127bb8e96c3" type="checkbox"><label class="sk-toggleable__label" for="f914e1a4-d444-48be-8b4f-6127bb8e96c3">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="1324ed7a-6c80-4810-9939-3909fc154f4e" type="checkbox"><label class="sk-toggleable__label" for="1324ed7a-6c80-4810-9939-3909fc154f4e">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="df8ab126-9292-4b4e-8ce6-b8433ac06591" type="checkbox"><label class="sk-toggleable__label" for="df8ab126-9292-4b4e-8ce6-b8433ac06591">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8515158e-85e4-4f63-bd49-9f98f3816b9a" type="checkbox"><label class="sk-toggleable__label" for="8515158e-85e4-4f63-bd49-9f98f3816b9a">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ec25bfd8-ae54-4967-8f66-3a6e673fa482" type="checkbox"><label class="sk-toggleable__label" for="ec25bfd8-ae54-4967-8f66-3a6e673fa482">RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(n_jobs=-1, random_state=1)</pre></div></div></div></div></div></div></div>
+                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="45a08284-724e-40d2-a852-17af158e8fc0" type="checkbox"><label class="sk-toggleable__label" for="45a08284-724e-40d2-a852-17af158e8fc0">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="5c36ff1c-e6b9-424b-acb0-5f6f61622f30" type="checkbox"><label class="sk-toggleable__label" for="5c36ff1c-e6b9-424b-acb0-5f6f61622f30">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="51ec5ec2-ccd0-476a-a428-2c6f3fe4a991" type="checkbox"><label class="sk-toggleable__label" for="51ec5ec2-ccd0-476a-a428-2c6f3fe4a991">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="950d7e99-5c97-48e5-a81a-a3349a8a32e9" type="checkbox"><label class="sk-toggleable__label" for="950d7e99-5c97-48e5-a81a-a3349a8a32e9">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="5d466104-d43b-43a3-852c-cd0693b2aa7b" type="checkbox"><label class="sk-toggleable__label" for="5d466104-d43b-43a3-852c-cd0693b2aa7b">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="95fd86e4-bf42-4171-8e39-1a7688df76ce" type="checkbox"><label class="sk-toggleable__label" for="95fd86e4-bf42-4171-8e39-1a7688df76ce">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ef962b49-557d-43eb-8187-430853f37f84" type="checkbox"><label class="sk-toggleable__label" for="ef962b49-557d-43eb-8187-430853f37f84">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6faa1435-9aee-4147-9802-847e659bc46b" type="checkbox"><label class="sk-toggleable__label" for="6faa1435-9aee-4147-9802-847e659bc46b">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3a81f3b4-e6ea-4616-9c9b-7818c6fbe897" type="checkbox"><label class="sk-toggleable__label" for="3a81f3b4-e6ea-4616-9c9b-7818c6fbe897">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="096e546c-a9e7-4670-bc8f-8bc7ec66f344" type="checkbox"><label class="sk-toggleable__label" for="096e546c-a9e7-4670-bc8f-8bc7ec66f344">RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(n_jobs=-1, random_state=1)</pre></div></div></div></div></div></div></div>
 </div>
 </div>
 <p>And we can cross-validate it to generate a baseline accuracy, which is 0.811. This accuracy is nearly identical to the baseline accuracy of our logistic regression Pipeline, but it’s likely that we can improve it through hyperparameter tuning.</p>
-<div id="bb2efa90" class="cell" data-execution_count="4">
+<div id="e0527601" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cross_val_score(rf_pipe, X, y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>0.811436821291821</code></pre>
@@ -410,7 +410,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li><strong>Grid search (LR):</strong> 0.828</li>
 <li><strong>Baseline (LR):</strong> 0.811</li>
-<li><strong>Baseline (RF):</strong> 0.811 👈</li>
+<li><strong>Baseline (RF):</strong> <mark>0.811</mark></li>
 </ul>
 </div>
 </div>
@@ -421,7 +421,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="11.2" class="anchored" data-anchor-id="tuning-random-forests-with-randomized-search"><span class="header-section-number">11.2</span> Tuning random forests with randomized search</h2>
 <p>When tuning random forests, we’ll try tuning the same parameters for the transformers as before, but different parameters for the model. It’s still important to tune the transformations and the model at the same time, because it may turn out that the best data transformations for a random forest model are different than the best data transformations for a logistic regression model.</p>
 <p>Rather than typing a parameters dictionary from scratch, we can start by creating a copy of the params dictionary called rf_params.</p>
-<div id="420f9c7c" class="cell" data-execution_count="5">
+<div id="e71454be" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>rf_params <span class="op">=</span> params.copy()</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>rf_params</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
@@ -433,7 +433,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Then, we’ll delete the entries from the rf_params dictionary that only apply to logistic regression.</p>
-<div id="00a7ebc2" class="cell" data-execution_count="6">
+<div id="c7f7ff19" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> rf_params[<span class="st">'logisticregression__penalty'</span>]</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> rf_params[<span class="st">'logisticregression__C'</span>]</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>rf_params</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -444,7 +444,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Alternatively, we could have created the rf_params dictionary using a dictionary comprehension that only keeps the entries in params that start with the letters ‘col’.</p>
-<div id="e26186ca" class="cell" data-execution_count="7">
+<div id="90dc920f" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>rf_params <span class="op">=</span> {k:v <span class="cf">for</span> k, v <span class="kw">in</span> params.items() <span class="cf">if</span> k.startswith(<span class="st">'col'</span>)}</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>rf_params</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
@@ -475,7 +475,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>We’ll start by trying out four parameters from the RandomForestClassifier, which I selected based on research and experience.</p>
 <p>First, we’ll confirm that the Pipeline step name is randomforestclassifier (all lowercase).</p>
-<div id="b57cefb6" class="cell" data-execution_count="8">
+<div id="89cb8dbb" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>rf_pipe.named_steps.keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>dict_keys(['columntransformer', 'randomforestclassifier'])</code></pre>
@@ -522,7 +522,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="51531878" class="cell" data-execution_count="9">
+<div id="d6f0c30d" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>rf_params[<span class="st">'randomforestclassifier__n_estimators'</span>] <span class="op">=</span> [<span class="dv">100</span>, <span class="dv">300</span>, <span class="dv">500</span>, <span class="dv">700</span>]</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>rf_params[<span class="st">'randomforestclassifier__min_samples_leaf'</span>] <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>rf_params[<span class="st">'randomforestclassifier__max_features'</span>] <span class="op">=</span> [<span class="st">'sqrt'</span>, <span class="va">None</span>]</span>
@@ -540,17 +540,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Finally, we’ll create an instance of RandomizedSearchCV called rf_rand, making sure to use the rf_pipe and rf_params objects, and we’ll run 100 iterations of the randomized search.</p>
 <p>Notice that I’ve added a warning to this cell to indicate that it takes a few minutes to run on my local machine, though it may run faster or slower on your machine.</p>
-<div id="4aa9f7af" class="cell" data-execution_count="10">
+<div id="abddd89f" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">WARNING</span><span class="co">: EXTENDED RUNTIME</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>rf_rand <span class="op">=</span> RandomizedSearchCV(rf_pipe, rf_params, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>,</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                             n_iter<span class="op">=</span><span class="dv">100</span>, random_state<span class="op">=</span><span class="dv">1</span>, n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>time rf_rand.fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>CPU times: user 2.84 s, sys: 403 ms, total: 3.25 s
-Wall time: 13min 24s</code></pre>
+<pre><code>CPU times: user 2.79 s, sys: 331 ms, total: 3.13 s
+Wall time: 1min 33s</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="10">
-<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="c73931c7-1eb1-488c-ae4a-6eddda2a8fa0" type="checkbox"><label class="sk-toggleable__label" for="c73931c7-1eb1-488c-ae4a-6eddda2a8fa0">RandomizedSearchCV</label><div class="sk-toggleable__content"><pre>RandomizedSearchCV(cv=5,
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="2b9a5304-2574-4cc6-8a43-39c2984e52c1" type="checkbox"><label class="sk-toggleable__label" for="2b9a5304-2574-4cc6-8a43-39c2984e52c1">RandomizedSearchCV</label><div class="sk-toggleable__content"><pre>RandomizedSearchCV(cv=5,
                    estimator=Pipeline(steps=[('columntransformer',
                                               ColumnTransformer(transformers=[('pipeline',
                                                                                Pipeline(steps=[('simpleimputer',
@@ -582,7 +582,7 @@ Wall time: 13min 24s</code></pre>
                                                                                  300,
                                                                                  500,
                                                                                  700]},
-                   random_state=1, scoring='accuracy')</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="cd3e93f8-2583-423d-82a7-e3e4996eadf0" type="checkbox"><label class="sk-toggleable__label" for="cd3e93f8-2583-423d-82a7-e3e4996eadf0">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
+                   random_state=1, scoring='accuracy')</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="2bd3d93f-6df8-4123-a11f-c4a088b329b9" type="checkbox"><label class="sk-toggleable__label" for="2bd3d93f-6df8-4123-a11f-c4a088b329b9">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
                                  Pipeline(steps=[('simpleimputer',
                                                   SimpleImputer(fill_value='missing',
                                                                 strategy='constant')),
@@ -592,11 +592,11 @@ Wall time: 13min 24s</code></pre>
                                 ('countvectorizer', CountVectorizer(), 'Name'),
                                 ('simpleimputer', SimpleImputer(),
                                  ['Age', 'Fare']),
-                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8f9517dd-407b-48f1-89cf-a68280fe4160" type="checkbox"><label class="sk-toggleable__label" for="8f9517dd-407b-48f1-89cf-a68280fe4160">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8cb221ff-bda6-41e9-8fca-332cb2b0d5f1" type="checkbox"><label class="sk-toggleable__label" for="8cb221ff-bda6-41e9-8fca-332cb2b0d5f1">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="643354db-528a-4359-8fa0-704bc9e556b2" type="checkbox"><label class="sk-toggleable__label" for="643354db-528a-4359-8fa0-704bc9e556b2">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="9c5824ea-a560-4a48-97dd-1822aca7b530" type="checkbox"><label class="sk-toggleable__label" for="9c5824ea-a560-4a48-97dd-1822aca7b530">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a875f374-a2fd-45ce-b929-a1c8f3f7660a" type="checkbox"><label class="sk-toggleable__label" for="a875f374-a2fd-45ce-b929-a1c8f3f7660a">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="dd7a1736-b702-45cd-b693-708c673523a6" type="checkbox"><label class="sk-toggleable__label" for="dd7a1736-b702-45cd-b693-708c673523a6">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="9d317c77-7ed1-41e4-b6de-c39610425470" type="checkbox"><label class="sk-toggleable__label" for="9d317c77-7ed1-41e4-b6de-c39610425470">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6ab0a733-e870-4a91-94fc-68fa2d4119a0" type="checkbox"><label class="sk-toggleable__label" for="6ab0a733-e870-4a91-94fc-68fa2d4119a0">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3b958f20-0d88-4215-b25e-597985951807" type="checkbox"><label class="sk-toggleable__label" for="3b958f20-0d88-4215-b25e-597985951807">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f4eeaf41-10fe-43b5-9b32-84b353fa65df" type="checkbox"><label class="sk-toggleable__label" for="f4eeaf41-10fe-43b5-9b32-84b353fa65df">RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(n_jobs=-1, random_state=1)</pre></div></div></div></div></div></div></div></div></div></div></div></div>
+                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b2d3501a-3303-41c1-86e2-2b6d0af05026" type="checkbox"><label class="sk-toggleable__label" for="b2d3501a-3303-41c1-86e2-2b6d0af05026">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="91f272ef-164f-4677-bfd4-a337e0061850" type="checkbox"><label class="sk-toggleable__label" for="91f272ef-164f-4677-bfd4-a337e0061850">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a241c24e-34f4-48d5-a347-2beee05cbaec" type="checkbox"><label class="sk-toggleable__label" for="a241c24e-34f4-48d5-a347-2beee05cbaec">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="7b8b950c-29cd-4960-91cb-4acf365f5160" type="checkbox"><label class="sk-toggleable__label" for="7b8b950c-29cd-4960-91cb-4acf365f5160">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="cf3b49cd-046a-4e35-80a9-a0d85e410b7d" type="checkbox"><label class="sk-toggleable__label" for="cf3b49cd-046a-4e35-80a9-a0d85e410b7d">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b03b24d9-cfad-4242-a084-b8876f859928" type="checkbox"><label class="sk-toggleable__label" for="b03b24d9-cfad-4242-a084-b8876f859928">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="7b58d31a-90bb-4de7-b456-8004a0c421fc" type="checkbox"><label class="sk-toggleable__label" for="7b58d31a-90bb-4de7-b456-8004a0c421fc">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="7741743a-3110-433f-9fac-7e89e75dd8f7" type="checkbox"><label class="sk-toggleable__label" for="7741743a-3110-433f-9fac-7e89e75dd8f7">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="99da7d19-92c3-4d91-a3b0-f29bf13ce54d" type="checkbox"><label class="sk-toggleable__label" for="99da7d19-92c3-4d91-a3b0-f29bf13ce54d">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="800ec562-ce71-4237-bdb5-94093a6fe3fc" type="checkbox"><label class="sk-toggleable__label" for="800ec562-ce71-4237-bdb5-94093a6fe3fc">RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(n_jobs=-1, random_state=1)</pre></div></div></div></div></div></div></div></div></div></div></div></div>
 </div>
 </div>
 <p>We see that the best score found during the randomized search is 0.825, which is better than our baseline score of 0.811, but not quite as good as the 0.828 score of our best logistic regression Pipeline.</p>
-<div id="13fd90ce" class="cell" data-execution_count="11">
+<div id="2dc8a3be" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>rf_rand.best_score_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>0.8249262444291003</code></pre>
@@ -611,7 +611,7 @@ Wall time: 13min 24s</code></pre>
 <p><strong>Pipeline accuracy scores:</strong></p>
 <ul>
 <li><strong>Grid search (LR):</strong> 0.828</li>
-<li><strong>Randomized search (RF):</strong> 0.825 👈</li>
+<li><strong>Randomized search (RF):</strong> <mark>0.825</mark></li>
 <li><strong>Baseline (LR):</strong> 0.811</li>
 <li><strong>Baseline (RF):</strong> 0.811</li>
 </ul>
@@ -622,7 +622,7 @@ Wall time: 13min 24s</code></pre>
 <section id="further-tuning-with-grid-search" class="level2" data-number="11.3">
 <h2 data-number="11.3" class="anchored" data-anchor-id="further-tuning-with-grid-search"><span class="header-section-number">11.3</span> Further tuning with grid search</h2>
 <p>Let’s now examine the results from the randomized search to look for trends, specifically focusing on the top 20 results. We’ll convert the results to a DataFrame, and then sort by rank_test_score. Keep in mind that it’s hard to draw any definitive conclusions since this is a randomized search, so what we’re looking for is just any obvious trends.</p>
-<div id="61087cfa" class="cell" data-execution_count="12">
+<div id="01530193" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pd.DataFrame(rf_rand.cv_results_)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>results.sort_values(<span class="st">'rank_test_score'</span>).head(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
@@ -658,10 +658,10 @@ Wall time: 13min 24s</code></pre>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">13</td>
-<td>1.775191</td>
-<td>0.141556</td>
-<td>0.056017</td>
-<td>0.016206</td>
+<td>1.758950</td>
+<td>0.102511</td>
+<td>0.091779</td>
+<td>0.033565</td>
 <td>700</td>
 <td>3</td>
 <td>None</td>
@@ -681,10 +681,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">70</td>
-<td>2.067046</td>
-<td>0.245151</td>
-<td>0.084293</td>
-<td>0.021412</td>
+<td>2.013018</td>
+<td>0.084309</td>
+<td>0.086011</td>
+<td>0.023684</td>
 <td>700</td>
 <td>3</td>
 <td>None</td>
@@ -704,10 +704,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">31</td>
-<td>1.907166</td>
-<td>0.051550</td>
-<td>0.065388</td>
-<td>0.017367</td>
+<td>1.887772</td>
+<td>0.086216</td>
+<td>0.064653</td>
+<td>0.011458</td>
 <td>500</td>
 <td>3</td>
 <td>None</td>
@@ -727,10 +727,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">45</td>
-<td>1.132841</td>
-<td>0.087042</td>
-<td>0.042709</td>
-<td>0.005103</td>
+<td>1.037857</td>
+<td>0.158690</td>
+<td>0.056631</td>
+<td>0.028906</td>
 <td>300</td>
 <td>2</td>
 <td>None</td>
@@ -750,10 +750,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">33</td>
-<td>0.866417</td>
-<td>0.121050</td>
-<td>0.049790</td>
-<td>0.017742</td>
+<td>0.858704</td>
+<td>0.094488</td>
+<td>0.060416</td>
+<td>0.020129</td>
 <td>300</td>
 <td>3</td>
 <td>None</td>
@@ -773,10 +773,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">54</td>
-<td>1.027468</td>
-<td>0.098267</td>
-<td>0.040619</td>
-<td>0.009987</td>
+<td>1.010711</td>
+<td>0.062747</td>
+<td>0.053485</td>
+<td>0.011058</td>
 <td>300</td>
 <td>2</td>
 <td>None</td>
@@ -796,10 +796,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">68</td>
-<td>2.022925</td>
-<td>0.063011</td>
-<td>0.059829</td>
-<td>0.010787</td>
+<td>2.148946</td>
+<td>0.087918</td>
+<td>0.076372</td>
+<td>0.018386</td>
 <td>500</td>
 <td>3</td>
 <td>None</td>
@@ -819,10 +819,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">81</td>
-<td>0.466743</td>
-<td>0.120791</td>
-<td>0.023605</td>
-<td>0.006715</td>
+<td>0.413764</td>
+<td>0.086766</td>
+<td>0.029865</td>
+<td>0.010336</td>
 <td>100</td>
 <td>3</td>
 <td>None</td>
@@ -842,10 +842,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">15</td>
-<td>0.830716</td>
-<td>0.132376</td>
-<td>0.079704</td>
-<td>0.038660</td>
+<td>0.844169</td>
+<td>0.142691</td>
+<td>0.048393</td>
+<td>0.007232</td>
 <td>300</td>
 <td>2</td>
 <td>None</td>
@@ -865,10 +865,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">94</td>
-<td>1.838951</td>
-<td>0.144510</td>
-<td>0.066304</td>
-<td>0.007401</td>
+<td>1.856896</td>
+<td>0.045917</td>
+<td>0.057204</td>
+<td>0.015763</td>
 <td>500</td>
 <td>2</td>
 <td>None</td>
@@ -888,10 +888,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">98</td>
-<td>0.274403</td>
-<td>0.058110</td>
-<td>0.048240</td>
-<td>0.018102</td>
+<td>0.261669</td>
+<td>0.037321</td>
+<td>0.044620</td>
+<td>0.026675</td>
 <td>100</td>
 <td>2</td>
 <td>None</td>
@@ -911,10 +911,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">63</td>
-<td>2.992522</td>
-<td>0.228749</td>
-<td>0.069530</td>
-<td>0.024953</td>
+<td>3.068088</td>
+<td>0.164047</td>
+<td>0.104920</td>
+<td>0.052729</td>
 <td>700</td>
 <td>1</td>
 <td>None</td>
@@ -934,10 +934,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">18</td>
-<td>2.152134</td>
-<td>0.208370</td>
-<td>0.077971</td>
-<td>0.021875</td>
+<td>2.645641</td>
+<td>0.444149</td>
+<td>0.072046</td>
+<td>0.010605</td>
 <td>700</td>
 <td>2</td>
 <td>None</td>
@@ -957,10 +957,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">57</td>
-<td>1.565075</td>
-<td>0.269175</td>
-<td>0.100762</td>
-<td>0.052414</td>
+<td>1.524880</td>
+<td>0.188370</td>
+<td>0.092194</td>
+<td>0.019741</td>
 <td>500</td>
 <td>2</td>
 <td>None</td>
@@ -980,10 +980,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">12</td>
-<td>0.407637</td>
-<td>0.104994</td>
-<td>0.028871</td>
-<td>0.011479</td>
+<td>0.437379</td>
+<td>0.084064</td>
+<td>0.026701</td>
+<td>0.007412</td>
 <td>100</td>
 <td>3</td>
 <td>None</td>
@@ -1003,10 +1003,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">72</td>
-<td>1.241201</td>
-<td>0.032166</td>
-<td>0.038227</td>
-<td>0.005361</td>
+<td>1.300662</td>
+<td>0.091567</td>
+<td>0.054674</td>
+<td>0.013393</td>
 <td>300</td>
 <td>1</td>
 <td>None</td>
@@ -1026,10 +1026,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
-<td>0.662763</td>
-<td>0.088451</td>
-<td>0.041698</td>
-<td>0.010623</td>
+<td>0.748695</td>
+<td>0.197776</td>
+<td>0.049966</td>
+<td>0.010642</td>
 <td>500</td>
 <td>1</td>
 <td>sqrt</td>
@@ -1049,10 +1049,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">41</td>
-<td>2.445723</td>
-<td>0.138797</td>
-<td>0.078492</td>
-<td>0.027981</td>
+<td>2.489124</td>
+<td>0.073481</td>
+<td>0.078912</td>
+<td>0.004515</td>
 <td>700</td>
 <td>2</td>
 <td>None</td>
@@ -1072,10 +1072,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">10</td>
-<td>2.127278</td>
-<td>0.120247</td>
-<td>0.069973</td>
-<td>0.019181</td>
+<td>2.137177</td>
+<td>0.137258</td>
+<td>0.062515</td>
+<td>0.015032</td>
 <td>500</td>
 <td>2</td>
 <td>None</td>
@@ -1095,10 +1095,10 @@ Wall time: 13min 24s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">8</td>
-<td>2.047190</td>
-<td>0.088370</td>
-<td>0.060528</td>
-<td>0.019753</td>
+<td>2.289808</td>
+<td>0.061330</td>
+<td>0.077428</td>
+<td>0.016585</td>
 <td>500</td>
 <td>2</td>
 <td>None</td>
@@ -1166,7 +1166,7 @@ Wall time: 13min 24s</code></pre>
 </div>
 </div>
 <p>Here are the updated values we’re going to try. For max_features and bootstrap, you’ll see that we can just pass a list with a single value so that that parameter value will always get set during the search.</p>
-<div id="7d8593b4" class="cell" data-execution_count="13">
+<div id="6e85dab6" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>rf_params[<span class="st">'randomforestclassifier__n_estimators'</span>] <span class="op">=</span> [<span class="dv">300</span>, <span class="dv">500</span>, <span class="dv">700</span>, <span class="dv">900</span>]</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>rf_params[<span class="st">'randomforestclassifier__min_samples_leaf'</span>] <span class="op">=</span> [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>rf_params[<span class="st">'randomforestclassifier__max_features'</span>] <span class="op">=</span> [<span class="va">None</span>]</span>
@@ -1184,16 +1184,16 @@ Wall time: 13min 24s</code></pre>
 </div>
 <p>At this point, you could continue to run additional randomized searches in order to study the trends further, but we’re just going to move on to grid search.</p>
 <p>We’ll create an instance of GridSearchCV called rf_grid, making sure to use the rf_pipe and rf_params objects, and then run the search.</p>
-<div id="1cb7e2a9" class="cell" data-execution_count="14">
+<div id="4240181d" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">WARNING</span><span class="co">: EXTENDED RUNTIME</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>rf_grid <span class="op">=</span> GridSearchCV(rf_pipe, rf_params, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>, n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>time rf_grid.fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>CPU times: user 2.06 s, sys: 221 ms, total: 2.28 s
-Wall time: 2min 53s</code></pre>
+<pre><code>CPU times: user 2.1 s, sys: 221 ms, total: 2.32 s
+Wall time: 3min 3s</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="14">
-<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="eea7418b-3543-43e1-ad01-ddc94015389c" type="checkbox"><label class="sk-toggleable__label" for="eea7418b-3543-43e1-ad01-ddc94015389c">GridSearchCV</label><div class="sk-toggleable__content"><pre>GridSearchCV(cv=5,
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f8221048-8ad1-4e7b-b90f-30affde7b024" type="checkbox"><label class="sk-toggleable__label" for="f8221048-8ad1-4e7b-b90f-30affde7b024">GridSearchCV</label><div class="sk-toggleable__content"><pre>GridSearchCV(cv=5,
              estimator=Pipeline(steps=[('columntransformer',
                                         ColumnTransformer(transformers=[('pipeline',
                                                                          Pipeline(steps=[('simpleimputer',
@@ -1222,7 +1222,7 @@ Wall time: 2min 53s</code></pre>
                                                                       5],
                          'randomforestclassifier__n_estimators': [300, 500, 700,
                                                                   900]},
-             scoring='accuracy')</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a713760a-c202-4613-911c-14e3d1205082" type="checkbox"><label class="sk-toggleable__label" for="a713760a-c202-4613-911c-14e3d1205082">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
+             scoring='accuracy')</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="36fba1ec-f1ce-4163-99e9-4175dc1ab03b" type="checkbox"><label class="sk-toggleable__label" for="36fba1ec-f1ce-4163-99e9-4175dc1ab03b">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
                                  Pipeline(steps=[('simpleimputer',
                                                   SimpleImputer(fill_value='missing',
                                                                 strategy='constant')),
@@ -1232,11 +1232,11 @@ Wall time: 2min 53s</code></pre>
                                 ('countvectorizer', CountVectorizer(), 'Name'),
                                 ('simpleimputer', SimpleImputer(),
                                  ['Age', 'Fare']),
-                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="36068d4f-6500-4682-be75-0660d0ef5bdc" type="checkbox"><label class="sk-toggleable__label" for="36068d4f-6500-4682-be75-0660d0ef5bdc">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f28c6ad8-ef46-4c54-8fe6-ab692945a2c4" type="checkbox"><label class="sk-toggleable__label" for="f28c6ad8-ef46-4c54-8fe6-ab692945a2c4">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="dc15924c-b5fb-4b94-bc27-7f6b326c4aff" type="checkbox"><label class="sk-toggleable__label" for="dc15924c-b5fb-4b94-bc27-7f6b326c4aff">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="34771d1d-fec6-4d90-86c1-ab6beaf84ddb" type="checkbox"><label class="sk-toggleable__label" for="34771d1d-fec6-4d90-86c1-ab6beaf84ddb">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="78d8fa70-8f94-409c-a223-81f78a33eaf8" type="checkbox"><label class="sk-toggleable__label" for="78d8fa70-8f94-409c-a223-81f78a33eaf8">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="e7c5bea1-7763-4761-afd4-a52cc4c67ac3" type="checkbox"><label class="sk-toggleable__label" for="e7c5bea1-7763-4761-afd4-a52cc4c67ac3">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="34942506-be92-4146-9d30-aa2939487fdc" type="checkbox"><label class="sk-toggleable__label" for="34942506-be92-4146-9d30-aa2939487fdc">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6d3b3e49-5fb9-4365-896a-e6513c763cb9" type="checkbox"><label class="sk-toggleable__label" for="6d3b3e49-5fb9-4365-896a-e6513c763cb9">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="fa4e99f3-36f9-4e84-9e80-79398c3ea762" type="checkbox"><label class="sk-toggleable__label" for="fa4e99f3-36f9-4e84-9e80-79398c3ea762">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b7a84984-0a62-4098-b4e2-e39c1fedd91d" type="checkbox"><label class="sk-toggleable__label" for="b7a84984-0a62-4098-b4e2-e39c1fedd91d">RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(n_jobs=-1, random_state=1)</pre></div></div></div></div></div></div></div></div></div></div></div></div>
+                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b224fd74-2b94-48a4-b0a2-c020044d71ad" type="checkbox"><label class="sk-toggleable__label" for="b224fd74-2b94-48a4-b0a2-c020044d71ad">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6322a62a-8be4-4904-a330-fd1cd56688a1" type="checkbox"><label class="sk-toggleable__label" for="6322a62a-8be4-4904-a330-fd1cd56688a1">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="831f23d9-ad4f-4f60-be50-d91cb1816938" type="checkbox"><label class="sk-toggleable__label" for="831f23d9-ad4f-4f60-be50-d91cb1816938">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="5c6d4895-7bdc-486a-8cd0-221c24bf2e03" type="checkbox"><label class="sk-toggleable__label" for="5c6d4895-7bdc-486a-8cd0-221c24bf2e03">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="93e04b78-ff2d-433b-95a3-039f649a52d8" type="checkbox"><label class="sk-toggleable__label" for="93e04b78-ff2d-433b-95a3-039f649a52d8">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="9b1c514b-82b4-4766-98f5-48d5991d47e7" type="checkbox"><label class="sk-toggleable__label" for="9b1c514b-82b4-4766-98f5-48d5991d47e7">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="235f400e-bab8-4cca-a81b-81c0c8ab770f" type="checkbox"><label class="sk-toggleable__label" for="235f400e-bab8-4cca-a81b-81c0c8ab770f">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="bcbf18cd-d741-4459-960b-c84c999d1433" type="checkbox"><label class="sk-toggleable__label" for="bcbf18cd-d741-4459-960b-c84c999d1433">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="052efd8b-fb4c-46ea-8ff1-cfbc63a2fc4c" type="checkbox"><label class="sk-toggleable__label" for="052efd8b-fb4c-46ea-8ff1-cfbc63a2fc4c">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f9ba34b0-a98e-4d81-9773-0dcc5cf2ea6b" type="checkbox"><label class="sk-toggleable__label" for="f9ba34b0-a98e-4d81-9773-0dcc5cf2ea6b">RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(n_jobs=-1, random_state=1)</pre></div></div></div></div></div></div></div></div></div></div></div></div>
 </div>
 </div>
 <p>The best score from our grid search is 0.829, which is just a tiny bit higher than the 0.828 score of our best logistic regression Pipeline.</p>
-<div id="480d3e4d" class="cell" data-execution_count="15">
+<div id="87d27f44" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>rf_grid.best_score_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
 <pre><code>0.8294143493817087</code></pre>
@@ -1250,7 +1250,7 @@ Wall time: 2min 53s</code></pre>
 <div class="callout-body-container">
 <p><strong>Pipeline accuracy scores:</strong></p>
 <ul>
-<li><strong>Grid search (RF):</strong> 0.829 👈</li>
+<li><strong>Grid search (RF):</strong> <mark>0.829</mark></li>
 <li><strong>Grid search (LR):</strong> 0.828</li>
 <li><strong>Randomized search (RF):</strong> 0.825</li>
 <li><strong>Baseline (LR):</strong> 0.811</li>
@@ -1260,7 +1260,7 @@ Wall time: 2min 53s</code></pre>
 </div>
 </div>
 <p>These are the best parameters that were found during the grid search. Again, it’s hard to say whether this is truly the best set of parameters, but we at least know that it’s a good set of parameters.</p>
-<div id="365e2629" class="cell" data-execution_count="16">
+<div id="99a209a4" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>rf_grid.best_params_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>{'columntransformer__countvectorizer__ngram_range': (1, 1),
@@ -1277,12 +1277,12 @@ Wall time: 2min 53s</code></pre>
 <h2 data-number="11.4" class="anchored" data-anchor-id="qa-how-do-i-tune-two-models-with-a-single-grid-search"><span class="header-section-number">11.4</span> Q&amp;A: How do I tune two models with a single grid search?</h2>
 <p>So far, we’ve set up two separate Pipelines called pipe and rf_pipe that each end in a different model. That made it easy to grid search each Pipeline with its own set of relevant parameters. However, you can actually tune two different models using a single grid search if you like.</p>
 <p>To do this, the first step is to create a new Pipeline using the Pipeline class instead of the make_pipeline function. The reason we’re doing this is so that we can provide custom names for the steps. In this case, we’ll call the Pipeline object both_pipe, and we’ll call the step names “preprocessor” and “classifier”. We’ll set the classifier to be logistic regression, though this is just a placeholder as you’ll see in a minute.</p>
-<div id="bc100e57" class="cell" data-execution_count="17">
+<div id="2a8ac959" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>both_pipe <span class="op">=</span> Pipeline([(<span class="st">'preprocessor'</span>, ct), (<span class="st">'classifier'</span>, logreg)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next, we’ll create a new parameter dictionary called params1. For the simplicity of this example, we’re only going to tune one parameter from the preprocessor step and two parameters from the classifier step.</p>
 <p>Additionally, we’re going to add one more entry to the dictionary to indicate that the classifier we want to use with this parameter set is logistic regression. Notice that this is a logistic regression object, not a string, and also notice that we put it in brackets to make it a list. This might seem strange, but it will make more sense in a minute.</p>
-<div id="1d071661" class="cell" data-execution_count="18">
+<div id="b095f268" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>params1 <span class="op">=</span> {}</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>params1[<span class="st">'preprocessor__countvectorizer__ngram_range'</span>] <span class="op">=</span> [(<span class="dv">1</span>, <span class="dv">1</span>), (<span class="dv">1</span>, <span class="dv">2</span>)]</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>params1[<span class="st">'classifier__penalty'</span>] <span class="op">=</span> [<span class="st">'l1'</span>, <span class="st">'l2'</span>]</span>
@@ -1298,7 +1298,7 @@ Wall time: 2min 53s</code></pre>
 </div>
 <p>Next, we’ll create another parameter dictionary called params2. Again, we’ll tune one parameter from the preprocessor step and two parameters from the classifier step. You’ll notice that the classifier parameters are random forest parameters, not logistic regression parameters.</p>
 <p>Just like above, we’ll add one more entry to the dictionary to indicate that the classifier we want to use with this parameter set is random forests. During the grid search, this will override the logistic regression classifier we specified when creating the Pipeline.</p>
-<div id="a99add56" class="cell" data-execution_count="19">
+<div id="d83eff71" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>params2 <span class="op">=</span> {}</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>params2[<span class="st">'preprocessor__countvectorizer__ngram_range'</span>] <span class="op">=</span> [(<span class="dv">1</span>, <span class="dv">1</span>), (<span class="dv">1</span>, <span class="dv">2</span>)]</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>params2[<span class="st">'classifier__n_estimators'</span>] <span class="op">=</span> [<span class="dv">300</span>, <span class="dv">500</span>]</span>
@@ -1313,7 +1313,7 @@ Wall time: 2min 53s</code></pre>
 </div>
 </div>
 <p>Next, we’ll create a list called both_params that includes both of these parameter sets.</p>
-<div id="595228f1" class="cell" data-execution_count="20">
+<div id="d1957c10" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>both_params <span class="op">=</span> [params1, params2]</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>both_params</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="20">
@@ -1334,12 +1334,12 @@ Wall time: 2min 53s</code></pre>
 <li>Then, it will try every combination of parameters from params2, which is 2 times 2 times 2 times 1, or 8 combinations.</li>
 </ul>
 <p>Thus, it will run a total of 20 times.</p>
-<div id="639ed08e" class="cell" data-execution_count="21">
+<div id="03aa3c05" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>both_grid <span class="op">=</span> GridSearchCV(both_pipe, both_params, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>,</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>                         n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>both_grid.fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="21">
-<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="19969963-af90-4eeb-9bcd-7158fcc35a13" type="checkbox"><label class="sk-toggleable__label" for="19969963-af90-4eeb-9bcd-7158fcc35a13">GridSearchCV</label><div class="sk-toggleable__content"><pre>GridSearchCV(cv=5,
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b471f549-feb2-4e29-b90a-b082087b29a6" type="checkbox"><label class="sk-toggleable__label" for="b471f549-feb2-4e29-b90a-b082087b29a6">GridSearchCV</label><div class="sk-toggleable__content"><pre>GridSearchCV(cv=5,
              estimator=Pipeline(steps=[('preprocessor',
                                         ColumnTransformer(transformers=[('pipeline',
                                                                          Pipeline(steps=[('simpleimputer',
@@ -1370,7 +1370,7 @@ Wall time: 2min 53s</code></pre>
                           'preprocessor__countvectorizer__ngram_range': [(1, 1),
                                                                          (1,
                                                                           2)]}],
-             scoring='accuracy')</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3ec6234a-09ba-4521-9175-4c998b65de8a" type="checkbox"><label class="sk-toggleable__label" for="3ec6234a-09ba-4521-9175-4c998b65de8a">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
+             scoring='accuracy')</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ad3095a2-ee7a-44f6-b307-70b0596dd220" type="checkbox"><label class="sk-toggleable__label" for="ad3095a2-ee7a-44f6-b307-70b0596dd220">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
                                  Pipeline(steps=[('simpleimputer',
                                                   SimpleImputer(fill_value='missing',
                                                                 strategy='constant')),
@@ -1380,11 +1380,11 @@ Wall time: 2min 53s</code></pre>
                                 ('countvectorizer', CountVectorizer(), 'Name'),
                                 ('simpleimputer', SimpleImputer(),
                                  ['Age', 'Fare']),
-                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6b3baa21-220b-4111-8121-babc4a516ca3" type="checkbox"><label class="sk-toggleable__label" for="6b3baa21-220b-4111-8121-babc4a516ca3">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="9a5e5049-daef-478e-b168-06d3aab060fc" type="checkbox"><label class="sk-toggleable__label" for="9a5e5049-daef-478e-b168-06d3aab060fc">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="56028b6f-37f8-4775-a9ef-0cf63b8ff6ae" type="checkbox"><label class="sk-toggleable__label" for="56028b6f-37f8-4775-a9ef-0cf63b8ff6ae">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0e3fd9da-54af-4e59-a9ef-4d521fb328e7" type="checkbox"><label class="sk-toggleable__label" for="0e3fd9da-54af-4e59-a9ef-4d521fb328e7">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="d18bc9e0-e6d2-4e38-a5e4-a75ef15adaa3" type="checkbox"><label class="sk-toggleable__label" for="d18bc9e0-e6d2-4e38-a5e4-a75ef15adaa3">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="035b14b7-dadf-4e06-b920-4d07430a3302" type="checkbox"><label class="sk-toggleable__label" for="035b14b7-dadf-4e06-b920-4d07430a3302">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6af8e40f-3c28-48ab-8aaa-1354df7a2313" type="checkbox"><label class="sk-toggleable__label" for="6af8e40f-3c28-48ab-8aaa-1354df7a2313">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="bb791f80-326b-4cc7-9225-2608f403aad0" type="checkbox"><label class="sk-toggleable__label" for="bb791f80-326b-4cc7-9225-2608f403aad0">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f64ae3d8-cd89-4bf3-831c-978d9d2fb723" type="checkbox"><label class="sk-toggleable__label" for="f64ae3d8-cd89-4bf3-831c-978d9d2fb723">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="78c1661c-9528-43ae-b0e2-cf03d757ce6b" type="checkbox"><label class="sk-toggleable__label" for="78c1661c-9528-43ae-b0e2-cf03d757ce6b">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(C=10, penalty='l1', random_state=1, solver='liblinear')</pre></div></div></div></div></div></div></div></div></div></div></div></div>
+                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="121702f4-eeec-473e-9a0c-460a2b7d1134" type="checkbox"><label class="sk-toggleable__label" for="121702f4-eeec-473e-9a0c-460a2b7d1134">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="4a0546dd-3c19-4061-b6f3-886105598700" type="checkbox"><label class="sk-toggleable__label" for="4a0546dd-3c19-4061-b6f3-886105598700">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ac1b1bb1-6c60-4399-a543-d5193ffb70b6" type="checkbox"><label class="sk-toggleable__label" for="ac1b1bb1-6c60-4399-a543-d5193ffb70b6">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="c401dd94-3172-4e0c-9601-eafa07aca6c3" type="checkbox"><label class="sk-toggleable__label" for="c401dd94-3172-4e0c-9601-eafa07aca6c3">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="810794bb-eff4-467f-9bdf-4be1466de37f" type="checkbox"><label class="sk-toggleable__label" for="810794bb-eff4-467f-9bdf-4be1466de37f">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="c2033039-1682-4500-b508-faf11d130165" type="checkbox"><label class="sk-toggleable__label" for="c2033039-1682-4500-b508-faf11d130165">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b9edd0f8-4112-4cae-aa1e-e19e6c639cf4" type="checkbox"><label class="sk-toggleable__label" for="b9edd0f8-4112-4cae-aa1e-e19e6c639cf4">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="2131fbf2-c3ae-42bc-94e7-6624b2e35dba" type="checkbox"><label class="sk-toggleable__label" for="2131fbf2-c3ae-42bc-94e7-6624b2e35dba">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="26baa246-191b-4969-8621-fc97f58686cf" type="checkbox"><label class="sk-toggleable__label" for="26baa246-191b-4969-8621-fc97f58686cf">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3acbd8c2-4581-416a-a235-bffe35606bdb" type="checkbox"><label class="sk-toggleable__label" for="3acbd8c2-4581-416a-a235-bffe35606bdb">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(C=10, penalty='l1', random_state=1, solver='liblinear')</pre></div></div></div></div></div></div></div></div></div></div></div></div>
 </div>
 </div>
 <p>Let’s take a look at the results. You can see that it ran 12 times with a logistic regression model and 8 times with a random forest model. Also note that when logistic regression model runs, the random forest-related parameters are listed as NaN, and vice versa when the random forest model runs.</p>
-<div id="ade333de" class="cell" data-execution_count="22">
+<div id="3b16da8c" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(both_grid.cv_results_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <div>
@@ -1418,10 +1418,10 @@ Wall time: 2min 53s</code></pre>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
-<td>0.009023</td>
-<td>0.003034</td>
-<td>0.003685</td>
-<td>0.000874</td>
+<td>0.007347</td>
+<td>0.000113</td>
+<td>0.002645</td>
+<td>0.000035</td>
 <td>LogisticRegression(C=10, penalty='l1', random_...</td>
 <td>0.1</td>
 <td>l1</td>
@@ -1440,10 +1440,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
-<td>0.013172</td>
-<td>0.002458</td>
-<td>0.003753</td>
-<td>0.000718</td>
+<td>0.010414</td>
+<td>0.000730</td>
+<td>0.003242</td>
+<td>0.000054</td>
 <td>LogisticRegression(C=10, penalty='l1', random_...</td>
 <td>0.1</td>
 <td>l1</td>
@@ -1462,10 +1462,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
-<td>0.012237</td>
-<td>0.003378</td>
-<td>0.002987</td>
-<td>0.000325</td>
+<td>0.010512</td>
+<td>0.003404</td>
+<td>0.003052</td>
+<td>0.000255</td>
 <td>LogisticRegression(C=10, penalty='l1', random_...</td>
 <td>0.1</td>
 <td>l2</td>
@@ -1484,10 +1484,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
-<td>0.016607</td>
-<td>0.003160</td>
-<td>0.003400</td>
-<td>0.000120</td>
+<td>0.012982</td>
+<td>0.001550</td>
+<td>0.005367</td>
+<td>0.001251</td>
 <td>LogisticRegression(C=10, penalty='l1', random_...</td>
 <td>0.1</td>
 <td>l2</td>
@@ -1506,10 +1506,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
-<td>0.011857</td>
-<td>0.001590</td>
-<td>0.003698</td>
-<td>0.000890</td>
+<td>0.012608</td>
+<td>0.002167</td>
+<td>0.004043</td>
+<td>0.001136</td>
 <td>LogisticRegression(C=10, penalty='l1', random_...</td>
 <td>1</td>
 <td>l1</td>
@@ -1528,10 +1528,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">5</td>
-<td>0.016823</td>
-<td>0.002887</td>
-<td>0.004835</td>
-<td>0.001060</td>
+<td>0.016644</td>
+<td>0.000577</td>
+<td>0.004067</td>
+<td>0.000812</td>
 <td>LogisticRegression(C=10, penalty='l1', random_...</td>
 <td>1</td>
 <td>l1</td>
@@ -1550,10 +1550,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">6</td>
-<td>0.012520</td>
-<td>0.000876</td>
-<td>0.004440</td>
-<td>0.001627</td>
+<td>0.011687</td>
+<td>0.002482</td>
+<td>0.003360</td>
+<td>0.000297</td>
 <td>LogisticRegression(C=10, penalty='l1', random_...</td>
 <td>1</td>
 <td>l2</td>
@@ -1572,10 +1572,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">7</td>
-<td>0.016068</td>
-<td>0.001914</td>
-<td>0.003496</td>
-<td>0.000102</td>
+<td>0.015418</td>
+<td>0.002135</td>
+<td>0.005152</td>
+<td>0.001715</td>
 <td>LogisticRegression(C=10, penalty='l1', random_...</td>
 <td>1</td>
 <td>l2</td>
@@ -1594,10 +1594,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">8</td>
-<td>0.017769</td>
-<td>0.001068</td>
-<td>0.005295</td>
-<td>0.001091</td>
+<td>0.019986</td>
+<td>0.003582</td>
+<td>0.005547</td>
+<td>0.001773</td>
 <td>LogisticRegression(C=10, penalty='l1', random_...</td>
 <td>10</td>
 <td>l1</td>
@@ -1616,10 +1616,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">9</td>
-<td>0.020225</td>
-<td>0.002208</td>
-<td>0.005433</td>
-<td>0.001440</td>
+<td>0.022375</td>
+<td>0.006685</td>
+<td>0.005572</td>
+<td>0.002336</td>
 <td>LogisticRegression(C=10, penalty='l1', random_...</td>
 <td>10</td>
 <td>l1</td>
@@ -1638,10 +1638,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">10</td>
-<td>0.014306</td>
-<td>0.002463</td>
-<td>0.003587</td>
-<td>0.000318</td>
+<td>0.013795</td>
+<td>0.002522</td>
+<td>0.004653</td>
+<td>0.001127</td>
 <td>LogisticRegression(C=10, penalty='l1', random_...</td>
 <td>10</td>
 <td>l2</td>
@@ -1660,10 +1660,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">11</td>
-<td>0.017853</td>
-<td>0.000362</td>
-<td>0.003578</td>
-<td>0.000097</td>
+<td>0.016559</td>
+<td>0.002225</td>
+<td>0.004013</td>
+<td>0.000424</td>
 <td>LogisticRegression(C=10, penalty='l1', random_...</td>
 <td>10</td>
 <td>l2</td>
@@ -1682,10 +1682,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">12</td>
-<td>0.336714</td>
-<td>0.027350</td>
-<td>0.053991</td>
-<td>0.014054</td>
+<td>0.329072</td>
+<td>0.039890</td>
+<td>0.046886</td>
+<td>0.009094</td>
 <td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
 <td>NaN</td>
 <td>NaN</td>
@@ -1704,10 +1704,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">13</td>
-<td>0.348650</td>
-<td>0.041838</td>
-<td>0.046395</td>
-<td>0.009478</td>
+<td>0.315229</td>
+<td>0.023925</td>
+<td>0.047965</td>
+<td>0.009272</td>
 <td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
 <td>NaN</td>
 <td>NaN</td>
@@ -1726,10 +1726,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">14</td>
-<td>0.580815</td>
-<td>0.119930</td>
-<td>0.067610</td>
-<td>0.034684</td>
+<td>0.534220</td>
+<td>0.080665</td>
+<td>0.061349</td>
+<td>0.009893</td>
 <td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
 <td>NaN</td>
 <td>NaN</td>
@@ -1748,10 +1748,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">15</td>
-<td>0.508402</td>
-<td>0.050694</td>
-<td>0.048401</td>
-<td>0.003638</td>
+<td>0.623413</td>
+<td>0.099512</td>
+<td>0.055768</td>
+<td>0.004650</td>
 <td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
 <td>NaN</td>
 <td>NaN</td>
@@ -1770,10 +1770,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">16</td>
-<td>0.347210</td>
-<td>0.027297</td>
-<td>0.037239</td>
-<td>0.001846</td>
+<td>0.319832</td>
+<td>0.048049</td>
+<td>0.042681</td>
+<td>0.002448</td>
 <td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
 <td>NaN</td>
 <td>NaN</td>
@@ -1792,10 +1792,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">17</td>
-<td>0.339160</td>
-<td>0.039954</td>
-<td>0.042311</td>
-<td>0.007090</td>
+<td>0.362235</td>
+<td>0.086649</td>
+<td>0.048045</td>
+<td>0.012798</td>
 <td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
 <td>NaN</td>
 <td>NaN</td>
@@ -1814,10 +1814,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">18</td>
-<td>0.499793</td>
-<td>0.055705</td>
-<td>0.051449</td>
-<td>0.007499</td>
+<td>0.504366</td>
+<td>0.026996</td>
+<td>0.048679</td>
+<td>0.005673</td>
 <td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
 <td>NaN</td>
 <td>NaN</td>
@@ -1836,10 +1836,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">19</td>
-<td>0.429146</td>
-<td>0.023762</td>
-<td>0.036653</td>
-<td>0.008553</td>
+<td>0.649702</td>
+<td>0.034483</td>
+<td>0.043766</td>
+<td>0.010341</td>
 <td>RandomForestClassifier(n_jobs=-1, random_state=1)</td>
 <td>NaN</td>
 <td>NaN</td>
@@ -1863,13 +1863,13 @@ Wall time: 2min 53s</code></pre>
 </div>
 </div>
 <p>As usual, the best_score_ and best_params_ attributes are still available.</p>
-<div id="4f6b2266" class="cell" data-execution_count="23">
+<div id="e4e876d6" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>both_grid.best_score_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="23">
 <pre><code>0.8248885820099178</code></pre>
 </div>
 </div>
-<div id="ae2bf52b" class="cell" data-execution_count="24">
+<div id="ef7d2c9c" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>both_grid.best_params_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="24">
 <pre><code>{'classifier': LogisticRegression(C=10, penalty='l1', random_state=1, solver='liblinear'),
@@ -1900,12 +1900,12 @@ Wall time: 2min 53s</code></pre>
 <h2 data-number="11.5" class="anchored" data-anchor-id="qa-how-do-i-tune-two-models-with-a-single-randomized-search"><span class="header-section-number">11.5</span> Q&amp;A: How do I tune two models with a single randomized search?</h2>
 <p>Starting in scikit-learn version 0.22, RandomizedSearchCV can search multiple parameter dictionaries. This allows you to do a randomized search of multiple models, in the same exact way that we did a grid search of multiple models.</p>
 <p>Here’s an example in which we pass both_pipe and both_params to RandomizedSearchCV and run it for 10 iterations.</p>
-<div id="7f48f663" class="cell" data-execution_count="25">
+<div id="b2a84f38" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>both_rand <span class="op">=</span> RandomizedSearchCV(both_pipe, both_params, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>,</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>                               n_iter<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">1</span>, n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>both_rand.fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
-<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="4bdfd767-6f7e-4cf1-b3cf-34708f146d35" type="checkbox"><label class="sk-toggleable__label" for="4bdfd767-6f7e-4cf1-b3cf-34708f146d35">RandomizedSearchCV</label><div class="sk-toggleable__content"><pre>RandomizedSearchCV(cv=5,
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="84a39c65-e551-4249-b204-ec822c5281c8" type="checkbox"><label class="sk-toggleable__label" for="84a39c65-e551-4249-b204-ec822c5281c8">RandomizedSearchCV</label><div class="sk-toggleable__content"><pre>RandomizedSearchCV(cv=5,
                    estimator=Pipeline(steps=[('preprocessor',
                                               ColumnTransformer(transformers=[('pipeline',
                                                                                Pipeline(steps=[('simpleimputer',
@@ -1936,7 +1936,7 @@ Wall time: 2min 53s</code></pre>
                                                                                          1),
                                                                                         (1,
                                                                                          2)]}],
-                   random_state=1, scoring='accuracy')</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="01b156e8-8bdb-4942-8c88-858c70b68e08" type="checkbox"><label class="sk-toggleable__label" for="01b156e8-8bdb-4942-8c88-858c70b68e08">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
+                   random_state=1, scoring='accuracy')</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="c1ab7afd-9348-45ac-9425-ea7fad65d6ce" type="checkbox"><label class="sk-toggleable__label" for="c1ab7afd-9348-45ac-9425-ea7fad65d6ce">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
                                  Pipeline(steps=[('simpleimputer',
                                                   SimpleImputer(fill_value='missing',
                                                                 strategy='constant')),
@@ -1946,11 +1946,11 @@ Wall time: 2min 53s</code></pre>
                                 ('countvectorizer', CountVectorizer(), 'Name'),
                                 ('simpleimputer', SimpleImputer(),
                                  ['Age', 'Fare']),
-                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f3148028-c39d-4981-ab7f-72959623ef66" type="checkbox"><label class="sk-toggleable__label" for="f3148028-c39d-4981-ab7f-72959623ef66">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="63b89630-2d5d-4c33-9efd-5a3de7a21cc4" type="checkbox"><label class="sk-toggleable__label" for="63b89630-2d5d-4c33-9efd-5a3de7a21cc4">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="cddd0274-afab-497a-981f-8441b5d727bd" type="checkbox"><label class="sk-toggleable__label" for="cddd0274-afab-497a-981f-8441b5d727bd">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="e6d27d21-c3a0-4d5b-941b-f53cc66b3a99" type="checkbox"><label class="sk-toggleable__label" for="e6d27d21-c3a0-4d5b-941b-f53cc66b3a99">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="2401ae66-c99c-4844-ab2a-57df33254a2b" type="checkbox"><label class="sk-toggleable__label" for="2401ae66-c99c-4844-ab2a-57df33254a2b">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3e5bd684-b57f-434a-9475-477b14aea0f0" type="checkbox"><label class="sk-toggleable__label" for="3e5bd684-b57f-434a-9475-477b14aea0f0">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a59e977b-4852-4e5d-b84b-264fb7072ab4" type="checkbox"><label class="sk-toggleable__label" for="a59e977b-4852-4e5d-b84b-264fb7072ab4">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="70eef66b-3064-4cf9-ba6b-f60904595bec" type="checkbox"><label class="sk-toggleable__label" for="70eef66b-3064-4cf9-ba6b-f60904595bec">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="461fbb4b-3300-45d2-b25f-0c90fc3da515" type="checkbox"><label class="sk-toggleable__label" for="461fbb4b-3300-45d2-b25f-0c90fc3da515">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="af90c383-8e0b-4cda-a03b-9467672539a7" type="checkbox"><label class="sk-toggleable__label" for="af90c383-8e0b-4cda-a03b-9467672539a7">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(C=1, penalty='l1', random_state=1, solver='liblinear')</pre></div></div></div></div></div></div></div></div></div></div></div></div>
+                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a9441ff3-7cd6-44fd-9f54-80e38080cd46" type="checkbox"><label class="sk-toggleable__label" for="a9441ff3-7cd6-44fd-9f54-80e38080cd46">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f36fc980-92a0-4469-af52-ae19803b6723" type="checkbox"><label class="sk-toggleable__label" for="f36fc980-92a0-4469-af52-ae19803b6723">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="44d9dbe2-8503-444c-9404-b43af6bd3bd0" type="checkbox"><label class="sk-toggleable__label" for="44d9dbe2-8503-444c-9404-b43af6bd3bd0">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8f738f92-7e60-4914-b2a7-94fb0e07d732" type="checkbox"><label class="sk-toggleable__label" for="8f738f92-7e60-4914-b2a7-94fb0e07d732">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3a724080-966e-4bc4-8e55-56403c15d248" type="checkbox"><label class="sk-toggleable__label" for="3a724080-966e-4bc4-8e55-56403c15d248">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="839dbb50-577f-4f07-b7e6-a3206e55bd99" type="checkbox"><label class="sk-toggleable__label" for="839dbb50-577f-4f07-b7e6-a3206e55bd99">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="51024dfb-fb2d-417c-aa4b-ac5779d22063" type="checkbox"><label class="sk-toggleable__label" for="51024dfb-fb2d-417c-aa4b-ac5779d22063">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="54cc9f4b-d622-42e4-9be2-9aaad6c0545c" type="checkbox"><label class="sk-toggleable__label" for="54cc9f4b-d622-42e4-9be2-9aaad6c0545c">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="50a68a26-0c54-4919-82ba-d78a2a477c4d" type="checkbox"><label class="sk-toggleable__label" for="50a68a26-0c54-4919-82ba-d78a2a477c4d">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8735676a-cca9-4e98-bc72-f045cccceeb5" type="checkbox"><label class="sk-toggleable__label" for="8735676a-cca9-4e98-bc72-f045cccceeb5">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(C=1, penalty='l1', random_state=1, solver='liblinear')</pre></div></div></div></div></div></div></div></div></div></div></div></div>
 </div>
 </div>
 <p>If you examine the results, you’ll find that logistic regression will be chosen more often because we defined more parameter combinations for the logistic regression model. This behavior may change in a future version, such that each model is equally likely to be chosen, regardless of the number of parameter combinations.</p>
-<div id="6fc8c2e3" class="cell" data-execution_count="26">
+<div id="722a526c" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(both_rand.cv_results_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="26">
 <div>
@@ -1984,10 +1984,10 @@ Wall time: 2min 53s</code></pre>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
-<td>0.009854</td>
-<td>0.000331</td>
-<td>0.002865</td>
-<td>0.000083</td>
+<td>0.011173</td>
+<td>0.001856</td>
+<td>0.003149</td>
+<td>0.000129</td>
 <td>(1, 2)</td>
 <td>l2</td>
 <td>0.1</td>
@@ -2006,10 +2006,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
-<td>0.322754</td>
-<td>0.020671</td>
-<td>0.032301</td>
-<td>0.003518</td>
+<td>0.324651</td>
+<td>0.029089</td>
+<td>0.040264</td>
+<td>0.011326</td>
 <td>(1, 1)</td>
 <td>NaN</td>
 <td>NaN</td>
@@ -2028,10 +2028,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
-<td>0.012104</td>
-<td>0.003389</td>
-<td>0.003630</td>
-<td>0.001202</td>
+<td>0.012903</td>
+<td>0.002507</td>
+<td>0.003355</td>
+<td>0.000525</td>
 <td>(1, 1)</td>
 <td>l2</td>
 <td>1</td>
@@ -2050,10 +2050,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
-<td>0.010625</td>
-<td>0.001252</td>
-<td>0.003091</td>
-<td>0.000057</td>
+<td>0.014181</td>
+<td>0.005096</td>
+<td>0.004045</td>
+<td>0.001645</td>
 <td>(1, 1)</td>
 <td>l2</td>
 <td>10</td>
@@ -2072,10 +2072,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
-<td>0.008279</td>
-<td>0.000302</td>
-<td>0.003023</td>
-<td>0.000061</td>
+<td>0.008655</td>
+<td>0.000337</td>
+<td>0.003142</td>
+<td>0.000069</td>
 <td>(1, 1)</td>
 <td>l2</td>
 <td>0.1</td>
@@ -2094,10 +2094,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">5</td>
-<td>0.460087</td>
-<td>0.075832</td>
-<td>0.042557</td>
-<td>0.012279</td>
+<td>0.506709</td>
+<td>0.093686</td>
+<td>0.040965</td>
+<td>0.009688</td>
 <td>(1, 1)</td>
 <td>NaN</td>
 <td>NaN</td>
@@ -2116,10 +2116,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">6</td>
-<td>0.020218</td>
-<td>0.008625</td>
-<td>0.010290</td>
-<td>0.001652</td>
+<td>0.010139</td>
+<td>0.000722</td>
+<td>0.003664</td>
+<td>0.000909</td>
 <td>(1, 1)</td>
 <td>l1</td>
 <td>1</td>
@@ -2138,10 +2138,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">7</td>
-<td>0.302770</td>
-<td>0.031318</td>
-<td>0.034362</td>
-<td>0.003524</td>
+<td>0.273520</td>
+<td>0.015257</td>
+<td>0.033608</td>
+<td>0.002356</td>
 <td>(1, 2)</td>
 <td>NaN</td>
 <td>NaN</td>
@@ -2160,10 +2160,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">8</td>
-<td>0.028805</td>
-<td>0.002600</td>
-<td>0.010308</td>
-<td>0.002683</td>
+<td>0.019968</td>
+<td>0.010435</td>
+<td>0.010277</td>
+<td>0.009121</td>
 <td>(1, 2)</td>
 <td>l2</td>
 <td>1</td>
@@ -2182,10 +2182,10 @@ Wall time: 2min 53s</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">9</td>
-<td>0.037220</td>
-<td>0.005678</td>
-<td>0.012917</td>
-<td>0.003896</td>
+<td>0.049322</td>
+<td>0.012308</td>
+<td>0.019117</td>
+<td>0.010222</td>
 <td>(1, 2)</td>
 <td>l1</td>
 <td>0.1</td>
