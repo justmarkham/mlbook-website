@@ -341,7 +341,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Let’s take another look at our Titanic DataFrame.</p>
 <p>We want to include the Name column in our model in case it contains predictive information about the likelihood of survival. For example, maybe their last name is predictive of survival if they’re part of an important family, and maybe certain titles are also predictive.</p>
 <p>The Name column can’t be passed directly to the model because it’s not numeric. So in this lesson, we’ll learn how to encode it numerically, and in the next lesson we’ll add it to the ColumnTransformer and Pipeline.</p>
-<div id="860f4a61" class="cell" data-execution_count="2">
+<div id="cfd8af76" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <div>
@@ -528,16 +528,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>To start, we import CountVectorizer from the feature_extraction module and create an instance called vect.</p>
-<div id="6e2c8c14" class="cell" data-execution_count="3">
+<div id="9914970b" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> CountVectorizer</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>vect <span class="op">=</span> CountVectorizer()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then we’ll pass the Name to the fit_transform method of vect. Notice that we’re using single brackets around Name to pass it as a Series, which is because CountVectorizer expects 1-dimensional input. This is unlike OneHotEncoder and most other transformers, which expect 2-dimensional input.</p>
 <p>The fit_transform method outputs what is called a document-term matrix, which we save as dtm. When we print it out, you can see that it’s a sparse matrix containing 10 rows and 40 columns. There’s one row for each of the 10 names, and one column for each of the 40 features it created.</p>
-<div id="6930efdc" class="cell" data-execution_count="4">
+<div id="a4016984" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dtm <span class="op">=</span> vect.fit_transform(df[<span class="st">'Name'</span>])</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>dtm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>&lt;10x40 sparse matrix of type '&lt;class 'numpy.int64'&gt;'
     with 46 stored elements in Compressed Sparse Row format&gt;</code></pre>
 </div>
@@ -559,7 +559,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Let’s examine the names of the 40 feature columns it created by running the get_feature_names method. As an aside, this will be replaced by the get_feature_names_out method starting in scikit-learn 1.0.</p>
 <p>These are the 40 unique words that were found in the Name column after lowercasing the words, removing all punctuation, and excluding words that were only 1 character long.</p>
 <p>Note that the features are sorted alphabetically, which is the same convention used by the OneHotEncoder when learning category names.</p>
-<div id="a49de106" class="cell" data-execution_count="5">
+<div id="f41811e7" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(vect.get_feature_names())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>['achem', 'adele', 'allen', 'berg', 'bradley', 'braund', 'briggs', 'cumings', 'elisabeth', 'florence', 'futrelle', 'gosta', 'harris', 'heath', 'heikkinen', 'henry', 'jacques', 'james', 'john', 'johnson', 'laina', 'leonard', 'lily', 'master', 'may', 'mccarthy', 'miss', 'moran', 'mr', 'mrs', 'nasser', 'nicholas', 'oscar', 'owen', 'palsson', 'peel', 'thayer', 'timothy', 'vilhelmina', 'william']</code></pre>
@@ -619,9 +619,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="7d92e014" class="cell" data-execution_count="6">
+<div id="5f36ebba" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(dtm.toarray(), columns<span class="op">=</span>vect.get_feature_names())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
+<div class="cell-output cell-output-display" data-execution_count="10">
 <div>
 
 
@@ -902,9 +902,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>What can we learn by examining this? If we compared the Name column to the document-term matrix, we would see that in each row, CountVectorizer counted how many times each word appeared.</p>
 <p>Let’s take the first row as an example. Using the head method, we can see that the name in the first row of training data was “Braund, Mr.&nbsp;Owen Harris”. Thus the first row of the document-term matrix contains 4 ones (under “braund”, “mr”, “owen”, and “harris”), and the other 36 entries are all zeros. Unfortunately, you can’t see the entries in the middle without modifying the display options for pandas.</p>
-<div id="906e39c2" class="cell" data-execution_count="7">
+<div id="92539351" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df.head(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell-output cell-output-display" data-execution_count="14">
 <div>
 
 
@@ -968,11 +968,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="6.2" class="anchored" data-anchor-id="including-text-data-in-the-model"><span class="header-section-number">6.2</span> Including text data in the model</h2>
 <p>Now that we know how to encode text data, we’re ready to include it in our model.</p>
 <p>We’ll start by updating the cols list to include the Name column, and then use cols to update the X DataFrame.</p>
-<div id="1aa2f9dc" class="cell" data-execution_count="8">
+<div id="af7e0578" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [<span class="st">'Parch'</span>, <span class="st">'Fare'</span>, <span class="st">'Embarked'</span>, <span class="st">'Sex'</span>, <span class="st">'Name'</span>]</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[cols]</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="8">
+<div class="cell-output cell-output-display" data-execution_count="18">
 <div>
 
 
@@ -1076,24 +1076,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Next, we’ll update the ColumnTransformer by adding one more tuple to specify that the CountVectorizer should be applied to Name.</p>
 <p>Note that there are no brackets around “Name”. This is not because there’s only one column being passed to CountVectorizer. Instead, it’s because CountVectorizer expects 1-dimensional input, and brackets would signal 2-dimensional input to the ColumnTransformer.</p>
-<div id="f4fef522" class="cell" data-execution_count="9">
+<div id="07af189c" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    (ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    (vect, <span class="st">'Name'</span>),</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'passthrough'</span>, [<span class="st">'Parch'</span>, <span class="st">'Fare'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next, we’ll use the fit_transform method to try out the transformation. The output contains 47 columns.</p>
-<div id="cc00e91c" class="cell" data-execution_count="10">
+<div id="cd828d3d" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="10">
+<div class="cell-output cell-output-display" data-execution_count="23">
 <pre><code>&lt;10x47 sparse matrix of type '&lt;class 'numpy.float64'&gt;'
     with 78 stored elements in Compressed Sparse Row format&gt;</code></pre>
 </div>
 </div>
 <p>We can confirm with get_feature_names the meaning of these 47 columns: 3 columns for Embarked, 2 colums for Sex, 40 columns for Name, 1 column for Parch, and 1 column for Fare. Again, the features are in this order because that’s the order in which they were passed to the ColumnTransformer.</p>
-<div id="bcf05d56" class="cell" data-execution_count="11">
+<div id="a20136b4" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ct.get_feature_names() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="11">
+<div class="cell-output cell-output-display" data-execution_count="24">
 <pre><code>['onehotencoder__x0_C',
  'onehotencoder__x0_Q',
  'onehotencoder__x0_S',
@@ -1161,14 +1161,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Now we’ll update the Pipeline to use the modified ColumnTransformer.</p>
-<div id="c813d8ee" class="cell" data-execution_count="12">
+<div id="8851f344" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> make_pipeline(ct, logreg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then we can fit the Pipeline, which displays our Pipeline diagram.</p>
-<div id="0a070354" class="cell" data-execution_count="13">
+<div id="23c0d189" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pipe.fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="13">
-<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="41e004ed-f724-4d94-9926-6bfba90e74e6" type="checkbox"><label class="sk-toggleable__label" for="41e004ed-f724-4d94-9926-6bfba90e74e6">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('columntransformer',
+<div class="cell-output cell-output-display" data-execution_count="26">
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a31a96e8-cf67-428c-9573-117dffeb6485" type="checkbox"><label class="sk-toggleable__label" for="a31a96e8-cf67-428c-9573-117dffeb6485">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('columntransformer',
                  ColumnTransformer(transformers=[('onehotencoder',
                                                   OneHotEncoder(),
                                                   ['Embarked', 'Sex']),
@@ -1177,21 +1177,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                                                  ('passthrough', 'passthrough',
                                                   ['Parch', 'Fare'])])),
                 ('logisticregression',
-                 LogisticRegression(random_state=1, solver='liblinear'))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="d9fbd7fa-1b5b-438c-87d4-9b549e31266e" type="checkbox"><label class="sk-toggleable__label" for="d9fbd7fa-1b5b-438c-87d4-9b549e31266e">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('onehotencoder', OneHotEncoder(),
+                 LogisticRegression(random_state=1, solver='liblinear'))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3fc8b00d-297b-42c2-aad1-ce2e202c6fe0" type="checkbox"><label class="sk-toggleable__label" for="3fc8b00d-297b-42c2-aad1-ce2e202c6fe0">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('onehotencoder', OneHotEncoder(),
                                  ['Embarked', 'Sex']),
                                 ('countvectorizer', CountVectorizer(), 'Name'),
                                 ('passthrough', 'passthrough',
-                                 ['Parch', 'Fare'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="be94093c-9774-4368-8253-646f8a3de0de" type="checkbox"><label class="sk-toggleable__label" for="be94093c-9774-4368-8253-646f8a3de0de">onehotencoder</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="921b4e35-3d04-4254-8f19-b08a6c3b4aab" type="checkbox"><label class="sk-toggleable__label" for="921b4e35-3d04-4254-8f19-b08a6c3b4aab">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="16c5f128-7400-422a-a349-f875ee8cc894" type="checkbox"><label class="sk-toggleable__label" for="16c5f128-7400-422a-a349-f875ee8cc894">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b8a7e1fe-a3a4-4cfa-accd-029b5026d102" type="checkbox"><label class="sk-toggleable__label" for="b8a7e1fe-a3a4-4cfa-accd-029b5026d102">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="810f614b-f27f-48dc-85dd-5fa900f197ef" type="checkbox"><label class="sk-toggleable__label" for="810f614b-f27f-48dc-85dd-5fa900f197ef">passthrough</label><div class="sk-toggleable__content"><pre>['Parch', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3f168474-e2d2-463d-bfd7-7881895dc69d" type="checkbox"><label class="sk-toggleable__label" for="3f168474-e2d2-463d-bfd7-7881895dc69d">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3d67a493-10f9-4fbe-a8c2-f1faba53f81f" type="checkbox"><label class="sk-toggleable__label" for="3d67a493-10f9-4fbe-a8c2-f1faba53f81f">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(random_state=1, solver='liblinear')</pre></div></div></div></div></div></div></div>
+                                 ['Parch', 'Fare'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0631a827-9c99-4307-b771-55d5940b6f74" type="checkbox"><label class="sk-toggleable__label" for="0631a827-9c99-4307-b771-55d5940b6f74">onehotencoder</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="9f72c7da-30c3-4f44-a5f4-3da3a6cc6121" type="checkbox"><label class="sk-toggleable__label" for="9f72c7da-30c3-4f44-a5f4-3da3a6cc6121">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="5ca1d674-1640-4769-ab4f-bd88cabcf0ac" type="checkbox"><label class="sk-toggleable__label" for="5ca1d674-1640-4769-ab4f-bd88cabcf0ac">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ad050c2a-1935-444c-baee-3c043d3fe884" type="checkbox"><label class="sk-toggleable__label" for="ad050c2a-1935-444c-baee-3c043d3fe884">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="30a06b0f-54c5-4711-aa6a-c8d73b4e9e8c" type="checkbox"><label class="sk-toggleable__label" for="30a06b0f-54c5-4711-aa6a-c8d73b4e9e8c">passthrough</label><div class="sk-toggleable__content"><pre>['Parch', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0d185ad4-3eec-4d88-a81a-a5ca2d600066" type="checkbox"><label class="sk-toggleable__label" for="0d185ad4-3eec-4d88-a81a-a5ca2d600066">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="1e72b8e6-927a-4214-a594-6deb65934441" type="checkbox"><label class="sk-toggleable__label" for="1e72b8e6-927a-4214-a594-6deb65934441">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(random_state=1, solver='liblinear')</pre></div></div></div></div></div></div></div>
 </div>
 </div>
 <p>Our last step before prediction is to update X_new to include the Name column.</p>
-<div id="a8038faa" class="cell" data-execution_count="14">
+<div id="1036ceb7" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>X_new <span class="op">=</span> df_new[cols]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And finally, we’ll use the fitted Pipeline to make predictions for X_new.</p>
-<div id="bf930a5e" class="cell" data-execution_count="15">
+<div id="546f862b" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pipe.predict(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div class="cell-output cell-output-display" data-execution_count="28">
 <pre><code>array([0, 1, 0, 0, 1, 0, 1, 0, 1, 0])</code></pre>
 </div>
 </div>
@@ -1200,13 +1200,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="qa-why-is-the-document-term-matrix-stored-as-a-sparse-matrix" class="level2" data-number="6.3">
 <h2 data-number="6.3" class="anchored" data-anchor-id="qa-why-is-the-document-term-matrix-stored-as-a-sparse-matrix"><span class="header-section-number">6.3</span> Q&amp;A: Why is the document-term matrix stored as a sparse matrix?</h2>
 <p>Just like OneHotEncoder, CountVectorizer outputs a sparse matrix by default. To explore why it does this, let’s create a Python list of two short text documents and call it text.</p>
-<div id="f51a4d24" class="cell" data-execution_count="16">
+<div id="3b8420e2" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> [<span class="st">'Machine Learning is fun'</span>, <span class="st">'I am learning Machine Learning'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We’ll pass those documents to the fit_transform method of CountVectorizer, make it dense with the toarray method, and then convert it to a DataFrame. As you can see, the word “I” was ignored because it’s only one character, and there’s a 2 under “learning” because the word “learning” appears twice in the second document.</p>
-<div id="03d3fe68" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(vect.fit_transform(text).toarray(), columns<span class="op">=</span>vect.get_feature_names())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="17">
+<div id="f87b416f" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(vect.fit_transform(text).toarray(),</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>             columns<span class="op">=</span>vect.get_feature_names())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
 <div>
 
 
@@ -1245,16 +1246,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Now let’s use CountVectorizer on the same text to output a sparse matrix instead, which is the default representation. The matrix is 2 rows by 5 columns, and there are 7 stored elements, meaning 7 non-zero values in the matrix.</p>
-<div id="d0e5c5e2" class="cell" data-execution_count="18">
+<div id="7a0c2119" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>dtm <span class="op">=</span> vect.fit_transform(text)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>dtm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="18">
+<div class="cell-output cell-output-display" data-execution_count="31">
 <pre><code>&lt;2x5 sparse matrix of type '&lt;class 'numpy.int64'&gt;'
     with 7 stored elements in Compressed Sparse Row format&gt;</code></pre>
 </div>
 </div>
 <p>We can actually see those 7 elements by using the print method. It turns out that a sparse matrix only stores the positions of the non-zero values and the values at those positions. In contrast, a dense matrix stores every value, whether or not it’s zero.</p>
-<div id="dde5e5a6" class="cell" data-execution_count="19">
+<div id="72be8465" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dtm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  (0, 4)    1
@@ -1286,29 +1287,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="qa-what-happens-if-the-testing-data-includes-new-words" class="level2" data-number="6.4">
 <h2 data-number="6.4" class="anchored" data-anchor-id="qa-what-happens-if-the-testing-data-includes-new-words"><span class="header-section-number">6.4</span> Q&amp;A: What happens if the testing data includes new words?</h2>
 <p>In the previous lesson, we created two short text documents.</p>
-<div id="0ecee21e" class="cell" data-execution_count="20">
+<div id="14cafb51" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>text</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="20">
+<div class="cell-output cell-output-display" data-execution_count="33">
 <pre><code>['Machine Learning is fun', 'I am learning Machine Learning']</code></pre>
 </div>
 </div>
 <p>Let’s pretend that those documents were our training data. If we passed those documents to the fit_transform method of CountVectorizer, these are the 5 features that would be learned.</p>
-<div id="6b94eeae" class="cell" data-execution_count="21">
+<div id="fa6dd5fc" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>dtm <span class="op">=</span> vect.fit_transform(text)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>vect.get_feature_names()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="21">
+<div class="cell-output cell-output-display" data-execution_count="34">
 <pre><code>['am', 'fun', 'is', 'learning', 'machine']</code></pre>
 </div>
 </div>
 <p>Now, let’s create another short text document to act as our testing data. It includes two words, “is” and “fun”, that were in the training data, and two words, “data” and “science”, that were not in the training data.</p>
-<div id="7c0a40d7" class="cell" data-execution_count="22">
+<div id="e91ef6df" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>text_new <span class="op">=</span> [<span class="st">'Data Science is FUN!'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>As we’ve discussed throughout this book, your testing data needs to have the same columns as your training data. In other words, we need to create a document-term matrix from the testing data that has the same 5 columns as the training data.</p>
 <p>To do this, we’ll pass the testing data to the transform method, and it will build a matrix using the features it learned during the fit step.</p>
-<div id="8abb86d8" class="cell" data-execution_count="23">
+<div id="c02a706c" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>vect.transform(text_new).toarray()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="23">
+<div class="cell-output cell-output-display" data-execution_count="36">
 <pre><code>array([[0, 1, 1, 0, 0]])</code></pre>
 </div>
 </div>
@@ -1333,9 +1334,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="qa-how-do-i-vectorize-multiple-columns-of-text" class="level2" data-number="6.5">
 <h2 data-number="6.5" class="anchored" data-anchor-id="qa-how-do-i-vectorize-multiple-columns-of-text"><span class="header-section-number">6.5</span> Q&amp;A: How do I vectorize multiple columns of text?</h2>
 <p>Let’s take a look at the Name and Ticket columns from the Titanic DataFrame. Even though some of the Ticket values are entirely numeric, they’re actually all stored as strings.</p>
-<div id="2107c319" class="cell" data-execution_count="24">
+<div id="3c0c7e37" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">'Name'</span>, <span class="st">'Ticket'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="24">
+<div class="cell-output cell-output-display" data-execution_count="37">
 <div>
 
 
@@ -1406,57 +1407,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>If we wanted to apply CountVectorizer to both columns so that we could include both in our model, how would we do it?</p>
 <p>First, let’s try applying CountVectorizer separately. Vectorizing Name creates a 10 by 40 matrix, and vectorizing Ticket creates a 10 by 13 matrix.</p>
-<div id="2a34d295" class="cell" data-execution_count="25">
+<div id="a6c66eda" class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>vect.fit_transform(df[<span class="st">'Name'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="25">
+<div class="cell-output cell-output-display" data-execution_count="38">
 <pre><code>&lt;10x40 sparse matrix of type '&lt;class 'numpy.int64'&gt;'
     with 46 stored elements in Compressed Sparse Row format&gt;</code></pre>
 </div>
 </div>
-<div id="2026e081" class="cell" data-execution_count="26">
+<div id="59b9207e" class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>vect.fit_transform(df[<span class="st">'Ticket'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="26">
+<div class="cell-output cell-output-display" data-execution_count="39">
 <pre><code>&lt;10x13 sparse matrix of type '&lt;class 'numpy.int64'&gt;'
     with 13 stored elements in Compressed Sparse Row format&gt;</code></pre>
 </div>
 </div>
 <p>What we want is to stack these matrices side-by-side as a 10 by 53 matrix.</p>
 <p>One idea would be to pass both columns as a DataFrame to CountVectorizer, which is how we would transform multiple columns with OneHotEncoder, for example. However, you’ll see that the output is not what we had hoped for. This is because CountVectorizer expects 1-dimensional input, and we passed it 2-dimensional input instead.</p>
-<div id="5c50aba3" class="cell" data-execution_count="27">
+<div id="486018bd" class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>vect.fit_transform(df[[<span class="st">'Name'</span>, <span class="st">'Ticket'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="27">
+<div class="cell-output cell-output-display" data-execution_count="40">
 <pre><code>&lt;2x2 sparse matrix of type '&lt;class 'numpy.int64'&gt;'
     with 2 stored elements in Compressed Sparse Row format&gt;</code></pre>
 </div>
 </div>
 <p>To actually get the result we’re looking for, we have to pass each column separately to make_column_transformer. And you’ll see that it does indeed output a 10 by 53 matrix.</p>
 <p>To be clear, it’s not problematic to use the same CountVectorizer object twice, since it will still learn two separate vocabularies.</p>
-<div id="1af33fac" class="cell" data-execution_count="28">
+<div id="4932350d" class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    (vect, <span class="st">'Name'</span>),</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    (vect, <span class="st">'Ticket'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="b4b6d91b" class="cell" data-execution_count="29">
+<div id="5b56d0d1" class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div class="cell-output cell-output-display" data-execution_count="42">
 <pre><code>&lt;10x53 sparse matrix of type '&lt;class 'numpy.int64'&gt;'
     with 59 stored elements in Compressed Sparse Row format&gt;</code></pre>
 </div>
 </div>
 <p>Recall that make_column_transformer assigns names to all transformers. Normally the assigned name would be “countvectorizer” in all lowercase, but it can’t give both transformers the same name. Instead, it appends numbers at the end, as you can see from the diagram.</p>
-<div id="5b71a9f9" class="cell" data-execution_count="30">
+<div id="755e9d5a" class="cell" data-execution_count="44">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>ct</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="30">
-<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="20288021-5987-45b9-9dcd-27ff3ad31f8c" type="checkbox"><label class="sk-toggleable__label" for="20288021-5987-45b9-9dcd-27ff3ad31f8c">ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('countvectorizer-1', CountVectorizer(),
+<div class="cell-output cell-output-display" data-execution_count="43">
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="c93ec207-3140-4c1a-a2b7-4b2b26a7ead3" type="checkbox"><label class="sk-toggleable__label" for="c93ec207-3140-4c1a-a2b7-4b2b26a7ead3">ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('countvectorizer-1', CountVectorizer(),
                                  'Name'),
                                 ('countvectorizer-2', CountVectorizer(),
-                                 'Ticket')])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="df33bad9-30bd-4b09-a1c4-a808794c21e3" type="checkbox"><label class="sk-toggleable__label" for="df33bad9-30bd-4b09-a1c4-a808794c21e3">countvectorizer-1</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ecf4ab07-1f96-4705-a594-a0504e118c93" type="checkbox"><label class="sk-toggleable__label" for="ecf4ab07-1f96-4705-a594-a0504e118c93">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="37a334ee-2603-45e8-b732-fe3fc2087e0e" type="checkbox"><label class="sk-toggleable__label" for="37a334ee-2603-45e8-b732-fe3fc2087e0e">countvectorizer-2</label><div class="sk-toggleable__content"><pre>Ticket</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="246b9295-94c1-472d-b2fa-70159f0245a7" type="checkbox"><label class="sk-toggleable__label" for="246b9295-94c1-472d-b2fa-70159f0245a7">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div></div></div></div></div>
+                                 'Ticket')])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b81a11ba-e134-42df-919a-8258891872a2" type="checkbox"><label class="sk-toggleable__label" for="b81a11ba-e134-42df-919a-8258891872a2">countvectorizer-1</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="1859f95b-bd09-475f-bb04-bff5ff0f3385" type="checkbox"><label class="sk-toggleable__label" for="1859f95b-bd09-475f-bb04-bff5ff0f3385">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0acc99c1-9f1d-47ef-aa37-c3b73e389ff2" type="checkbox"><label class="sk-toggleable__label" for="0acc99c1-9f1d-47ef-aa37-c3b73e389ff2">countvectorizer-2</label><div class="sk-toggleable__content"><pre>Ticket</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="cecc9ac4-0b8f-4312-aafa-bccef328cfc7" type="checkbox"><label class="sk-toggleable__label" for="cecc9ac4-0b8f-4312-aafa-bccef328cfc7">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div></div></div></div></div>
 </div>
 </div>
 <p>You can also see these names by running the keys method on the named_transformers_ attribute.</p>
-<div id="a5e77a4c" class="cell" data-execution_count="31">
+<div id="cca90361" class="cell" data-execution_count="45">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>ct.named_transformers_.keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="31">
+<div class="cell-output cell-output-display" data-execution_count="44">
 <pre><code>dict_keys(['countvectorizer-1', 'countvectorizer-2', 'remainder'])</code></pre>
 </div>
 </div>
@@ -1465,9 +1466,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="qa-should-i-one-hot-encode-or-vectorize-categorical-features" class="level2" data-number="6.6">
 <h2 data-number="6.6" class="anchored" data-anchor-id="qa-should-i-one-hot-encode-or-vectorize-categorical-features"><span class="header-section-number">6.6</span> Q&amp;A: Should I one-hot encode or vectorize categorical features?</h2>
 <p>Let’s say you have categorical features which only contain one word, such as Embarked and Sex. We’ve been using OneHotEncoder to encode them, but should we use CountVectorizer instead? Let’s try it out and see what happens.</p>
-<div id="cd02f476" class="cell" data-execution_count="32">
+<div id="d304d6d2" class="cell" data-execution_count="46">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div class="cell-output cell-output-display" data-execution_count="45">
 <div>
 
 
@@ -1537,9 +1538,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>If we use CountVectorizer on the Sex column, it produces the exact same output as the OneHotEncoder.</p>
-<div id="d7c7ecb4" class="cell" data-execution_count="33">
+<div id="d98d314d" class="cell" data-execution_count="47">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>vect.fit_transform(df[<span class="st">'Sex'</span>]).toarray()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display" data-execution_count="46">
 <pre><code>array([[0, 1],
        [1, 0],
        [1, 0],
@@ -1553,41 +1554,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>But as we saw in the previous lesson, CountVectorizer won’t do what you expect if you try to encode multiple columns at once, since it expects 1-dimensional input.</p>
-<div id="ad01dcef" class="cell" data-execution_count="34">
+<div id="5712a015" class="cell" data-execution_count="48">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>vect.fit_transform(df[[<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]]).toarray()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="34">
+<div class="cell-output cell-output-display" data-execution_count="47">
 <pre><code>array([[1, 0],
        [0, 1]])</code></pre>
 </div>
 </div>
 <p>In addition, the default settings for CountVectorizer don’t allow for one-character tokens, so you would have to modify those settings if you wanted to use it with Embarked.</p>
-<div id="9843e250" class="cell" data-execution_count="35">
+<div id="557548f9" class="cell" data-execution_count="49">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>vect.fit_transform(df[<span class="st">'Embarked'</span>]).toarray()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In[35], line 1</span>
-<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">vect</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">fit_transform</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">df</span><span class="ansi-yellow-bg">[</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">'</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">Embarked</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">'</span><span class="ansi-yellow-bg">]</span><span class="ansi-yellow-bg">)</span><span style="color:rgb(98,98,98)">.</span>toarray()
-
-File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/feature_extraction/text.py:1198</span>, in <span class="ansi-cyan-fg">CountVectorizer.fit_transform</span><span class="ansi-blue-fg">(self, raw_documents, y)</span>
-<span class="ansi-green-fg ansi-bold">   1195</span> min_df <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>min_df
-<span class="ansi-green-fg ansi-bold">   1196</span> max_features <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>max_features
-<span class="ansi-green-fg">-&gt; 1198</span> vocabulary, X <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_count_vocab</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">raw_documents</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-fg ansi-bold">   1199</span> <span class="ansi-yellow-bg">                                  </span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">fixed_vocabulary_</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-fg ansi-bold">   1201</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>binary:
-<span class="ansi-green-fg ansi-bold">   1202</span>     X<span style="color:rgb(98,98,98)">.</span>data<span style="color:rgb(98,98,98)">.</span>fill(<span style="color:rgb(98,98,98)">1</span>)
-
-File <span class="ansi-green-fg">/opt/miniconda3/envs/mlbook/lib/python3.9/site-packages/sklearn/feature_extraction/text.py:1129</span>, in <span class="ansi-cyan-fg">CountVectorizer._count_vocab</span><span class="ansi-blue-fg">(self, raw_documents, fixed_vocab)</span>
-<span class="ansi-green-fg ansi-bold">   1127</span>     vocabulary <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">dict</span>(vocabulary)
-<span class="ansi-green-fg ansi-bold">   1128</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="font-weight:bold;color:rgb(175,0,255)">not</span> vocabulary:
-<span class="ansi-green-fg">-&gt; 1129</span>         <span style="font-weight:bold;color:rgb(0,135,0)">raise</span> <span style="font-weight:bold;color:rgb(215,95,95)">ValueError</span>(<span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">empty vocabulary; perhaps the documents only</span><span style="color:rgb(175,0,0)">"</span>
-<span class="ansi-green-fg ansi-bold">   1130</span>                          <span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)"> contain stop words</span><span style="color:rgb(175,0,0)">"</span>)
-<span class="ansi-green-fg ansi-bold">   1132</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> indptr[<span style="color:rgb(98,98,98)">-</span><span style="color:rgb(98,98,98)">1</span>] <span style="color:rgb(98,98,98)">&gt;</span> np<span style="color:rgb(98,98,98)">.</span>iinfo(np<span style="color:rgb(98,98,98)">.</span>int32)<span style="color:rgb(98,98,98)">.</span>max:  <span style="font-style:italic;color:rgb(95,135,135)"># = 2**31 - 1</span>
-<span class="ansi-green-fg ansi-bold">   1133</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> _IS_32BIT:
-
-<span class="ansi-red-fg">ValueError</span>: empty vocabulary; perhaps the documents only contain stop words</pre>
 </div>
+<div id="8ce58e72" class="cell" data-execution_count="50">
+<div class="cell-output cell-output-stdout">
+<pre><code>ValueError: empty vocabulary; perhaps the documents only contain stop words</code></pre>
 </div>
 </div>
 <p>Finally, OneHotEncoder lets you decide how you want to handle categories that weren’t seen during training (using the handle_unknown parameter), whereas CountVectorizer doesn’t provide that option and will always ignore words that it didn’t see during training.</p>
