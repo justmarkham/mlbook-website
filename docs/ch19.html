@@ -414,7 +414,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Anyway, our train_test_split code is identical to the code that we used in <a href="ch18.html#sec-18-3" class="quarto-xref">lesson&nbsp;<span>18.3</span></a>, including the use of stratified sampling.</p>
-<div id="acb0b6f1" class="cell" data-execution_count="2">
+<div id="16faa5f6" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(scan_X, scan_y,</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                                                    test_size<span class="op">=</span><span class="fl">0.25</span>,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                                                    random_state<span class="op">=</span><span class="dv">1</span>,</span>
@@ -425,7 +425,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="19.3" class="anchored" data-anchor-id="step-2-optimizing-the-model-on-the-training-set"><span class="header-section-number">19.3</span> Step 2: Optimizing the model on the training set</h2>
 <p>Step 2 is to optimize your model (or Pipeline) using the training set only.</p>
 <p>As you can see, I’m using cross-validation as the evaluation procedure, and AUC as the evaluation metric that I want to optimize. But notice that I’m passing the training set only to cross_val_score. I’m not touching the testing set during this step so that it can function as an independent dataset for the next step.</p>
-<div id="8cecde3c" class="cell" data-execution_count="3">
+<div id="d3a27cea" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cross_val_score(logreg, X_train, y_train, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'roc_auc'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <pre><code>0.9137689754365026</code></pre>
@@ -439,7 +439,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The third option is custom weights, which we specify with a dictionary. This means for class 0, I want a weight of 1, and for class 1, I want a weight of 99. In other words, I’m applying an even higher weight to class 1 than the ‘balanced’ option.</li>
 <li>The fourth option is another set of custom weights, in which I’m applying a slightly lower weight to class 1 than the ‘balanced’ option. Note that the weights can be any numbers and don’t actually have to add up to 100 like I’m doing here.</li>
 </ul>
-<div id="146169b4" class="cell" data-execution_count="4">
+<div id="46a75c69" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>im_params <span class="op">=</span> {}</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>im_params[<span class="st">'penalty'</span>] <span class="op">=</span> [<span class="st">'l1'</span>, <span class="st">'l2'</span>]</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>im_params[<span class="st">'C'</span>] <span class="op">=</span> [<span class="fl">0.1</span>, <span class="dv">1</span>, <span class="dv">10</span>]</span>
@@ -447,7 +447,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Now that we’ve set up the parameters to be searched, we can pass them to GridSearchCV and use AUC as the metric. When doing the search, again we only pass it the training set.</p>
 <p>The search results in an AUC of 0.923, which is higher than the unoptimized model we passed to cross_val_score.</p>
-<div id="ec81b9ee" class="cell" data-execution_count="5">
+<div id="644072e8" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>training_grid <span class="op">=</span> GridSearchCV(logreg, im_params, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'roc_auc'</span>,</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                             n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>training_grid.fit(X_train, y_train)</span>
@@ -457,7 +457,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Here’s the best set of parameters it found, which actually uses one of the custom class weights.</p>
-<div id="0e790654" class="cell" data-execution_count="6">
+<div id="3bbb60ab" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>training_grid.best_params_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>{'C': 1, 'class_weight': {0: 1, 1: 99}, 'penalty': 'l1'}</code></pre>
@@ -465,7 +465,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Now that we’ve found the best set of parameters, we need to save the model with those parameters as an object.</p>
 <p>We could try to further optimize the model by creating more features, using feature selection, trying a different type of model, and so on, but instead we’re just going to move on to the next step.</p>
-<div id="37738229" class="cell" data-execution_count="7">
+<div id="589a5d5c" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>best_model <span class="op">=</span> training_grid.best_estimator_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -473,18 +473,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="19.4" class="anchored" data-anchor-id="step-3-evaluating-the-model-on-the-testing-set"><span class="header-section-number">19.4</span> Step 3: Evaluating the model on the testing set</h2>
 <p>Step 3 is to use our best model to make predictions for the testing set and evaluate those predictions. Again, we did not touch the testing set during step 2, so the model has never seen this data.</p>
 <p>We’ll use the predict method to generate class predictions, and the predict_proba method to generate predicted probabilities.</p>
-<div id="8339825e" class="cell" data-execution_count="8">
+<div id="daeab81f" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> best_model.predict(X_test)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>y_score <span class="op">=</span> best_model.predict_proba(X_test)[:, <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We’ll evaluate the predicted probabilities using AUC and the ROC curve. The AUC is 0.94, which is our best estimate of how well the trained model will perform on truly new data.</p>
-<div id="17f09b0a" class="cell" data-execution_count="9">
+<div id="3a4f14d2" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>roc_auc_score(y_test, y_score)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>0.9375151395656705</code></pre>
 </div>
 </div>
-<div id="fa27ba8e" class="cell" data-execution_count="10">
+<div id="10f863e3" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>disp <span class="op">=</span> plot_roc_curve(best_model, X_test, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -495,14 +495,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>We’ll evaluate the class predictions using a confusion matrix and the classification report. Notice that the True Positive Rate is 95%, and the False Positive Rate is 24%.</p>
-<div id="cdc74527" class="cell" data-execution_count="11">
+<div id="fa969336" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>confusion_matrix(y_test, y_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>array([[2082,  649],
        [   3,   62]])</code></pre>
 </div>
 </div>
-<div id="b7ea0b71" class="cell" data-execution_count="12">
+<div id="41cae9b6" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, y_pred))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              precision    recall  f1-score   support
@@ -522,14 +522,14 @@ weighted avg       0.98      0.77      0.85      2796
 <p>Step 4 is to tune the decision threshold based on our priorities, meaning our tolerance of False Negatives versus False Positives.</p>
 <p>This is the same process you saw in <a href="ch18.html#sec-18-8" class="quarto-xref">lesson&nbsp;<span>18.8</span></a>, except this time, we’re tuning the threshold using a testing set that the model never saw when it was being optimized. Again, this is important because it will lead to a more reliable estimate of the True Positive and False Positive Rates.</p>
 <p>Anyway, let’s pretend that we would prefer a slightly lower False Positive Rate, and are willing to tolerate a lower True Positive Rate in order to achieve it. As such, we’ll increase the decision threshold slightly to 0.55.</p>
-<div id="ed229ad1" class="cell" data-execution_count="13">
+<div id="39698dcc" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>confusion_matrix(y_test, y_score <span class="op">&gt;</span> <span class="fl">0.55</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>array([[2179,  552],
        [   5,   60]])</code></pre>
 </div>
 </div>
-<div id="f4c9faed" class="cell" data-execution_count="14">
+<div id="54782c7b" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, y_score <span class="op">&gt;</span> <span class="fl">0.55</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              precision    recall  f1-score   support
@@ -563,16 +563,16 @@ weighted avg       0.98      0.80      0.87      2796
 <h2 data-number="19.6" class="anchored" data-anchor-id="step-5-retraining-the-model-and-making-predictions"><span class="header-section-number">19.6</span> Step 5: Retraining the model and making predictions</h2>
 <p>Step 5 is to use the decision threshold we chose when making predictions on new data.</p>
 <p>Before making predictions, it’s critical that we train our best model on all of our data, meaning the entirety of scan_X and scan_y, otherwise we’re throwing away valuable data. In other words, we’re using the hyperparameters that were chosen from the training data during step 2, and fitting that model with all of the data.</p>
-<div id="782e4a60" class="cell" data-execution_count="15">
+<div id="c734c993" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>best_model.fit(scan_X, scan_y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
-<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b5e1c105-f8a6-4cb3-b400-0732a3bf1157" type="checkbox" checked=""><label class="sk-toggleable__label" for="b5e1c105-f8a6-4cb3-b400-0732a3bf1157">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(C=1, class_weight={0: 1, 1: 99}, penalty='l1',
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="c2303f66-43c9-4121-a179-db684afcc2ad" type="checkbox" checked=""><label class="sk-toggleable__label" for="c2303f66-43c9-4121-a179-db684afcc2ad">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(C=1, class_weight={0: 1, 1: 99}, penalty='l1',
                    random_state=1, solver='liblinear')</pre></div></div></div></div></div>
 </div>
 </div>
 <p>We’ll use that model to make predictions on new data, meaning data for which you don’t know the actual class labels. I don’t have access to any new data, so I’m just going to create some random data for demonstration purposes.</p>
 <p>I’ll set NumPy’s random seed for reproducibility, and then use the randint function to create a 4 by 6 array with random integers between 0 and 2. In other words, this is a simulation of 4 samples of new data, each of which has 6 features.</p>
-<div id="5551c427" class="cell" data-execution_count="16">
+<div id="2f81324c" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>scan_X_new <span class="op">=</span> np.random.randint(<span class="dv">0</span>, <span class="dv">3</span>, (<span class="dv">4</span>, <span class="dv">6</span>))</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>scan_X_new</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -584,11 +584,11 @@ weighted avg       0.98      0.80      0.87      2796
 </div>
 </div>
 <p>To make predictions, we’ll pass the new data to the predict_proba method, and save the output.</p>
-<div id="50964776" class="cell" data-execution_count="17">
+<div id="02eec1fc" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>scan_y_new_score <span class="op">=</span> best_model.predict_proba(scan_X_new)[:, <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Finally, we’ll predict class 1 any time the predicted probability is greater than our decision threshold of 0.55, otherwise we’ll predict class 0. These are our class predictions for the 4 new samples.</p>
-<div id="c681fcbf" class="cell" data-execution_count="18">
+<div id="7b56db9e" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>(scan_y_new_score <span class="op">&gt;</span> <span class="fl">0.55</span>) <span class="op">*</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>array([1, 0, 1, 0])</code></pre>
@@ -599,13 +599,13 @@ weighted avg       0.98      0.80      0.87      2796
 <h2 data-number="19.7" class="anchored" data-anchor-id="qa-should-i-use-an-roc-curve-or-a-precision-recall-curve"><span class="header-section-number">19.7</span> Q&amp;A: Should I use an ROC curve or a precision-recall curve?</h2>
 <p>One alternative to ROC curves that you might have heard about is the precision-recall curve. In this lesson, I’ll explain the precision-recall curve and then compare it to the ROC curve.</p>
 <p>To start, I want to look at the confusion matrix for our best model from earlier in the chapter. I’m going to fit the model on X_train and y_train, and then generate class predictions and predicted probabilities for X_test.</p>
-<div id="76e0705e" class="cell" data-execution_count="19">
+<div id="5a5b8220" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>best_model.fit(X_train, y_train)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> best_model.predict(X_test)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>y_score <span class="op">=</span> best_model.predict_proba(X_test)[:, <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, we can create the confusion matrix by comparing the true values with the predicted values. There are two rates that we’ll calculate from the confusion matrix this time.</p>
-<div id="ff265a3a" class="cell" data-execution_count="20">
+<div id="c90ecdac" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>confusion_matrix(y_test, y_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>array([[2082,  649],
@@ -613,14 +613,14 @@ weighted avg       0.98      0.80      0.87      2796
 </div>
 </div>
 <p>The first rate is recall, which is just another name for True Positive Rate. It answers the question: When cancer is present, how often is that correctly predicted? We divide the True Positives by the entire bottom row, and we get 95%.</p>
-<div id="b8752629" class="cell" data-execution_count="21">
+<div id="9c71118c" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="dv">62</span> <span class="op">/</span> (<span class="dv">3</span> <span class="op">+</span> <span class="dv">62</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>0.9538461538461539</code></pre>
 </div>
 </div>
 <p>The second rate we’ll calculate is called precision. It answers the question: When cancer is predicted, how often is that prediction correct? We divide the True Positives by the entire right column, and we get 9%. Notice that unlike all of our other calculations, the denominator for precision is a column total rather than a row total.</p>
-<div id="63e9aabb" class="cell" data-execution_count="22">
+<div id="acd3cfc1" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="dv">62</span> <span class="op">/</span> (<span class="dv">649</span> <span class="op">+</span> <span class="dv">62</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>0.08720112517580872</code></pre>
@@ -641,7 +641,7 @@ weighted avg       0.98      0.80      0.87      2796
 </div>
 </div>
 <p>Both precision and recall are listed in the classification report. We just calculated the precision and recall for class 1, as you can see here.</p>
-<div id="dfff3398" class="cell" data-execution_count="23">
+<div id="63a9e1d3" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, y_pred))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              precision    recall  f1-score   support
@@ -658,13 +658,13 @@ weighted avg       0.98      0.77      0.85      2796
 <p>Now that we understand precision and recall, let’s plot the precision-recall curve using the plot_precision_recall_curve function, which was introduced in version 0.22. It uses a similar API to plot_roc_curve in that we pass it the fitted model, X_test, and y_test, though the API will be changing in scikit-learn 1.0.</p>
 <p>So what are we looking at? The precision-recall curve is a plot of precision (on the y-axis) versus recall (on the x-axis) for all possible decision thresholds. This is very similar to an ROC curve in that it can help you to tune the decision threshold of your model based on your priorities.</p>
 <p>And just like you can summarize an ROC curve by calculating the area underneath it, you can summarize a precision-recall curve by calculating the area underneath it. There are multiple ways to do this calculation, but the metric used in scikit-learn is called average precision.</p>
-<div id="bb8c5531" class="cell" data-execution_count="24">
+<div id="3e620b47" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> plot_precision_recall_curve</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>disp <span class="op">=</span> plot_precision_recall_curve(best_model, X_test, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ch19_files/figure-html/cell-25-output-1.png" width="589" height="429" class="figure-img"></p>
+<p><img src="ch19_files/figure-html/cell-26-output-1.png" width="589" height="429" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -685,7 +685,7 @@ weighted avg       0.98      0.77      0.85      2796
 </div>
 </div>
 <p>To calculate average precision, we import it and pass the true values and the predicted probabilities, and it outputs an average precision of 0.55.</p>
-<div id="a2095624" class="cell" data-execution_count="25">
+<div id="217c4f97" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> average_precision_score</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>average_precision_score(y_test, y_score)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
@@ -710,7 +710,7 @@ weighted avg       0.98      0.77      0.85      2796
 </div>
 <p>In this chapter, I recommended using AUC as your primary evaluation metric in cases of class imbalance. However, there are many people who recommend using average precision instead. Which metric should you use?</p>
 <p>First, let me share the most common critique of AUC, and then I’ll share my response. Looking at our confusion matrix might be helpful to you during this discussion, so I’ll share it now.</p>
-<div id="06cf005e" class="cell" data-execution_count="26">
+<div id="c6cd255d" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>confusion_matrix(y_test, y_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="26">
 <pre><code>array([[2082,  649],
