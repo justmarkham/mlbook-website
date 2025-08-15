@@ -342,7 +342,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="preprocessing-features-with-columntransformer" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="preprocessing-features-with-columntransformer"><span class="header-section-number">4.1</span> Preprocessing features with ColumnTransformer</h2>
-<p>In the last chapter, our goal was to include two numeric features and two categorical features in our model. We saw how to numerically encode the categorical features using OneHotEncoder, but we lacked an efficient process for stacking those encoded features next to the numerical features, and we lacked an efficient way to apply this same preprocessing to our new data.</p>
+<p>In the last chapter, our goal was to include two numeric features and two categorical features in our model. We saw how to numerically encode the categorical features using <code>OneHotEncoder</code>, but we lacked an efficient process for stacking those encoded features next to the numerical features, and we lacked an efficient way to apply this same preprocessing to our new data.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -357,10 +357,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>In this chapter, we’re going to solve both of those problems using the ColumnTransformer and Pipeline classes:</p>
+<p>In this chapter, we’re going to solve both of those problems using the <code>ColumnTransformer</code> and <code>Pipeline</code> classes:</p>
 <ul>
-<li>ColumnTransformer will make it easy to apply different preprocessing steps to different columns.</li>
-<li>Pipeline will make it easy to apply the same workflow to training data and new data.</li>
+<li><code>ColumnTransformer</code> will make it easy to apply different preprocessing steps to different columns.</li>
+<li><code>Pipeline</code> will make it easy to apply the same workflow to training data and new data.</li>
 </ul>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -376,11 +376,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>To start, we’ll create a Python list of the four columns we’ve been working with, and use that to create our X object.</p>
-<div id="06c37142" class="cell" data-execution_count="2">
+<p>To start, we’ll create a Python list of the four columns we’ve been working with, and use that to create our <code>X</code> object.</p>
+<div id="118bdb76" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [<span class="st">'Parch'</span>, <span class="st">'Fare'</span>, <span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="09d1f6eb" class="cell" data-execution_count="3">
+<div id="2c784ff2" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[cols]</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
@@ -474,21 +474,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>We’re still going to be one-hot encoding the Embarked and Sex columns, so we’ll create an instance of OneHotEncoder. We’re using the default options for OneHotEncoder, which means it will output a sparse matrix, but that’s fine because we’re not going to examine the output directly.</p>
-<div id="f89bb730" class="cell" data-execution_count="4">
+<p>We’re still going to be one-hot encoding the Embarked and Sex columns, so we’ll create an instance of <code>OneHotEncoder</code>. We’re using the default options for <code>OneHotEncoder</code>, which means it will output a sparse matrix, but that’s fine because we’re not going to examine the output directly.</p>
+<div id="b70a46de" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ohe <span class="op">=</span> OneHotEncoder()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Now it’s time to create our first ColumnTransformer, which will take care of any data transformations that we specify. We’ll start by importing the make_column_transformer function from the compose module.</p>
-<p>In general, you use make_column_transformer by passing it one or more tuples, and each tuple should have two elements:</p>
+<p>Now it’s time to create our first <code>ColumnTransformer</code>, which will take care of any data transformations that we specify. We’ll start by importing the <code>make_column_transformer</code> function from the <code>compose</code> module.</p>
+<p>In general, you use <code>make_column_transformer</code> by passing it one or more tuples, and each tuple should have two elements:</p>
 <ol type="1">
 <li>The first element is a transformer.</li>
 <li>The second element is a list of columns to which that transformer should be applied. Note that in most cases, this element should be a list even if you are only specifying a single column.</li>
 </ol>
-<p>In our case, we’ll pass it a single tuple in which the first element is our OneHotEncoder object and the second element is a list of the two columns we want to one-hot encode.</p>
-<p>After all tuples, we’ll set the remainder parameter to drop, which means that all columns which are not explicitly mentioned in the ColumnTransformer should be dropped. Drop is actually the default value for remainder, but I’m including it here just for clarity.</p>
-<p>Note that I could have defined the ColumnTransformer on a single line, but I prefer breaking the lines in this way for readability.</p>
-<p>When we run this code, the make_column_transformer code returns a ColumnTransformer object, which we’ll save as ct.</p>
-<div id="76431c9f" class="cell" data-execution_count="5">
+<p>In our case, we’ll pass it a single tuple in which the first element is our <code>OneHotEncoder</code> object and the second element is a list of the two columns we want to one-hot encode.</p>
+<p>After all tuples, we’ll set the <code>remainder</code> parameter to <code>'drop'</code>, which means that all columns which are not explicitly mentioned in the <code>ColumnTransformer</code> should be dropped. <code>'drop'</code> is actually the default value for <code>remainder</code>, but I’m including it here just for clarity.</p>
+<p>Note that I could have defined the <code>ColumnTransformer</code> on a single line, but I prefer breaking the lines in this way for readability.</p>
+<p>When we run this code, the <code>make_column_transformer</code> code returns a <code>ColumnTransformer</code> object, which we’ll save as <code>ct</code>.</p>
+<div id="585436da" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> make_column_transformer</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    (ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
@@ -508,9 +508,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Next, we’ll perform the transformation by passing X, which is our four-column DataFrame, to the fit_transform method of the ct object. It outputs a 10 by 5 array that represents the one-hot encoding of the Embarked and Sex columns. The first three columns represent Embarked and the other two columns represent Sex, and they’re in that order because that’s the order in which they were listed in the ColumnTransformer.</p>
-<p>Note that even though the Parch and Fare columns are part of X, they’re excluded from the output array because we told the ColumnTransformer to drop all unspecified columns.</p>
-<div id="06d87d98" class="cell" data-execution_count="6">
+<p>Next, we’ll perform the transformation by passing <code>X</code>, which is our four-column DataFrame, to the <code>fit_transform</code> method of the <code>ct</code> object. It outputs a 10 by 5 array that represents the one-hot encoding of the Embarked and Sex columns. The first three columns represent Embarked and the other two columns represent Sex, and they’re in that order because that’s the order in which they were listed in the <code>ColumnTransformer</code>.</p>
+<p>Note that even though the Parch and Fare columns are part of <code>X</code>, they’re excluded from the output array because we told the <code>ColumnTransformer</code> to drop all unspecified columns.</p>
+<div id="a906239f" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>array([[0., 0., 1., 0., 1.],
@@ -539,14 +539,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>This is nice, but our actual goal was to create a matrix that includes the Parch and Fare columns alongside the encoded versions of Embarked and Sex. To accomplish that, we’ll simply change the value of remainder from drop to passthrough. This means that all columns which are not mentioned in the ColumnTransformer should be passed through to the output unmodified. In other words, include the Parch and Fare columns in the output, but don’t transform them in any way.</p>
-<div id="d1ae35ff" class="cell" data-execution_count="7">
+<p>This is nice, but our actual goal was to create a matrix that includes the Parch and Fare columns alongside the encoded versions of Embarked and Sex. To accomplish that, we’ll simply change the value of <code>remainder</code> from <code>'drop'</code> to <code>'passthrough'</code>. This means that all columns which are not mentioned in the <code>ColumnTransformer</code> should be passed through to the output unmodified. In other words, include the Parch and Fare columns in the output, but don’t transform them in any way.</p>
+<div id="1da86805" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    (ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    remainder<span class="op">=</span><span class="st">'passthrough'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>When we run the fit_transform method this time, it outputs a 10 by 7 array. The first five columns represent the encoded Embarked and Sex columns, and the sixth and seventh columns are the Parch and Fare columns. The column order is based on the order in which the columns were listed in the ColumnTransformer, followed by any you passthrough.</p>
-<div id="d7de77d5" class="cell" data-execution_count="8">
+<p>When we run the <code>fit_transform</code> method this time, it outputs a 10 by 7 array. The first five columns represent the encoded Embarked and Sex columns, and the sixth and seventh columns are the Parch and Fare columns. The column order is based on the order in which the columns were listed in the <code>ColumnTransformer</code>, followed by any you pass through.</p>
+<div id="db2180dd" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>array([[ 0.    ,  0.    ,  1.    ,  0.    ,  1.    ,  0.    ,  7.25  ],
@@ -577,8 +577,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>We were able to figure out on our own what each column represents, but you can also use the ColumnTransformer’s get_feature_names method to confirm the meanings of these 7 features. The x0 simply means feature 0 that was passed to the OneHotEncoder, and the x1 means feature 1.</p>
-<div id="5bc930db" class="cell" data-execution_count="9">
+<p>We were able to figure out on our own what each column represents, but you can also use the <code>ColumnTransformer</code>’s <code>get_feature_names</code> method to confirm the meanings of these 7 features. The x0 simply means feature 0 that was passed to the <code>OneHotEncoder</code>, and the x1 means feature 1.</p>
+<div id="9c2fba68" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ct.get_feature_names()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>['onehotencoder__x0_C',
@@ -590,10 +590,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  'Fare']</code></pre>
 </div>
 </div>
-<p>Before we move on, I have two quick asides about the get_feature_names method:</p>
+<p>Before we move on, I have two quick asides about the <code>get_feature_names</code> method:</p>
 <ul>
-<li>First, the get_feature_names method didn’t work with passthrough columns prior to scikit-learn version 0.23, so you’ll get an error if you run the code with previous versions.</li>
-<li>Second, the get_feature_names method has been replaced with a similar method called get_feature_names_out beginning in scikit-learn 1.0.</li>
+<li>First, the <code>get_feature_names</code> method didn’t work with passthrough columns prior to scikit-learn version 0.23, so you’ll get an error if you run the code with previous versions.</li>
+<li>Second, the <code>get_feature_names</code> method has been replaced with a similar method called <code>get_feature_names_out</code> beginning in scikit-learn 1.0.</li>
 </ul>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -609,8 +609,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>To wrap up this lesson, I want to show you one other way to specify this same ColumnTransformer.</p>
-<p>As I mentioned before, make_column_transformer accepts tuples, and the first element of each tuple is usually a transformer object (like our “ohe” object). However, the first element of the tuple can also be the special strings “drop” or “passthrough”, which tells the ColumnTransformer to drop or passthrough specific columns.</p>
+<p>To wrap up this lesson, I want to show you one other way to specify this same <code>ColumnTransformer</code>.</p>
+<p>As I mentioned before, <code>make_column_transformer</code> accepts tuples, and the first element of each tuple is usually a transformer object (like our <code>ohe</code> object). However, the first element of the tuple can also be the special strings <code>'drop'</code> or <code>'passthrough'</code>, which tells the <code>ColumnTransformer</code> to drop or pass through specific columns.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -625,15 +625,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>So, we’re going to add a second tuple in which the transformer is the string “passthrough”, and we want to apply this passthrough transformer to the columns Parch and Fare. This ColumnTransformer will do the exact same thing as the previous one, but I actually prefer this notation any time I have a small number of passthrough columns, since it reminds me of which columns I’m passing through.</p>
-<p>It’s still important to remember that the default value for the remainder parameter is “drop”, which means that any unspecified columns will be dropped, though we don’t have any unspecified columns in this case.</p>
-<div id="d778acee" class="cell" data-execution_count="10">
+<p>So, we’re going to add a second tuple in which the transformer is the string <code>'passthrough'</code>, and we want to apply this passthrough transformer to the columns Parch and Fare. This <code>ColumnTransformer</code> will do the exact same thing as the previous one, but I actually prefer this notation any time I have a small number of passthrough columns, since it reminds me of which columns I’m passing through.</p>
+<p>It’s still important to remember that the default value for the <code>remainder</code> parameter is <code>'drop'</code>, which means that any unspecified columns will be dropped, though we don’t have any unspecified columns in this case.</p>
+<div id="3d0ffa1c" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    (ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'passthrough'</span>, [<span class="st">'Parch'</span>, <span class="st">'Fare'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We’ll run the fit_transform method one more time, and you can see that it outputs the same 7 columns as before. And to be clear, this is the feature matrix that we will pass to our model.</p>
-<div id="eb32644f" class="cell" data-execution_count="11">
+<p>We’ll run the <code>fit_transform</code> method one more time, and you can see that it outputs the same 7 columns as before. And to be clear, this is the feature matrix that we will pass to our model.</p>
+<div id="a99f91d5" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>array([[ 0.    ,  0.    ,  1.    ,  0.    ,  1.    ,  0.    ,  7.25  ],
@@ -651,10 +651,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="chaining-steps-with-pipeline" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="chaining-steps-with-pipeline"><span class="header-section-number">4.2</span> Chaining steps with Pipeline</h2>
-<p>In the previous lesson, we accomplished our first goal, which was to apply different preprocessing to different columns using ColumnTransformer. In this lesson, we’re moving on to our second goal, which is to apply the same workflow to training data and new data using the Pipeline class.</p>
-<p>A Pipeline is used to chain together sequential steps. In this case, we want to chain together two steps, namely data preprocessing followed by model building.</p>
-<p>We’ll start by importing the make_pipeline function. Then, we can create a Pipeline instance by passing it two objects: our ColumnTransformer instance for data preprocessing, and our logistic regression instance for model building. We’ll save it as an object called “pipe”, which is a 2-step Pipeline.</p>
-<div id="c7cf18cd" class="cell" data-execution_count="12">
+<p>In the previous lesson, we accomplished our first goal, which was to apply different preprocessing to different columns using <code>ColumnTransformer</code>. In this lesson, we’re moving on to our second goal, which is to apply the same workflow to training data and new data using the <code>Pipeline</code> class.</p>
+<p>A <code>Pipeline</code> is used to chain together sequential steps. In this case, we want to chain together two steps, namely data preprocessing followed by model building.</p>
+<p>We’ll start by importing the <code>make_pipeline</code> function. Then, we can create a <code>Pipeline</code> instance by passing it two objects: our <code>ColumnTransformer</code> instance for data preprocessing, and our <code>LogisticRegression</code> instance for model building. We’ll save it as an object called <code>pipe</code>, which is a 2-step <code>Pipeline</code>.</p>
+<div id="ef7dc910" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> make_pipeline(ct, logreg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -672,15 +672,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>You might remember that back in Chapter 2, we used cross-validation to evaluate our model when it only included the Parch and Fare features. Now that we’ve added the Embarked and Sex features, it would normally make sense to cross-validate the updated model to see whether the adding those features made our model better or worse. And in fact, you can (and should) cross-validate an entire Pipeline.</p>
+<p>You might remember that back in Chapter 2, we used cross-validation to evaluate our model when it only included the Parch and Fare features. Now that we’ve added the Embarked and Sex features, it would normally make sense to cross-validate the updated model to see whether the adding those features made our model better or worse. And in fact, you can (and should) cross-validate an entire <code>Pipeline</code>.</p>
 <p>However, any model evaluation procedure is highly unreliable with only 10 rows of data, and so any change in the cross-validated accuracy would be misleading. Thus we’re going to skip the cross-validation step for the moment, though we’ll return to it in a later chapter once we’re using the full dataset.</p>
-<p>Since we’re skipping cross-validation, our next step is just to run the fit method on the Pipeline, and pass it X and y. Here’s what happens when we fit the Pipeline:</p>
+<p>Since we’re skipping cross-validation, our next step is just to run the <code>fit</code> method on the <code>Pipeline</code>, and pass it <code>X</code> and <code>y</code>. Here’s what happens when we fit the <code>Pipeline</code>:</p>
 <ul>
-<li>First, it runs the ColumnTransformer step, meaning that it takes X, which is a 4-column DataFrame that contains both numbers and strings, and transforms it into the 7-column feature matrix that only includes numbers.</li>
-<li>Second, it runs the LogisticRegression step, meaning that the model is fit to this 7-column feature matrix. In other words, it learns the relationship between those 7 features and the y values.</li>
+<li>First, it runs the <code>ColumnTransformer</code> step, meaning that it takes <code>X</code>, which is a 4-column DataFrame that contains both numbers and strings, and transforms it into the 7-column feature matrix that only includes numbers.</li>
+<li>Second, it runs the <code>LogisticRegression</code> step, meaning that the model is fit to this 7-column feature matrix. In other words, it learns the relationship between those 7 features and the <code>y</code> values.</li>
 </ul>
-<p>Note that when you fit a Pipeline, it will actually print out the steps. You can see that step 1 is a ColumnTransformer that includes a OneHotEncoder and a passthrough transformer, and step 2 is a LogisticRegression model.</p>
-<div id="0c2b29af" class="cell" data-execution_count="13">
+<p>Note that when you fit a <code>Pipeline</code>, it will actually print out the steps. You can see that step 1 is a <code>ColumnTransformer</code> that includes a <code>OneHotEncoder</code> and a passthrough transformer, and step 2 is a <code>LogisticRegression</code> model.</p>
+<div id="27e2a1ed" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pipe.fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>Pipeline(steps=[('columntransformer',
@@ -707,17 +707,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>In case it helps you to understand the Pipeline better, I’m going to show you what happens “under the hood” when you fit this Pipeline. To be clear, you should not actually write the following code, rather it is just for teaching purposes.</p>
-<p>First, X is transformed by the ColumnTransformer into X_t, which stands for X transformed. Second, the LogisticRegression model is fit on X_t and y.</p>
-<div id="ee46e84d" class="cell" data-execution_count="14">
+<p>In case it helps you to understand the <code>Pipeline</code> better, I’m going to show you what happens “under the hood” when you fit this <code>Pipeline</code>. To be clear, you should not actually write the following code, rather it is just for teaching purposes.</p>
+<p>First, <code>X</code> is transformed by the <code>ColumnTransformer</code> into <code>X_t</code>, which stands for “X transformed”. Second, the <code>LogisticRegression</code> model is fit on <code>X_t</code> and <code>y</code>.</p>
+<div id="2347e507" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>X_t <span class="op">=</span> ct.fit_transform(X)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>logreg.fit(X_t, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>LogisticRegression(random_state=1, solver='liblinear')</code></pre>
 </div>
 </div>
-<p>And as you would expect, X has the shape 10 by 4, and X_t has the shape 10 by 7.</p>
-<div id="bd676d51" class="cell" data-execution_count="15">
+<p>And as you would expect, <code>X</code> has the shape 10 by 4, and <code>X_t</code> has the shape 10 by 7.</p>
+<div id="2fb4da81" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X.shape)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X_t.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -728,9 +728,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="using-the-pipeline-to-make-predictions" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="using-the-pipeline-to-make-predictions"><span class="header-section-number">4.3</span> Using the Pipeline to make predictions</h2>
-<p>Now that we’ve fit our Pipeline, we want to use it to make predictions on new data.</p>
-<p>The first step is to update the X_new DataFrame so that it contains the same columns as X. Recall that the cols object contains the names of our four columns, and so we can use it to select those four columns from the df_new DataFrame.</p>
-<div id="5f9885a2" class="cell" data-execution_count="16">
+<p>Now that we’ve fit our <code>Pipeline</code>, we want to use it to make predictions on new data.</p>
+<p>The first step is to update the <code>X_new</code> DataFrame so that it contains the same columns as <code>X</code>. Recall that the <code>cols</code> object contains the names of our four columns, and so we can use it to select those four columns from the <code>df_new</code> DataFrame.</p>
+<div id="658a0f7a" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>X_new <span class="op">=</span> df_new[cols]</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>X_new</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
@@ -824,10 +824,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Now, we can pass X_new to the Pipeline’s predict method to make predictions for these ten samples. When we run it, the Pipeline applies the same transformations to X_new that it applied to X, and the transformed version of X_new is passed to the fitted logistic regression model so that it can make predictions.</p>
-<p>In other words, the Pipeline enabled us to accomplish our second goal, which is to apply the same workflow to training data and new data.</p>
-<p>As a reminder, we can’t evaluate the accuracy of these ten predictions because we don’t know the true target values for X_new.</p>
-<div id="06cd1fca" class="cell" data-execution_count="17">
+<p>Now, we can pass <code>X_new</code> to the <code>Pipeline</code>’s <code>predict</code> method to make predictions for these ten samples. When we run it, the <code>Pipeline</code> applies the same transformations to <code>X_new</code> that it applied to <code>X</code>, and the transformed version of <code>X_new</code> is passed to the fitted logistic regression model so that it can make predictions.</p>
+<p>In other words, the <code>Pipeline</code> enabled us to accomplish our second goal, which is to apply the same workflow to training data and new data.</p>
+<p>As a reminder, we can’t evaluate the accuracy of these ten predictions because we don’t know the true target values for <code>X_new</code>.</p>
+<div id="a55c665e" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pipe.predict(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>array([0, 1, 0, 0, 1, 0, 1, 0, 1, 0])</code></pre>
@@ -847,17 +847,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Just like before, I’m going to show you what happens “under the hood” when you make predictions using this Pipeline. Again, you should not actually write the following code, rather it is just for teaching purposes.</p>
-<p>First, X_new is transformed by the ColumnTransformer into X_new_t, which stands for X_new transformed. Second, the fitted LogisticRegression model makes predictions for the samples in X_new_t.</p>
-<div id="2ad5e436" class="cell" data-execution_count="18">
+<p>Just like before, I’m going to show you what happens “under the hood” when you make predictions using this <code>Pipeline</code>. Again, you should not actually write the following code, rather it is just for teaching purposes.</p>
+<p>First, <code>X_new</code> is transformed by the <code>ColumnTransformer</code> into <code>X_new_t</code>, which stands for “X_new transformed”. Second, the fitted <code>LogisticRegression</code> model makes predictions for the samples in <code>X_new_t</code>.</p>
+<div id="3d37437a" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>X_new_t <span class="op">=</span> ct.transform(X_new)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>logreg.predict(X_new_t)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>array([0, 1, 0, 0, 1, 0, 1, 0, 1, 0])</code></pre>
 </div>
 </div>
-<p>And as you would expect, X_new has the shape 10 by 4, and X_new_t has the shape 10 by 7.</p>
-<div id="418722a8" class="cell" data-execution_count="19">
+<p>And as you would expect, <code>X_new</code> has the shape 10 by 4, and <code>X_new_t</code> has the shape 10 by 7.</p>
+<div id="ee828fd1" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X_new.shape)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X_new_t.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -865,8 +865,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 (10, 7)</code></pre>
 </div>
 </div>
-<p>One important point I want to highlight is that the Pipeline’s predict method called the ColumnTransformer’s transform method, not its fit_transform method. Why would that be?</p>
-<p>Recall that the fit step is when a transformer learns something, and the transform step is when it uses what it learned to do the transformation. Thus you fit on X to learn an encoding, and you transform on X and X_new to apply that encoding.</p>
+<p>One important point I want to highlight is that the <code>Pipeline</code>’s <code>predict</code> method called the <code>ColumnTransformer</code>’s <code>transform</code> method, not its <code>fit_transform</code> method. Why would that be?</p>
+<p>Recall that the <code>fit</code> step is when a transformer learns something, and the <code>transform</code> step is when it uses what it learned to do the transformation. Thus you fit on <code>X</code> to learn an encoding, and you transform on <code>X</code> and <code>X_new</code> to apply that encoding.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -890,15 +890,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>This is critically important. Our logistic regression model was fit on 7 columns, and so it learned 7 coefficients. To make predictions, you need to pass 7 columns to the predict method, and those 7 columns need to mean the same thing as the 7 columns you used when fitting the model. Thus, the predict method only runs transform so that the exact same encoding will be applied to the training data and the new data.</p>
-<p>It’s okay if you’re still a bit fuzzy on the difference between fit and transform, because the Pipeline object will just do the right thing for you when you run fit or predict. However, understanding the difference will ultimately help you to go further with scikit-learn.</p>
+<p>This is critically important. Our logistic regression model was fit on 7 columns, and so it learned 7 coefficients. To make predictions, you need to pass 7 columns to the <code>predict</code> method, and those 7 columns need to mean the same thing as the 7 columns you used when fitting the model. Thus, the <code>predict</code> method only runs <code>transform</code> so that the exact same encoding will be applied to the training data and the new data.</p>
+<p>It’s okay if you’re still a bit fuzzy on the difference between <code>fit</code> and <code>transform</code>, because the <code>Pipeline</code> object will just do the right thing for you when you run <code>fit</code> or <code>predict</code>. However, understanding the difference will ultimately help you to go further with scikit-learn.</p>
 </section>
 <section id="qa-how-do-i-drop-some-columns-and-passthrough-others" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="qa-how-do-i-drop-some-columns-and-passthrough-others"><span class="header-section-number">4.4</span> Q&amp;A: How do I drop some columns and passthrough others?</h2>
-<p>Currently we only have 4 columns in X, namely Parch, Fare, Embarked, and Sex. But imagine that we had many more columns, and we wanted to drop a few columns and passthrough the rest. How would we do that efficiently?</p>
-<p>We can use the special string “drop” to tell the ColumnTransformer which columns to drop, and also tell it to passthrough all remaining columns. So in this example, we’re one-hot encoding Embarked and Sex, which creates 5 columns, dropping Fare, and passing through Parch, which adds 1 more column.</p>
-<p>We could use this same pattern to drop a few columns and passthrough hundreds of columns without having to list the passthrough columns one-by-one.</p>
-<div id="16904abc" class="cell" data-execution_count="20">
+<p>Currently we only have 4 columns in <code>X</code>, namely Parch, Fare, Embarked, and Sex. But imagine that we had many more columns, and we wanted to drop a few columns and pass through the rest. How would we do that efficiently?</p>
+<p>We can use the special string <code>'drop'</code> to tell the <code>ColumnTransformer</code> which columns to drop, and also tell it to pass through all remaining columns. So in this example, we’re one-hot encoding Embarked and Sex, which creates 5 columns, dropping Fare, and passing through Parch, which adds 1 more column.</p>
+<p>We could use this same pattern to drop a few columns and pass through hundreds of columns without having to list the passthrough columns one-by-one.</p>
+<div id="24dcb131" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    (ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'drop'</span>, [<span class="st">'Fare'</span>]),</span>
@@ -917,10 +917,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [1., 0., 0., 1., 0., 0.]])</code></pre>
 </div>
 </div>
-<p>Conversely, we might want to passthrough a few columns and drop the rest. We can use the special string “passthrough” to tell the ColumnTransformer which columns to passthrough, and also tell it to drop all remaining columns. So in this example, we’re one-hot encoding Embarked and Sex, which creates 5 columns, passing through Parch, which adds 1 more column, and dropping Fare.</p>
-<p>Again, we can use this pattern to passthrough a few columns and drop hundreds of columns without listing them all.</p>
-<p>Finally, just a reminder that “drop” is the default value for remainder, so you aren’t actually required to specify it here.</p>
-<div id="b08cd4c4" class="cell" data-execution_count="21">
+<p>Conversely, we might want to pass through a few columns and drop the rest. We can use the special string <code>'passthrough'</code> to tell the <code>ColumnTransformer</code> which columns to pass through, and also tell it to drop all remaining columns. So in this example, we’re one-hot encoding Embarked and Sex, which creates 5 columns, passing through Parch, which adds 1 more column, and dropping Fare.</p>
+<p>Again, we can use this pattern to pass through a few columns and drop hundreds of columns without listing them all.</p>
+<p>Finally, just a reminder that <code>'drop'</code> is the default value for <code>remainder</code>, so you aren’t actually required to specify it here.</p>
+<div id="2be114e6" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    (ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'passthrough'</span>, [<span class="st">'Parch'</span>]),</span>
@@ -942,15 +942,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="qa-how-do-i-transform-the-unspecified-columns" class="level2" data-number="4.5">
 <h2 data-number="4.5" class="anchored" data-anchor-id="qa-how-do-i-transform-the-unspecified-columns"><span class="header-section-number">4.5</span> Q&amp;A: How do I transform the unspecified columns?</h2>
-<p>We know how to drop or passthrough the unspecified columns in a ColumnTransformer, but let’s pretend we wanted to apply a transformation to all of the unspecified columns. This is actually simple to do by passing a transformer to the remainder parameter.</p>
-<p>For example, we might want to scale all of the unspecified columns. One option is MaxAbsScaler, which divides each feature by its maximum value and thus scales it to the range negative 1 to positive 1. We’ll import it from the preprocessing module and then create an instance.</p>
-<div id="002796ea" class="cell" data-execution_count="22">
+<p>We know how to drop or pass through the unspecified columns in a <code>ColumnTransformer</code>, but let’s pretend we wanted to apply a transformation to all of the unspecified columns. This is actually simple to do by passing a transformer to the <code>remainder</code> parameter.</p>
+<p>For example, we might want to scale all of the unspecified columns. One option is <code>MaxAbsScaler</code>, which divides each feature by its maximum value and thus scales it to the range negative 1 to positive 1. We’ll import it from the <code>preprocessing</code> module and then create an instance.</p>
+<div id="c85fcea1" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> MaxAbsScaler</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> MaxAbsScaler()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Then, we can pass the scaler to the remainder parameter.</p>
-<p>When we run the fit_transform method, you can see that the first 5 columns were created from Embarked and Sex, and the sixth column is the scaled version of the Parch column.</p>
-<div id="ad0c8118" class="cell" data-execution_count="23">
+<p>Then, we can pass the <code>scaler</code> to the <code>remainder</code> parameter.</p>
+<p>When we run the <code>fit_transform</code> method, you can see that the first 5 columns were created from Embarked and Sex, and the sixth column is the scaled version of the Parch column.</p>
+<div id="10ae5793" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    (ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'drop'</span>, [<span class="st">'Fare'</span>]),</span>
@@ -973,13 +973,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="qa-how-do-i-select-columns-from-a-numpy-array" class="level2" data-number="4.6">
 <h2 data-number="4.6" class="anchored" data-anchor-id="qa-how-do-i-select-columns-from-a-numpy-array"><span class="header-section-number">4.6</span> Q&amp;A: How do I select columns from a NumPy array?</h2>
 <p>Throughout this book, we’ve been using a pandas DataFrame as our input. But what if your input data was a NumPy array instead? Let’s see how that affects our workflow.</p>
-<p>We’ll start by converting the X and X_new DataFrames into NumPy arrays called X_array and X_new_array.</p>
-<div id="7a2c4405" class="cell" data-execution_count="24">
+<p>We’ll start by converting the <code>X</code> and <code>X_new</code> DataFrames into NumPy arrays called <code>X_array</code> and <code>X_new_array</code>.</p>
+<div id="2356832f" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>X_array <span class="op">=</span> X.to_numpy()</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>X_new_array <span class="op">=</span> X_new.to_numpy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Here’s what X_array looks like.</p>
-<div id="9add2e13" class="cell" data-execution_count="25">
+<p>Here’s what <code>X_array</code> looks like.</p>
+<div id="c1e631e0" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>X_array</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>array([[0, 7.25, 'S', 'male'],
@@ -994,9 +994,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [0, 30.0708, 'C', 'female']], dtype=object)</code></pre>
 </div>
 </div>
-<p>If this was our input data, and we wanted to use a ColumnTransformer, we wouldn’t be able to specify the columns by name because columns of a NumPy array don’t have names. However, we do have a couple of other options.</p>
-<p>First, we could specify the columns by integer position. Embarked and Sex are columns 2 and 3, so in this example, we’re one-hot encoding Embarked and Sex and passing through the remainder. Note that we’re passing X_array, not X, to the fit_transform method.</p>
-<div id="6914327c" class="cell" data-execution_count="26">
+<p>If this was our input data, and we wanted to use a <code>ColumnTransformer</code>, we wouldn’t be able to specify the columns by name because columns of a NumPy array don’t have names. However, we do have a couple of other options.</p>
+<p>First, we could specify the columns by integer position. Embarked and Sex are columns 2 and 3, so in this example, we’re one-hot encoding Embarked and Sex and passing through the remainder. Note that we’re passing <code>X_array</code>, not <code>X</code>, to the <code>fit_transform</code> method.</p>
+<div id="68c516c5" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    (ohe, [<span class="dv">2</span>, <span class="dv">3</span>]),</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    remainder<span class="op">=</span><span class="st">'passthrough'</span>)</span>
@@ -1015,7 +1015,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Another option is to specify the columns using slices, which is useful for large ranges of columns next to one another. In this case, we’re selecting columns 2 through 3 for one-hot encoding, and passing through the remainder. Remember that Python slices are inclusive of the starting value, which is 2 in this case, and exclusive of the ending value, which is 4 in this case.</p>
-<div id="48e4a91a" class="cell" data-execution_count="27">
+<div id="84da2e3a" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    (ohe, <span class="bu">slice</span>(<span class="dv">2</span>, <span class="dv">4</span>)),</span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    remainder<span class="op">=</span><span class="st">'passthrough'</span>)</span>
@@ -1034,7 +1034,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>One final option is to specify the columns using a boolean mask. Normally you would create the mask using some sort of condition, but in this case I’m just writing out a mask to select columns 2 and 3 for one-hot encoding, and passing through the remainder.</p>
-<div id="ff4f3617" class="cell" data-execution_count="28">
+<div id="0b4242d2" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    (ohe, [<span class="va">False</span>, <span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>]),</span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    remainder<span class="op">=</span><span class="st">'passthrough'</span>)</span>
@@ -1052,7 +1052,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [1.0, 0.0, 0.0, 1.0, 0.0, 0, 30.0708]], dtype=object)</code></pre>
 </div>
 </div>
-<p>So those are our three options for selecting columns in a ColumnTransformer when your input source is a NumPy array.</p>
+<p>So those are our three options for selecting columns in a <code>ColumnTransformer</code> when your input source is a NumPy array.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1068,12 +1068,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Other than that, the rest of our workflow remains the same. We’ll just update the Pipeline to use our new ColumnTransformer.</p>
-<div id="19eacdc2" class="cell" data-execution_count="29">
+<p>Other than that, the rest of our workflow remains the same. We’ll just update the <code>Pipeline</code> to use our new <code>ColumnTransformer</code>.</p>
+<div id="1af63ceb" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> make_pipeline(ct, logreg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Then we can fit the Pipeline with X_array and y, and make predictions for the X_new_array.</p>
-<div id="1613e655" class="cell" data-execution_count="30">
+<p>Then we can fit the <code>Pipeline</code> with <code>X_array</code> and <code>y</code>, and make predictions for <code>X_new_array</code>.</p>
+<div id="815f9849" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>pipe.fit(X_array, y)</span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>pipe.predict(X_new_array)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="30">
@@ -1084,18 +1084,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="qa-how-do-i-select-columns-by-data-type" class="level2" data-number="4.7">
 <h2 data-number="4.7" class="anchored" data-anchor-id="qa-how-do-i-select-columns-by-data-type"><span class="header-section-number">4.7</span> Q&amp;A: How do I select columns by data type?</h2>
 <p>So far in this book, we’ve been selecting columns one-by-one. But let’s say that we had many more columns, and we simply wanted to one-hot encode all object columns and passthrough all numeric columns without listing all of them out. How would we do that?</p>
-<p>The easiest way to do this is with the make_column_selector function, which is new in scikit-learn version 0.22.</p>
-<div id="c1d682c4" class="cell" data-execution_count="31">
+<p>The easiest way to do this is with the <code>make_column_selector</code> function, which is new in scikit-learn version 0.22.</p>
+<div id="a195f92c" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> make_column_selector</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We’re going to create two column selectors called select_object and select_number. To do this, we just set the dtype_include parameter to the data type we want to include, and it outputs a callable.</p>
-<div id="b6c776e3" class="cell" data-execution_count="32">
+<p>We’re going to create two column selectors called <code>select_object</code> and <code>select_number</code>. To do this, we just set the <code>dtype_include</code> parameter to the data type we want to include, and it outputs a callable.</p>
+<div id="b9cc89fc" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>select_object <span class="op">=</span> make_column_selector(dtype_include<span class="op">=</span><span class="bu">object</span>)</span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>select_number <span class="op">=</span> make_column_selector(dtype_include<span class="op">=</span><span class="st">'number'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Then, we pass the callables to make_column_transformer instead of the column names, and the callables select the columns for us.</p>
-<p>When we run fit_transform, you can see that once again, the object columns have been one-hot encoded and the numeric columns have been passed through.</p>
-<div id="27bd1c11" class="cell" data-execution_count="33">
+<p>Then, we pass the callables to <code>make_column_transformer</code> instead of the column names, and the callables select the columns for us.</p>
+<p>When we run <code>fit_transform</code>, you can see that once again, the object columns have been one-hot encoded and the numeric columns have been passed through.</p>
+<div id="739d0d95" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>    (ohe, select_object),</span>
 <span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'passthrough'</span>, select_number))</span>
@@ -1113,12 +1113,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [ 1.    ,  0.    ,  0.    ,  1.    ,  0.    ,  0.    , 30.0708]])</code></pre>
 </div>
 </div>
-<p>One slight variation of this is that you can tell make_column_selector to exclude instead of include a specific data type. In this example, we’re using the dtype_exclude parameter to create a column selector that excludes the object data type.</p>
-<div id="798bb156" class="cell" data-execution_count="34">
+<p>One slight variation of this is that you can tell <code>make_column_selector</code> to exclude instead of include a specific data type. In this example, we’re using the <code>dtype_exclude</code> parameter to create a column selector that excludes the object data type.</p>
+<div id="24c5db5e" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>exclude_object <span class="op">=</span> make_column_selector(dtype_exclude<span class="op">=</span><span class="bu">object</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This time, we’ll tell the ColumnTransformer to one-hot encode all object columns and passthrough all non-object columns, which has the same effect as before.</p>
-<div id="9146a250" class="cell" data-execution_count="35">
+<p>This time, we’ll tell the <code>ColumnTransformer</code> to one-hot encode all object columns and pass through all non-object columns, which has the same effect as before.</p>
+<div id="2a4c89e1" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>    (ohe, select_object),</span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'passthrough'</span>, exclude_object))</span>
@@ -1137,24 +1137,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>There are also other data type options you can use, such as the datetime data type or the pandas category data type.</p>
-<div id="21c5071e" class="cell" data-execution_count="36">
+<div id="8edf4260" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>select_datetime <span class="op">=</span> make_column_selector(dtype_include<span class="op">=</span><span class="st">'datetime'</span>)</span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>select_category <span class="op">=</span> make_column_selector(dtype_include<span class="op">=</span><span class="st">'category'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Finally, it’s worth noting that you can also pass a list of multiple data types to make_column_selector.</p>
-<div id="ff67dd23" class="cell" data-execution_count="37">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>select_multiple <span class="op">=</span> make_column_selector(dtype_include<span class="op">=</span>[<span class="bu">object</span>, <span class="st">'category'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Finally, it’s worth noting that you can also pass a list of multiple data types to <code>make_column_selector</code>.</p>
+<div id="4c770898" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>select_multiple <span class="op">=</span> make_column_selector(dtype_include<span class="op">=</span>[<span class="bu">object</span>,</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>                                                      <span class="st">'category'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="qa-how-do-i-select-columns-by-column-name-pattern" class="level2" data-number="4.8">
 <h2 data-number="4.8" class="anchored" data-anchor-id="qa-how-do-i-select-columns-by-column-name-pattern"><span class="header-section-number">4.8</span> Q&amp;A: How do I select columns by column name pattern?</h2>
 <p>Let’s say that we had a lot of columns, and all of the columns that we wanted to select for a particular transformation had the same pattern in their names. For example, maybe all of those columns started with the same word.</p>
-<p>Once again, we can use the make_column_selector function, which allows us to select columns by regular expression pattern. Here’s a silly example in which we select columns that include the capital letters E or S.</p>
-<div id="53646cf1" class="cell" data-execution_count="38">
+<p>Once again, we can use the <code>make_column_selector</code> function, which allows us to select columns by regular expression pattern. Here’s a silly example in which we select columns that include the capital letters E or S.</p>
+<div id="6d9dacd6" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>select_ES <span class="op">=</span> make_column_selector(pattern<span class="op">=</span><span class="st">'E|S'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>When we run the fit_transform method, Embarked and Sex have been one-hot encoded, and the remaining columns have been passed through.</p>
-<div id="38017860" class="cell" data-execution_count="39">
+<p>When we run the <code>fit_transform</code> method, Embarked and Sex have been one-hot encoded, and the remaining columns have been passed through.</p>
+<div id="97483e0e" class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>    (ohe, select_ES),</span>
 <span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>    remainder<span class="op">=</span><span class="st">'passthrough'</span>)</span>
@@ -1176,12 +1177,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="sec-4-9" class="level2" data-number="4.9">
 <h2 data-number="4.9" class="anchored" data-anchor-id="sec-4-9"><span class="header-section-number">4.9</span> Q&amp;A: Should I use ColumnTransformer or make_column_transformer?</h2>
-<p>So far in this book, we’ve been creating ColumnTransformers using the make_column_transformer function. In this lesson, I’ll show you how to use the ColumnTransformer class and then compare it to make_column_transformer so that you can decide which one you want to use.</p>
-<p>To start, we’ll import the ColumnTransformer class from the compose module, and then we’ll create an instance.</p>
+<p>So far in this book, we’ve been creating <code>ColumnTransformer</code>s using the <code>make_column_transformer</code> function. In this lesson, I’ll show you how to use the <code>ColumnTransformer</code> class and then compare it to <code>make_column_transformer</code> so that you can decide which one you want to use.</p>
+<p>To start, we’ll import the <code>ColumnTransformer</code> class from the <code>compose</code> module, and then we’ll create an instance.</p>
 <p>When creating an instance, the first difference you might notice is that the tuples have three elements rather than two. The first element of each tuple is a name of your choosing that you are required to assign to the transformer.</p>
-<p>In this case, the first tuple is our one-hot encoding of Embarked and Sex, and we’re assigning it the name “OHE” in all caps. The second tuple is our special passthrough transformer for Parch and Fare, and we’re assigning it the name “pass”. We can see these names when we print out the ColumnTransformer.</p>
-<p>You might also notice that the tuples are in a list, which is a requirement of the ColumnTransformer class.</p>
-<div id="d3a09adb" class="cell" data-execution_count="40">
+<p>In this case, the first tuple is our one-hot encoding of Embarked and Sex, and we’re assigning it the name “OHE” (all caps). The second tuple is our special passthrough transformer for Parch and Fare, and we’re assigning it the name “pass”. We can see these names when we print out the <code>ColumnTransformer</code>.</p>
+<p>You might also notice that the tuples are in a list, which is a requirement of the <code>ColumnTransformer</code> class.</p>
+<div id="4c541a3b" class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> ColumnTransformer</span>
 <span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> ColumnTransformer(</span>
 <span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>    [(<span class="st">'OHE'</span>, ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
@@ -1207,9 +1208,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Now let’s create the same ColumnTransformer using the make_column_transformer function. When using make_column_transformer, we don’t define names for the transformers. Instead, each transformer is assigned a default name, which is the lowercase version of the transformer’s class name.</p>
+<p>Now let’s create the same <code>ColumnTransformer</code> using the <code>make_column_transformer</code> function. When using <code>make_column_transformer</code>, we don’t define names for the transformers. Instead, each transformer is assigned a default name, which is the lowercase version of the transformer’s class name.</p>
 <p>As you can see when we print it out, the one-hot encoder is assigned the name “onehotencoder” (all lowercase), and the passthrough transformer is assigned the name “passthrough”.</p>
-<div id="3fce66cd" class="cell" data-execution_count="41">
+<div id="3dbc691f" class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>    (ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
 <span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'passthrough'</span>, [<span class="st">'Parch'</span>, <span class="st">'Fare'</span>]))</span>
@@ -1222,9 +1223,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>All of that being said, which one should you use?</p>
-<p>I prefer make_column_transformer, because I find the code both easier to read and easier to write, so that’s what I’ll use in this book. I usually don’t mind the default transformer names, and in fact I like that I don’t have to come up with a name for each transformer.</p>
-<p>However, there are times when defining names for the transformers is useful. Custom names can be clearer if you’re performing a grid search of transformer parameters, or if you’re using the same type of transformer multiple times in the same ColumnTransformer instance. We’ll see examples of this later in the book.</p>
-<p>One final note is that the ColumnTransformer class enables transformer weights, meaning you can emphasize the output of some transformers more than others. The specific use case of this is not yet clear to me, but if you do decide to use transformer weights, then you can’t use the make_column_transformer function and you must use the ColumnTransformer class.</p>
+<p>I prefer <code>make_column_transformer</code>, because I find the code both easier to read and easier to write, so that’s what I’ll use in this book. I usually don’t mind the default transformer names, and in fact I like that I don’t have to come up with a name for each transformer.</p>
+<p>However, there are times when defining names for the transformers is useful. Custom names can be clearer if you’re performing a grid search of transformer parameters, or if you’re using the same type of transformer multiple times in the same <code>ColumnTransformer</code> instance. We’ll see examples of this later in the book.</p>
+<p>One final note is that the <code>ColumnTransformer</code> class enables transformer weights, meaning you can emphasize the output of some transformers more than others. The specific use case of this is not yet clear to me, but if you do decide to use transformer weights, then you can’t use the <code>make_column_transformer</code> function and you must use the <code>ColumnTransformer</code> class.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1258,11 +1259,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="sec-4-10" class="level2" data-number="4.10">
 <h2 data-number="4.10" class="anchored" data-anchor-id="sec-4-10"><span class="header-section-number">4.10</span> Q&amp;A: Should I use Pipeline or make_pipeline?</h2>
-<p>So far in this book, we’ve been creating Pipelines using the make_pipeline function. In this lesson, I’ll show you how to use the Pipeline class and then compare it to make_pipeline so that you can decide which one you want to use.</p>
-<p>To start, we’ll import the Pipeline class from the pipeline module, and then we’ll create an instance.</p>
-<p>When creating an instance, the main difference you might notice is that we’re passing in a list of tuples to the Pipeline constructor. Each tuple has two elements, in which the first element is the name you’re assigning to the Pipeline step, and the second element is the model or transformer you’re including in the Pipeline.</p>
-<p>In this case, the first tuple is our preprocessing step using ColumnTransformer, and we’re assigning it the name “preprocessor”. The second tuple is our model building step using logistic regression, and we’re assigning it the name “classifier”. We can see these names when we print out the Pipeline.</p>
-<div id="a803f197" class="cell" data-execution_count="42">
+<p>So far in this book, we’ve been creating <code>Pipeline</code>s using the <code>make_pipeline</code> function. In this lesson, I’ll show you how to use the <code>Pipeline</code> class and then compare it to <code>make_pipeline</code> so that you can decide which one you want to use.</p>
+<p>To start, we’ll import the <code>Pipeline</code> class from the <code>pipeline</code> module, and then we’ll create an instance.</p>
+<p>When creating an instance, the main difference you might notice is that we’re passing in a list of tuples to the <code>Pipeline</code> constructor. Each tuple has two elements, in which the first element is the name you’re assigning to the <code>Pipeline</code> step, and the second element is the model or transformer you’re including in the <code>Pipeline</code>.</p>
+<p>In this case, the first tuple is our preprocessing step using <code>ColumnTransformer</code>, and we’re assigning it the name “preprocessor”. The second tuple is our model building step using logistic regression, and we’re assigning it the name “classifier”. We can see these names when we print out the <code>Pipeline</code>.</p>
+<div id="58bbde5a" class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
 <span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> Pipeline([(<span class="st">'preprocessor'</span>, ct), (<span class="st">'classifier'</span>, logreg)])</span>
 <span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>pipe</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1291,16 +1292,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>We can also see the step names by accessing the named_steps attribute of the Pipeline and running the keys method.</p>
-<div id="5b3e256b" class="cell" data-execution_count="43">
+<p>We can also see the step names by accessing the <code>named_steps</code> attribute of the <code>Pipeline</code> and running the <code>keys</code> method.</p>
+<div id="b6983d2b" class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>pipe.named_steps.keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="43">
 <pre><code>dict_keys(['preprocessor', 'classifier'])</code></pre>
 </div>
 </div>
-<p>Now let’s create the same Pipeline using the make_pipeline function. When using make_pipeline, we don’t define names for the steps. Instead, each step is assigned a default name, which is the lowercase version of the step’s class name.</p>
+<p>Now let’s create the same <code>Pipeline</code> using the <code>make_pipeline</code> function. When using <code>make_pipeline</code>, we don’t define names for the steps. Instead, each step is assigned a default name, which is the lowercase version of the step’s class name.</p>
 <p>As you can see when we print it out, the first step is assigned the name “columntransformer” (all lowercase), and the second step is assigned the name “logisticregression” (all lowercase).</p>
-<div id="af6558a1" class="cell" data-execution_count="44">
+<div id="6a918e28" class="cell" data-execution_count="44">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> make_pipeline(ct, logreg)</span>
 <span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>pipe</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="44">
@@ -1314,16 +1315,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                  LogisticRegression(random_state=1, solver='liblinear'))])</code></pre>
 </div>
 </div>
-<p>Again, we can also see the step names using the named_steps attribute.</p>
-<div id="7eb95581" class="cell" data-execution_count="45">
+<p>Again, we can also see the step names using the <code>named_steps</code> attribute.</p>
+<div id="14cd3153" class="cell" data-execution_count="45">
 <div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>pipe.named_steps.keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="45">
 <pre><code>dict_keys(['columntransformer', 'logisticregression'])</code></pre>
 </div>
 </div>
 <p>All of that being said, which one should you use?</p>
-<p>I prefer make_pipeline, because I find the code both easier to read and easier to write, so that’s what I’ll use in this book. I usually don’t mind the default step names, and in fact I like that I don’t have to come up with a name for each step.</p>
-<p>However, custom step names can be useful for clarity, especially if you’re performing a grid search of a Pipeline. We’ll see many examples of this later in the book.</p>
+<p>I prefer <code>make_pipeline</code>, because I find the code both easier to read and easier to write, so that’s what I’ll use in this book. I usually don’t mind the default step names, and in fact I like that I don’t have to come up with a name for each step.</p>
+<p>However, custom step names can be useful for clarity, especially if you’re performing a grid search of a <code>Pipeline</code>. We’ll see many examples of this later in the book.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1352,9 +1353,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="qa-how-do-i-examine-the-steps-of-a-pipeline" class="level2" data-number="4.11">
 <h2 data-number="4.11" class="anchored" data-anchor-id="qa-how-do-i-examine-the-steps-of-a-pipeline"><span class="header-section-number">4.11</span> Q&amp;A: How do I examine the steps of a Pipeline?</h2>
-<p>Sometimes you might want to examine the steps of a fitted Pipeline so that you can understand what’s happening within each step. In this lesson, I’ll show you how to do it.</p>
-<p>We’ll start by fitting the Pipeline, which prints out the two steps.</p>
-<div id="9c2f12c2" class="cell" data-execution_count="46">
+<p>Sometimes you might want to examine the steps of a fitted <code>Pipeline</code> so that you can understand what’s happening within each step. In this lesson, I’ll show you how to do it.</p>
+<p>We’ll start by fitting the <code>Pipeline</code>, which prints out the two steps.</p>
+<div id="2587498e" class="cell" data-execution_count="46">
 <div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>pipe.fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="46">
 <pre><code>Pipeline(steps=[('columntransformer',
@@ -1367,15 +1368,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                  LogisticRegression(random_state=1, solver='liblinear'))])</code></pre>
 </div>
 </div>
-<p>As I mentioned in the previous lesson, make_pipeline assigned a name to each step, which is the lowercase version of the step’s class name. In this case, our step names are “columntransformer” and “logisticregression”.</p>
-<div id="9f2c0319" class="cell" data-execution_count="47">
+<p>As I mentioned in the previous lesson, <code>make_pipeline</code> assigned a name to each step, which is the lowercase version of the step’s class name. In this case, our step names are “columntransformer” and “logisticregression”.</p>
+<div id="a2ad57f5" class="cell" data-execution_count="47">
 <div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>pipe.named_steps.keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="47">
 <pre><code>dict_keys(['columntransformer', 'logisticregression'])</code></pre>
 </div>
 </div>
-<p>To examine an individual step, you select the named_steps attribute and pass the step name in brackets. Note that if we had assigned custom step names such as “preprocessor” and “classifier”, we would be using those here instead.</p>
-<div id="6c809ad5" class="cell" data-execution_count="48">
+<p>To examine an individual step, you select the <code>named_steps</code> attribute and pass the step name in brackets. Note that if we had assigned custom step names such as “preprocessor” and “classifier”, we would be using those here instead.</p>
+<div id="2638b446" class="cell" data-execution_count="48">
 <div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>pipe.named_steps[<span class="st">'columntransformer'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="48">
 <pre><code>ColumnTransformer(transformers=[('onehotencoder', OneHotEncoder(),
@@ -1384,14 +1385,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                                  ['Parch', 'Fare'])])</code></pre>
 </div>
 </div>
-<div id="12f49998" class="cell" data-execution_count="49">
+<div id="9901f4b9" class="cell" data-execution_count="49">
 <div class="sourceCode cell-code" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>pipe.named_steps[<span class="st">'logisticregression'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="49">
 <pre><code>LogisticRegression(random_state=1, solver='liblinear')</code></pre>
 </div>
 </div>
-<p>Once you’ve accessed a step, you can examine its attributes or run its methods. For example, we can run the get_feature_names method from the “columntransformer” step to learn the names of each feature. As a reminder, the x0 means feature 0 that was passed to the OneHotEncoder, and the x1 means feature 1.</p>
-<div id="1224ea3f" class="cell" data-execution_count="50">
+<p>Once you’ve accessed a step, you can examine its attributes or run its methods. For example, we can run the <code>get_feature_names</code> method from the “columntransformer” step to learn the names of each feature. As a reminder, the x0 means feature 0 that was passed to the OneHotEncoder, and the x1 means feature 1.</p>
+<div id="79d5a0db" class="cell" data-execution_count="50">
 <div class="sourceCode cell-code" id="cb80"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>pipe.named_steps[<span class="st">'columntransformer'</span>].get_feature_names()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="50">
 <pre><code>['onehotencoder__x0_C',
@@ -1403,43 +1404,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  'Fare']</code></pre>
 </div>
 </div>
-<p>We can also see the coefficient values of the 7 features by examining the “coef_” attribute of the “logisticregression” step. These coefficients are listed in the same order as the features, though the intercept is stored in a separate attribute.</p>
+<p>We can also see the coefficient values of the 7 features by examining the <code>coef_</code> attribute of the “logisticregression” step. These coefficients are listed in the same order as the features, though the intercept is stored in a separate attribute.</p>
 <p>By finding the 4 positive coefficients, you can determine that embarking at port C, being female, and having a higher Parch and Fare are all associated with a greater likelihood of survival. Note that these are just associations the model learned from 10 rows of training data. They are not necessarily statistically significant associations, and in fact scikit-learn does not provide p-values.</p>
-<div id="19dc288d" class="cell" data-execution_count="51">
+<div id="d78ac07f" class="cell" data-execution_count="51">
 <div class="sourceCode cell-code" id="cb82"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>pipe.named_steps[<span class="st">'logisticregression'</span>].coef_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="51">
 <pre><code>array([[ 0.26491287, -0.19848033, -0.22907928,  1.0075062 , -1.17015293,
          0.20056557,  0.01597307]])</code></pre>
 </div>
 </div>
-<p>Finally, it’s worth noting that there are three other ways that you can examine the steps of a Pipeline:</p>
+<p>Finally, it’s worth noting that there are three other ways that you can examine the steps of a <code>Pipeline</code>:</p>
 <ul>
-<li>First, you can use named_steps with periods.</li>
-<li>Second, you can exclude the named_steps attribute entirely.</li>
+<li>First, you can use <code>named_steps</code> with periods.</li>
+<li>Second, you can exclude the <code>named_steps</code> attribute entirely.</li>
 <li>And third, you can reference the step by position rather than by name.</li>
 </ul>
-<div id="617f5081" class="cell" data-execution_count="52">
+<div id="293df48c" class="cell" data-execution_count="52">
 <div class="sourceCode cell-code" id="cb84"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>pipe.named_steps.logisticregression.coef_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="52">
 <pre><code>array([[ 0.26491287, -0.19848033, -0.22907928,  1.0075062 , -1.17015293,
          0.20056557,  0.01597307]])</code></pre>
 </div>
 </div>
-<div id="6ea098c4" class="cell" data-execution_count="53">
+<div id="ae7bbf92" class="cell" data-execution_count="53">
 <div class="sourceCode cell-code" id="cb86"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>pipe[<span class="st">'logisticregression'</span>].coef_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="53">
 <pre><code>array([[ 0.26491287, -0.19848033, -0.22907928,  1.0075062 , -1.17015293,
          0.20056557,  0.01597307]])</code></pre>
 </div>
 </div>
-<div id="c4255a23" class="cell" data-execution_count="54">
+<div id="4d72f310" class="cell" data-execution_count="54">
 <div class="sourceCode cell-code" id="cb88"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a>pipe[<span class="dv">1</span>].coef_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="54">
 <pre><code>array([[ 0.26491287, -0.19848033, -0.22907928,  1.0075062 , -1.17015293,
          0.20056557,  0.01597307]])</code></pre>
 </div>
 </div>
-<p>Personally, I like the initial bracket notation because I think it’s the most readable, even though it’s the most typing. However, using named_steps with the periods seems to be the only option that supports autocompleting both the step name and the attribute, which is a nice benefit.</p>
+<p>Personally, I like the initial bracket notation because I think it’s the most readable, even though it’s the most typing. However, using <code>named_steps</code> with the periods seems to be the only option that supports autocompleting both the step name and the attribute, which is a nice benefit.</p>
 
 
 </section>

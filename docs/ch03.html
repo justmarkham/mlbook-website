@@ -342,7 +342,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="3.1" class="anchored" data-anchor-id="introduction-to-one-hot-encoding"><span class="header-section-number">3.1</span> Introduction to one-hot encoding</h2>
 <p>In this chapter, we’re going to focus on one of the most important data preprocessing steps, which is the encoding of categorical features.</p>
 <p>Let’s take a look at our Titanic DataFrame. In the last chapter, the only features we used were Parch and Fare. In this chapter, we want to add Embarked and Sex as additional features, in case they improve our model.</p>
-<div id="56dcb23e" class="cell" data-execution_count="2">
+<div id="d1d263a4" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <div>
@@ -546,12 +546,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>All scikit-learn models expect features to be numeric, and so Embarked and Sex can’t actually be passed directly to a model. Instead, we’re going to encode them using a process called one-hot encoding, also known as dummy encoding.</p>
-<p>Let’s look at the code for one-hot encoding. First, we import the OneHotEncoder class from the preprocessing module. Then, we create an instance of it and set sparse to False.</p>
-<div id="7e9715db" class="cell" data-execution_count="6">
+<p>Let’s look at the code for one-hot encoding. First, we import the <code>OneHotEncoder</code> class from the <code>preprocessing</code> module. Then, we create an instance of it and set <code>sparse</code> to <code>False</code>.</p>
+<div id="dde55fd6" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> OneHotEncoder</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ohe <span class="op">=</span> OneHotEncoder(sparse<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>By default, OneHotEncoder will output a sparse matrix, which is the most efficient and performant data structure for this type of data. By setting sparse to False, it will instead output a dense matrix, which is just the normal way of representing a matrix. This representation will allow us to examine the output so that we can understand the encoding scheme.</p>
+<p>By default, <code>OneHotEncoder</code> will output a sparse matrix, which is the most efficient and performant data structure for this type of data. By setting <code>sparse</code> to <code>False</code>, it will instead output a dense matrix, which is just the normal way of representing a matrix. This representation will allow us to examine the output so that we can understand the encoding scheme.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -566,8 +566,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Next, we’ll encode the Embarked column by passing it to the fit_transform method of the OneHotEncoder. We’ll talk about the fit_transform method in the next lesson, but for now I just want to highlight that we’ll use double brackets around Embarked to pass it as a single-column DataFrame instead of using single brackets to pass it as a Series.</p>
-<p>This is important because OneHotEncoder expects to receive a two-dimensional object (such as a DataFrame) since a one-dimensional object is considered ambiguous. A one-dimensional Series could be interpreted either as a single feature or a single sample, whereas our two-dimensional DataFrame signals to scikit-learn that this is indeed a single feature.</p>
+<p>Next, we’ll encode the Embarked column by passing it to the <code>fit_transform</code> method of the <code>OneHotEncoder</code>. We’ll talk about the <code>fit_transform</code> method in the next lesson, but for now I just want to highlight that we’ll use double brackets around Embarked to pass it as a single-column DataFrame instead of using single brackets to pass it as a Series.</p>
+<p>This is important because <code>OneHotEncoder</code> expects to receive a two-dimensional object (such as a DataFrame) since a one-dimensional object is considered ambiguous. A one-dimensional Series could be interpreted either as a single feature or a single sample, whereas our two-dimensional DataFrame signals to scikit-learn that this is indeed a single feature.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -590,8 +590,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Running the fit_transform method outputs this 10 by 3 array. This is the encoded version of the Embarked column, and it is exactly what we will pass to the model instead of the strings C, Q, and S.</p>
-<div id="5efdfbe1" class="cell" data-execution_count="7">
+<p>Running the <code>fit_transform</code> method outputs this 10 by 3 array. This is the encoded version of the Embarked column, and it is exactly what we will pass to the model instead of the strings C, Q, and S.</p>
+<div id="940a035a" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ohe.fit_transform(df[[<span class="st">'Embarked'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>array([[0., 0., 1.],
@@ -608,7 +608,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Let’s talk about how we interpret this output. There are 3 columns because there were 3 unique values in Embarked. Each row contains a single 1, and the rest of the values in the row are 0. 100 means “C”, 010 means “Q”, and 001 means “S”, which you can confirm by comparing it to the Embarked column in our DataFrame.</p>
 <p>As an aside, this is called one-hot encoding because in each row there is one “hot” level, meaning one non-zero level.</p>
-<p>This is also the same output you would get by using the get_dummies function in pandas, though we’ll talk later in the book why it’s best to do all of your preprocessing in scikit-learn instead of pandas.</p>
+<p>This is also the same output you would get by using the <code>get_dummies</code> function in pandas, though we’ll talk later in the book why it’s best to do all of your preprocessing in scikit-learn instead of pandas.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -628,16 +628,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Let’s now look at the categories attribute of the OneHotEncoder. You can think of it as the column header for our 10 by 3 array. In other words, the categories attribute tells you that the first column represents C, the second column represents Q, and the third column represents S. Because the categories are always in alphabetical order from left to right, I didn’t actually have to examine the categories attribute in order to know how to interpret it.</p>
-<p>As an aside, you’ll notice a lot of attributes in scikit-learn end in an underscore. This is scikit-learn’s convention for any attribute that is learned or estimated from the data during the fit step.</p>
-<div id="31576a78" class="cell" data-execution_count="8">
+<p>Let’s now look at the <code>categories_</code> attribute of the <code>OneHotEncoder</code>. You can think of it as the column header for our 10 by 3 array. In other words, the <code>categories_</code> attribute tells you that the first column represents “C”, the second column represents “Q”, and the third column represents “S”. Because the categories are always in alphabetical order from left to right, I didn’t actually have to examine the <code>categories_</code> attribute in order to know how to interpret it.</p>
+<p>As an aside, you’ll notice a lot of attributes in scikit-learn end in an <code>_</code>. This is scikit-learn’s convention for any attribute that is learned or estimated from the data during the <code>fit</code> step.</p>
+<div id="de5221f0" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ohe.categories_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>[array(['C', 'Q', 'S'], dtype=object)]</code></pre>
 </div>
 </div>
-<p>We’ve now seen how the OneHotEncoder encodes the Embarked feature. But why is this a reasonable way to encode a categorical feature?</p>
-<p>You can think of it this way: OneHotEncoder creates a feature from each level so that the model can learn the relationship between each level and the target value. In this case, the model can learn the relationship between the target value of Survived and whether or not a passenger embarked at a given port.</p>
+<p>We’ve now seen how the <code>OneHotEncoder</code> encodes the Embarked feature. But why is this a reasonable way to encode a categorical feature?</p>
+<p>You can think of it this way: <code>OneHotEncoder</code> creates a feature from each level so that the model can learn the relationship between each level and the target value. In this case, the model can learn the relationship between the target value of Survived and whether or not a passenger embarked at a given port.</p>
 <p>For example, the model might learn from the first feature that passengers who embarked at C have a higher survival rate than passengers who didn’t embark at C. This is similar to how a model might learn from a numeric feature like Fare that passengers with a higher Fare have a higher survival rate than passengers with a lower Fare.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -654,7 +654,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>At this point, you might be wondering whether we could have instead encoded Embarked as a single numeric feature with the values 0, 1, and 2 representing C, Q, and S. The answer is that yes, we can do this, but it’s generally not a good idea to do this with unordered categories because it would imply an ordering that doesn’t inherently exist.</p>
-<p>To see why it’s not a good idea, let’s pretend that passengers who embarked at C and S had high survival rates, and passengers who embarked at Q had low survival rates. There would be no way for a linear model like logistic regression to learn that relationship if Embarked is encoded as a single feature since a single feature can’t be assigned both a negative coefficient to represent the impact of Q with respect to C and a positive coefficient to represent the impact of S with respect to Q.</p>
+<p>To see why it’s not a good idea, let’s pretend that passengers who embarked at C and S had high survival rates, and passengers who embarked at Q had low survival rates. There would be no way for a linear model like logistic regression to learn that relationship if Embarked is encoded as a single feature since a single feature can’t be assigned both a negative coefficient to represent the impact of Q (with respect to C) and a positive coefficient to represent the impact of S (with respect to Q).</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -682,8 +682,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="transformer-methods-fit-transform-fit_transform" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="transformer-methods-fit-transform-fit_transform"><span class="header-section-number">3.2</span> Transformer methods: fit, transform, fit_transform</h2>
-<p>Let’s discuss the fit_transform method, since that’s the method we used with OneHotEncoder to encode the Embarked feature.</p>
-<p>OneHotEncoder is known as a transformer, meaning its role is to perform data transformations. Transformers usually have a “fit” method and always have a “transform” method. The fit method is when the transformer learns something, and the transform method is when it uses what it learned to do the data transformation.</p>
+<p>Let’s discuss the <code>fit_transform</code> method, since that’s the method we used with <code>OneHotEncoder</code> to encode the Embarked feature.</p>
+<p><code>OneHotEncoder</code> is known as a transformer, meaning its role is to perform data transformations. Transformers usually have a <code>fit</code> method and always have a <code>transform</code> method. The <code>fit</code> method is when the transformer learns something, and the <code>transform</code> method is when it uses what it learned to do the data transformation.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -698,7 +698,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Using OneHotEncoder as an example, the fit method is when it learns the categories from the data in alphabetical order, and the transform method is when it creates the feature matrix using those categories.</p>
+<p>Using <code>OneHotEncoder</code> as an example, the <code>fit</code> method is when it learns the categories from the data in alphabetical order, and the <code>transform</code> method is when it creates the feature matrix using those categories.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -713,13 +713,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>The fit_transform method, which is what we used above, just combines those two steps into a single method call. You can actually do those steps as two separate calls of fit then transform, but the single method call of fit_transform is better because it’s more computationally efficient and also more readable in my opinion.</p>
+<p>The <code>fit_transform</code> method, which is what we used above, just combines those two steps into a single method call. You can actually do those steps as two separate calls of <code>fit</code> then <code>transform</code>, but the single method call of <code>fit_transform</code> is better because it’s more computationally efficient and also more readable in my opinion.</p>
 </section>
 <section id="one-hot-encoding-of-multiple-features" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="one-hot-encoding-of-multiple-features"><span class="header-section-number">3.3</span> One-hot encoding of multiple features</h2>
-<p>We saw how to use OneHotEncoder to encode the Embarked column, but we actually need to encode both Embarked and Sex. Thankfully, OneHotEncoder can be applied to multiple features at once.</p>
-<p>To do this, we simply pass a two-column DataFrame to the fit_transform method, whereas previously we had passed a one-column DataFrame. It outputs 5 columns, in which the first 3 columns represent Embarked and the last 2 columns represent Sex.</p>
-<div id="13d145cc" class="cell" data-execution_count="9">
+<p>We saw how to use <code>OneHotEncoder</code> to encode the Embarked column, but we actually need to encode both Embarked and Sex. Thankfully, <code>OneHotEncoder</code> can be applied to multiple features at once.</p>
+<p>To do this, we simply pass a two-column DataFrame to the <code>fit_transform</code> method, whereas previously we had passed a one-column DataFrame. It outputs 5 columns, in which the first 3 columns represent Embarked and the last 2 columns represent Sex.</p>
+<div id="52c89196" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ohe.fit_transform(df[[<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>array([[0., 0., 1., 0., 1.],
@@ -734,8 +734,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [1., 0., 0., 1., 0.]])</code></pre>
 </div>
 </div>
-<p>Looking at the categories attribute, we first see the 3 categories that were learned from Embarked in alphabetical order, and then we see the 2 categories that were learned from Sex in alphabetical order. Thus, we know that a 10 in the last two columns means “female”, and a 01 in the last two columns means “male”.</p>
-<div id="8c84019f" class="cell" data-execution_count="10">
+<p>Looking at the <code>categories_</code> attribute, we first see the 3 categories that were learned from Embarked in alphabetical order, and then we see the 2 categories that were learned from Sex in alphabetical order. Thus, we know that a 10 in the last two columns means “female”, and a 01 in the last two columns means “male”.</p>
+<div id="b0e48b8c" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ohe.categories_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>[array(['C', 'Q', 'S'], dtype=object), array(['female', 'male'], dtype=object)]</code></pre>
@@ -771,7 +771,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Recall that our goal in this chapter was to numerically encode Embarked and Sex so we could include them in our model along with Parch and Fare. How might we do that?</p>
-<p>One idea would be to manually stack Parch and Fare side-by-side with the 5 columns output by OneHotEncoder, and then train the model using all 7 columns. However, we would need to repeat the same exact process of encoding and stacking with the new data, since if you train a model with 7 features, you need the same 7 features in the new data in order to make predictions.</p>
+<p>One idea would be to manually stack Parch and Fare side-by-side with the 5 columns output by <code>OneHotEncoder</code>, and then train the model using all 7 columns. However, we would need to repeat the same exact process of encoding and stacking with the new data, since if you train a model with 7 features, you need the same 7 features in the new data in order to make predictions.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -801,13 +801,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>In the next chapter, I’ll introduce you to the ColumnTransformer and Pipeline classes. We’ll use these two classes to accomplish our goal of adding Embarked and Sex to our model, but we’ll do it in a way that is both reliable and efficient.</p>
+<p>In the next chapter, I’ll introduce you to the <code>ColumnTransformer</code> and <code>Pipeline</code> classes. We’ll use these two classes to accomplish our goal of adding Embarked and Sex to our model, but we’ll do it in a way that is both reliable and efficient.</p>
 </section>
 <section id="qa-when-should-i-use-transform-instead-of-fit_transform" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="qa-when-should-i-use-transform-instead-of-fit_transform"><span class="header-section-number">3.4</span> Q&amp;A: When should I use transform instead of fit_transform?</h2>
-<p>Earlier in this chapter, we used the fit_transform method of OneHotEncoder to encode two categorical features. In this lesson, I’ll show you when it’s appropriate to just use the transform method instead of fit_transform. The example below will use OneHotEncoder, but the principles I’m teaching here apply the same way to all transformers.</p>
+<p>Earlier in this chapter, we used the <code>fit_transform</code> method of <code>OneHotEncoder</code> to encode two categorical features. In this lesson, I’ll show you when it’s appropriate to just use the <code>transform</code> method instead of <code>fit_transform</code>. The example below will use <code>OneHotEncoder</code>, but the principles I’m teaching here apply the same way to all transformers.</p>
 <p>We’ll start by creating a DataFrame of training data with just 1 categorical feature.</p>
-<div id="79247d5c" class="cell" data-execution_count="11">
+<div id="b30b1d79" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>demo_train <span class="op">=</span> pd.DataFrame({<span class="st">'letter'</span>:[<span class="st">'A'</span>, <span class="st">'B'</span>, <span class="st">'C'</span>, <span class="st">'B'</span>]})</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>demo_train</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
@@ -844,8 +844,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Let’s run fit_transform on the entire DataFrame.</p>
-<div id="cd460e1c" class="cell" data-execution_count="12">
+<p>Let’s run <code>fit_transform</code> on the entire DataFrame.</p>
+<div id="521d959b" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ohe.fit_transform(demo_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>array([[1., 0., 0.],
@@ -854,7 +854,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [0., 1., 0.]])</code></pre>
 </div>
 </div>
-<p>Recall that fit_transform is really 2 steps. During the first step, which is fit, the OneHotEncoder learns the 3 categories. During the second step, which is transform, the OneHotEncoder creates the feature matrix using those categories. It outputs a 4 by 3 array, since there are 4 samples and 3 categories.</p>
+<p>Recall that <code>fit_transform</code> is really 2 steps. During the first step, which is <code>fit</code>, the <code>OneHotEncoder</code> learns the 3 categories. During the second step, which is <code>transform</code>, the <code>OneHotEncoder</code> creates the feature matrix using those categories. It outputs a 4 by 3 array, since there are 4 samples and 3 categories.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -870,7 +870,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Now, we’ll create a DataFrame of testing data. It contains the same feature, but that feature includes one less category.</p>
-<div id="9b84b3e9" class="cell" data-execution_count="13">
+<div id="32a467a9" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>demo_test <span class="op">=</span> pd.DataFrame({<span class="st">'letter'</span>:[<span class="st">'A'</span>, <span class="st">'C'</span>, <span class="st">'A'</span>]})</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>demo_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
@@ -903,8 +903,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>What would happen if we ran fit_transform on the testing data?</p>
-<div id="eb72426c" class="cell" data-execution_count="14">
+<p>What would happen if we ran <code>fit_transform</code> on the testing data?</p>
+<div id="93561a65" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ohe.fit_transform(demo_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>array([[1., 0.],
@@ -928,9 +928,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>The solution is to run fit_transform on the training data, and only run transform on the testing data. Let’s take a look at the output arrays.</p>
+<p>The solution is to run <code>fit_transform</code> on the training data, and only run <code>transform</code> on the testing data. Let’s take a look at the output arrays.</p>
 <p>Notice that the categories are represented the same way in both arrays: the first column represents A, the second column represents B, and the third column represents C.</p>
-<div id="3999352d" class="cell" data-execution_count="15">
+<div id="6aed4f9b" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ohe.fit_transform(demo_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
 <pre><code>array([[1., 0., 0.],
@@ -939,7 +939,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [0., 1., 0.]])</code></pre>
 </div>
 </div>
-<div id="3ff42ebc" class="cell" data-execution_count="16">
+<div id="86f8985e" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ohe.transform(demo_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>array([[1., 0., 0.],
@@ -947,8 +947,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [1., 0., 0.]])</code></pre>
 </div>
 </div>
-<p>This happened because we only ran the fit method once, on the training data, and the fit method is when the OneHotEncoder learns the categories.</p>
-<p>Then we ran the transform method twice, both on the training data and the testing data. Because we didn’t run the fit method on the testing data, the categories learned from the training data were applied to both the training and testing data. This is critically important because it means that both our training and testing feature matrices have 3 columns, and those 3 columns mean the same thing.</p>
+<p>This happened because we only ran the <code>fit</code> method once, on the training data, and the <code>fit</code> method is when the <code>OneHotEncoder</code> learns the categories.</p>
+<p>Then we ran the <code>transform</code> method twice, both on the training data and the testing data. Because we didn’t run the <code>fit</code> method on the testing data, the categories learned from the training data were applied to both the training and testing data. This is critically important because it means that both our training and testing feature matrices have 3 columns, and those 3 columns mean the same thing.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -972,12 +972,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>In summary, when using any transformer, you will always use the fit_transform method on the training data and only the transform method on the testing data.</p>
+<p>In summary, when using any transformer, you will always use the <code>fit_transform</code> method on the training data and only the <code>transform</code> method on the testing data.</p>
 </section>
 <section id="sec-3-5" class="level2" data-number="3.5">
 <h2 data-number="3.5" class="anchored" data-anchor-id="sec-3-5"><span class="header-section-number">3.5</span> Q&amp;A: What happens if the testing data includes a new category?</h2>
 <p>In the previous lesson, we created this example DataFrame of training data.</p>
-<div id="c70a0ffa" class="cell" data-execution_count="17">
+<div id="c7b48908" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>demo_train</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <div>
@@ -1013,8 +1013,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>When we passed that DataFrame to fit_transform, the output array included three columns.</p>
-<div id="372b63ee" class="cell" data-execution_count="18">
+<p>When we passed that DataFrame to <code>fit_transform</code>, the output array included three columns.</p>
+<div id="764ba16e" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>ohe.fit_transform(demo_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>array([[1., 0., 0.],
@@ -1023,15 +1023,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [0., 1., 0.]])</code></pre>
 </div>
 </div>
-<p>We know from the categories attribute that those columns represent the categories A, B, and C.</p>
-<div id="1f3d8fc3" class="cell" data-execution_count="19">
+<p>We know from the <code>categories_</code> attribute that those columns represent the categories A, B, and C.</p>
+<div id="27a73b7c" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>ohe.categories_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="19">
 <pre><code>[array(['A', 'B', 'C'], dtype=object)]</code></pre>
 </div>
 </div>
 <p>Now we’ll create a new DataFrame of testing data that includes a category, D, which was not seen in the training data.</p>
-<div id="6426e08d" class="cell" data-execution_count="20">
+<div id="4c71285d" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>demo_test_unknown <span class="op">=</span> pd.DataFrame({<span class="st">'letter'</span>:[<span class="st">'A'</span>, <span class="st">'C'</span>, <span class="st">'D'</span>]})</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>demo_test_unknown</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="20">
@@ -1064,22 +1064,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>If you pass this new DataFrame to the transform method, it will throw an error because it doesn’t know how to represent the D category. It only knows how to represent the A, B, and C categories because those are the ones that were seen by the OneHotEncoder during the fit step.</p>
-<div id="b9299f4f" class="cell" data-execution_count="21">
+<p>If you pass this new DataFrame to the <code>transform</code> method, it will throw an error because it doesn’t know how to represent the D category. It only knows how to represent the A, B, and C categories because those are the ones that were seen by the <code>OneHotEncoder</code> during the <code>fit</code> step.</p>
+<div id="684f750f" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>ohe.transform(demo_test_unknown)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="deceae47" class="cell" data-execution_count="22">
+<div id="1cb5970c" class="cell" data-execution_count="22">
 <div class="cell-output cell-output-stdout">
 <pre><code>ValueError: Found unknown categories ['D'] in column 0 during transform</code></pre>
 </div>
 </div>
 <p>There are two possible solutions to this problem.</p>
-<p>The first solution is to specify the categories manually to the OneHotEncoder when creating an instance.</p>
-<div id="c79790a0" class="cell" data-execution_count="23">
+<p>The first solution is to specify the categories manually to the <code>OneHotEncoder</code> when creating an instance.</p>
+<div id="947f272e" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>ohe <span class="op">=</span> OneHotEncoder(sparse<span class="op">=</span><span class="va">False</span>, categories<span class="op">=</span>[[<span class="st">'A'</span>, <span class="st">'B'</span>, <span class="st">'C'</span>, <span class="st">'D'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Then, when fit_transform is run on the training data, a column is reserved for each of the four categories.</p>
-<div id="6de97a67" class="cell" data-execution_count="24">
+<p>Then, when <code>fit_transform</code> is run on the training data, a column is reserved for each of the four categories.</p>
+<div id="1e5a1671" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>ohe.fit_transform(demo_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="23">
 <pre><code>array([[1., 0., 0., 0.],
@@ -1088,8 +1088,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [0., 1., 0., 0.]])</code></pre>
 </div>
 </div>
-<p>As a result, the transform on the testing data will no longer error.</p>
-<div id="6fb57c6c" class="cell" data-execution_count="25">
+<p>As a result, the <code>transform</code> on the testing data will no longer error.</p>
+<div id="55fa2284" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>ohe.transform(demo_test_unknown)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="24">
 <pre><code>array([[1., 0., 0., 0.],
@@ -1113,12 +1113,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>If you don’t know all possible categories, then the solution is to set the handle_unknown parameter of the OneHotEncoder to ignore, which overrides the default value of error.</p>
-<div id="9f677592" class="cell" data-execution_count="26">
+<p>If you don’t know all possible categories, then the solution is to set the <code>handle_unknown</code> parameter of the <code>OneHotEncoder</code> to <code>'ignore'</code>, which overrides the default value of <code>'error'</code>.</p>
+<div id="cce6c73f" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>ohe <span class="op">=</span> OneHotEncoder(sparse<span class="op">=</span><span class="va">False</span>, handle_unknown<span class="op">=</span><span class="st">'ignore'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Let’s use the fit_transform method on our training data one more time. The output array includes three columns representing A, B, and C.</p>
-<div id="b5cbb0da" class="cell" data-execution_count="27">
+<p>Let’s use the <code>fit_transform</code> method on our training data one more time. The output array includes three columns representing A, B, and C.</p>
+<div id="795a233f" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>ohe.fit_transform(demo_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="26">
 <pre><code>array([[1., 0., 0.],
@@ -1127,8 +1127,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [0., 1., 0.]])</code></pre>
 </div>
 </div>
-<p>Now, when you use the transform method on the testing data, the third sample is encoded as all zeros because D is an unknown category.</p>
-<div id="7451f119" class="cell" data-execution_count="28">
+<p>Now, when you use the <code>transform</code> method on the testing data, the third sample is encoded as all zeros because D is an unknown category.</p>
+<div id="be0aed63" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>ohe.transform(demo_test_unknown)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="27">
 <pre><code>array([[1., 0., 0.],
@@ -1140,9 +1140,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>One limitation of this approach, however, is that all unknown categories will be encoded the same way, which means that an E value in the testing data would also be encoded as all zeros.</p>
 <p>Here’s my overall advice:</p>
 <ol type="1">
-<li>When starting a project, keep the handle_unknown parameter set to its default value of error so that you will know if you are encountering new categories in your testing data.</li>
-<li>If you do find that you’re encountering new categories, but you can determine the full set of categories through research, then define the categories manually when creating the OneHotEncoder instance.</li>
-<li>If you can’t determine the full set of categories, then set the handle_unknown parameter to ignore. However, you should retrain your model as soon as possible using data that includes those new categories.</li>
+<li>When starting a project, keep the <code>handle_unknown</code> parameter set to its default value of <code>'error'</code> so that you will know if you are encountering new categories in your testing data.</li>
+<li>If you do find that you’re encountering new categories, but you can determine the full set of categories through research, then define the categories manually when creating the <code>OneHotEncoder</code> instance.</li>
+<li>If you can’t determine the full set of categories, then set the <code>handle_unknown</code> parameter to <code>'ignore'</code>. However, you should retrain your model as soon as possible using data that includes those new categories.</li>
 </ol>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -1163,7 +1163,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="sec-3-6" class="level2" data-number="3.6">
 <h2 data-number="3.6" class="anchored" data-anchor-id="sec-3-6"><span class="header-section-number">3.6</span> Q&amp;A: Should I drop one of the one-hot encoded categories?</h2>
 <p>Here’s the example training data that we’ve used in the past few lessons.</p>
-<div id="868639ed" class="cell" data-execution_count="29">
+<div id="3aa0238f" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>demo_train</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="28">
 <div>
@@ -1200,7 +1200,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>And here’s the default one-hot encoding of this DataFrame.</p>
-<div id="52e0e6f0" class="cell" data-execution_count="30">
+<div id="7ab06712" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>ohe.fit_transform(demo_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="29">
 <pre><code>array([[1., 0., 0.],
@@ -1224,8 +1224,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>If you want to drop the first column, you can set the OneHotEncoder’s drop parameter to first, though this option only exists in scikit-learn version 0.21 and later. When you run the fit_transform, you can see that the output array contains 1 less column. However, the new encoding retains the same information, since each category is still represented by a unique code: 00 means A, 10 means B, and 01 means C.</p>
-<div id="f0923930" class="cell" data-execution_count="31">
+<p>If you want to drop the first column, you can set the <code>OneHotEncoder</code>’s <code>drop</code> parameter to <code>'first'</code>, though this option only exists in scikit-learn version 0.21 and later. When you run the <code>fit_transform</code>, you can see that the output array contains 1 less column. However, the new encoding retains the same information, since each category is still represented by a unique code: 00 means “A”, 10 means “B”, and 01 means “C”.</p>
+<div id="62a4e44a" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>ohe <span class="op">=</span> OneHotEncoder(sparse<span class="op">=</span><span class="va">False</span>, drop<span class="op">=</span><span class="st">'first'</span>)</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>ohe.fit_transform(demo_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="30">
@@ -1254,8 +1254,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>You’ve now seen that you can drop the first column, but the question is, should you drop the first column? Here’s my advice.</p>
 <p>If you know that perfectly collinear features will cause problems, such as when feeding the resulting data into a neural network or an unregularized regression, then it’s a good idea to drop the first column. However, for most scikit-learn models, perfectly collinear features will not cause any problems, and thus dropping the first column will not benefit the model.</p>
 <p>There are also some significant downsides to dropping the first column that you need to be aware of.</p>
-<p>Number one, dropping the first column is incompatible with ignoring unknown categories, which is the handle_unknown=‘ignore’ option that we saw in the previous lesson, since the dropped category and unknown categories would both be encoded as all zeros. You are allowed to do this starting in scikit-learn 1.0, but I still don’t recommend it.</p>
-<p>Number two, dropping the first column can introduce bias into the model if you standardize your features, such as with StandardScaler, or if you use a regularized model, such as logistic regression, since the dropped category will be exempt from standardization and regularization.</p>
+<p>Number one, dropping the first column is incompatible with ignoring unknown categories, which is the <code>handle_unknown='ignore'</code> option that we saw in the previous lesson, since the dropped category and unknown categories would both be encoded as all zeros. You are allowed to do this starting in scikit-learn 1.0, but I still don’t recommend it.</p>
+<p>Number two, dropping the first column can introduce bias into the model if you standardize your features, such as with <code>StandardScaler</code>, or if you use a regularized model, such as logistic regression, since the dropped category will be exempt from standardization and regularization.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1299,7 +1299,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Let’s take a look at our Titanic DataFrame.</p>
 <p>Pclass, which stands for passenger class, is an ordinal feature. Although it’s already numeric, the numbers 1, 2, and 3 represent the categories 1st class, 2nd class, and 3rd class. It’s considered ordinal data because there is a logical ordering to the categories.</p>
 <p>Our intuition is that there may be a relationship between Pclass values increasing and survival rate decreasing, because passengers in the lower-numbered classes may have gotten priority access to lifeboats.</p>
-<div id="9294edea" class="cell" data-execution_count="32">
+<div id="2c6ee652" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="31">
 <div>
@@ -1486,10 +1486,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Let’s create an example DataFrame to see how to handle ordinal features that are stored as strings.</p>
 <p>In this DataFrame, we have two ordinal features, Class and Size.</p>
-<div id="ae5318d5" class="cell" data-execution_count="36">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>df_ordinal <span class="op">=</span> pd.DataFrame({<span class="st">'Class'</span>: [<span class="st">'third'</span>, <span class="st">'first'</span>, <span class="st">'second'</span>, <span class="st">'third'</span>],</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>                           <span class="st">'Size'</span>: [<span class="st">'S'</span>, <span class="st">'S'</span>, <span class="st">'L'</span>, <span class="st">'XL'</span>]})</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>df_ordinal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="3debb1ab" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>df_ordinal <span class="op">=</span> pd.DataFrame({<span class="st">'Class'</span>: [<span class="st">'third'</span>, <span class="st">'first'</span>, <span class="st">'second'</span>,</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>                                     <span class="st">'third'</span>],</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>                           <span class="st">'Size'</span>: [<span class="st">'S'</span>, <span class="st">'S'</span>, <span class="st">'L'</span>, <span class="st">'XL'</span>]})</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>df_ordinal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="35">
 <div>
 
@@ -1529,16 +1530,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>If you have ordinal data, you should use the OrdinalEncoder class to do the encoding. First, you import it from the preprocessing module. Then, you create an instance of OrdinalEncoder, and when you do so, you define the logical order of the categories.</p>
-<p>We pass a list of lists to the categories parameter, in which the first inner list is the categories for the Class feature, and the second inner list is the categories for the Size feature. I put the two lists in that order because that is the order in which I’ll be passing the features to the fit_transform method.</p>
-<p>One important note is that I included the M category for Size even though it wasn’t present in this DataFrame because I knew that it would occur in the dataset at some point.</p>
-<div id="2af967d4" class="cell" data-execution_count="37">
+<p>If you have ordinal data, you should use the <code>OrdinalEncoder</code> class to do the encoding. First, you import it from the <code>preprocessing</code> module. Then, you create an instance of <code>OrdinalEncoder</code>, and when you do so, you define the logical order of the categories.</p>
+<p>We pass a list of lists to the <code>categories</code> parameter, in which the first inner list is the categories for the Class feature, and the second inner list is the categories for the Size feature. I put the two lists in that order because that is the order in which I’ll be passing the features to the <code>fit_transform</code> method.</p>
+<p>One important note is that I included the “M” category for Size even though it wasn’t present in this DataFrame because I knew that it would occur in the dataset at some point.</p>
+<div id="dde1e4fe" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> OrdinalEncoder</span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>oe <span class="op">=</span> OrdinalEncoder(categories<span class="op">=</span>[[<span class="st">'first'</span>, <span class="st">'second'</span>, <span class="st">'third'</span>],</span>
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>                                [<span class="st">'S'</span>, <span class="st">'M'</span>, <span class="st">'L'</span>, <span class="st">'XL'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Next, we pass the DataFrame to the OrdinalEncoder’s fit_transform method in order to do the encoding. You’ll notice that each input feature became a single feature in the output array.</p>
-<div id="b3cff779" class="cell" data-execution_count="38">
+<p>Next, we pass the DataFrame to the <code>OrdinalEncoder</code>’s <code>fit_transform</code> method in order to do the encoding. You’ll notice that each input feature became a single feature in the output array.</p>
+<div id="bddcec4d" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>oe.fit_transform(df_ordinal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="37">
 <pre><code>array([[2., 0.],
@@ -1547,8 +1548,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [2., 3.]])</code></pre>
 </div>
 </div>
-<p>For the Class feature, first was encoded as 0, second was encoded as 1, and third was encoded as 2.</p>
-<p>For the Size feature, S was encoded as 0, L was encoded as 2, and XL was encoded as 3. And if M appears in the data at some point, it will be encoded as 1.</p>
+<p>For the Class feature, “first” was encoded as 0, “second” was encoded as 1, and “third” was encoded as 2.</p>
+<p>For the Size feature, “S” was encoded as 0, “L” was encoded as 2, and “XL” was encoded as 3. And if “M” appears in the data at some point, it will be encoded as 1.</p>
 <p>Again, we encoded each input feature as a single column so that the model can learn the relationship between the target and an increase or decrease in each feature.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -1579,12 +1580,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Let’s briefly contrast this with the output you would get if you used OneHotEncoder with these same two features.</p>
-<p>OneHotEncoder would create 7 columns in the output array, since Class has 3 categories and Size has 4 categories. These 7 columns contain the same information as the 2 columns output by OrdinalEncoder, but the model would have a comparatively harder time learning from the 7 columns since the information is expressed in a less compact form.</p>
-<div id="e5e9511d" class="cell" data-execution_count="39">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>ohe <span class="op">=</span> OneHotEncoder(sparse<span class="op">=</span><span class="va">False</span>, categories<span class="op">=</span>[[<span class="st">'first'</span>, <span class="st">'second'</span>, <span class="st">'third'</span>],</span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>                                              [<span class="st">'S'</span>, <span class="st">'M'</span>, <span class="st">'L'</span>, <span class="st">'XL'</span>]])</span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>ohe.fit_transform(df_ordinal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Let’s briefly contrast this with the output you would get if you used <code>OneHotEncoder</code> with these same two features.</p>
+<p><code>OneHotEncoder</code> would create 7 columns in the output array, since Class has 3 categories and Size has 4 categories. These 7 columns contain the same information as the 2 columns output by OrdinalEncoder, but the model would have a comparatively harder time learning from the 7 columns since the information is expressed in a less compact form.</p>
+<div id="fa86c186" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>ohe <span class="op">=</span> OneHotEncoder(sparse<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>                    categories<span class="op">=</span>[[<span class="st">'first'</span>, <span class="st">'second'</span>, <span class="st">'third'</span>],</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>                                [<span class="st">'S'</span>, <span class="st">'M'</span>, <span class="st">'L'</span>, <span class="st">'XL'</span>]])</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>ohe.fit_transform(df_ordinal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="38">
 <pre><code>array([[0., 0., 1., 1., 0., 0., 0.],
        [1., 0., 0., 1., 0., 0., 0.],
@@ -1595,8 +1597,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Here’s a summary of my advice on this topic:</p>
 <ol type="1">
 <li>If you have an ordinal feature that’s already encoded numerically, then leave it as-is.</li>
-<li>If you have an ordinal feature that’s stored as strings, then encode it using OrdinalEncoder.</li>
-<li>If you have a nominal feature, then encode it using OneHotEncoder.</li>
+<li>If you have an ordinal feature that’s stored as strings, then encode it using <code>OrdinalEncoder</code>.</li>
+<li>If you have a nominal feature, then encode it using <code>OneHotEncoder</code>.</li>
 </ol>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -1614,13 +1616,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>In chapter 17, we’ll explore this topic further and see if there are cases in which you should diverge from this advice.</p>
-<p>One final note about OrdinalEncoder is that unlike OneHotEncoder, it does not allow for new categories in the testing data that were not seen during training. However, that functionality is available beginning in scikit-learn version 0.24 using a handle_unknown parameter.</p>
+<p>One final note about <code>OrdinalEncoder</code> is that unlike <code>OneHotEncoder</code>, it does not allow for new categories in the testing data that were not seen during training. However, that functionality is available beginning in scikit-learn version 0.24 using a <code>handle_unknown</code> parameter.</p>
 </section>
 <section id="qa-whats-the-difference-between-ordinalencoder-and-labelencoder" class="level2" data-number="3.8">
 <h2 data-number="3.8" class="anchored" data-anchor-id="qa-whats-the-difference-between-ordinalencoder-and-labelencoder"><span class="header-section-number">3.8</span> Q&amp;A: What’s the difference between OrdinalEncoder and LabelEncoder?</h2>
-<p>There are many similarities between the OrdinalEncoder and LabelEncoder classes, so in this lesson I’ll explain how they’re different and why you should be using OrdinalEncoder, not LabelEncoder.</p>
-<p>The first main difference is that OrdinalEncoder allows you to define the order of the categories, whereas LabelEncoder does not. LabelEncoder simply uses the alphabetical order of the values you pass to it to determine which value to encode as 0, which value to encode as 1, and so on.</p>
-<p>The second main difference is that OrdinalEncoder can be used to encode multiple features at once, whereas LabelEncoder can only encode one column of data at once.</p>
+<p>There are many similarities between the <code>OrdinalEncoder</code> and <code>LabelEncoder</code> classes, so in this lesson I’ll explain how they’re different and why you should be using <code>OrdinalEncoder</code>, not <code>LabelEncoder</code>.</p>
+<p>The first main difference is that <code>OrdinalEncoder</code> allows you to define the order of the categories, whereas <code>LabelEncoder</code> does not. <code>LabelEncoder</code> simply uses the alphabetical order of the values you pass to it to determine which value to encode as 0, which value to encode as 1, and so on.</p>
+<p>The second main difference is that <code>OrdinalEncoder</code> can be used to encode multiple features at once, whereas <code>LabelEncoder</code> can only encode one column of data at once.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1651,10 +1653,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Because of these differences, OrdinalEncoder is much better suited than LabelEncoder for encoding ordinal features. And in fact, LabelEncoder is only intended for the encoding of class labels, hence its name.</p>
-<p>You might be asking why LabelEncoder even exists, given its limitations. There are two reasons.</p>
-<p>First, in older versions of scikit-learn, some classification models were not able to handle string-based labels. LabelEncoder was used to encode those strings as integers so that they could be passed to the model. That limitation was removed a few years ago, and so all scikit-learn classifiers can now handle string-based labels. Therefore, you should never need to use LabelEncoder for encoding your class labels.</p>
-<p>Second, also in order versions of scikit-learn, OneHotEncoder did not accept strings as input. Thus if you had categorical data stored as strings, you actually had to use LabelEncoder to encode the strings as integers before passing them to the OneHotEncoder. Again, that limitation was removed a few years ago, and so you can pass string-based categorical data directly to OneHotEncoder.</p>
+<p>Because of these differences, <code>OrdinalEncoder</code> is much better suited than <code>LabelEncoder</code> for encoding ordinal features. And in fact, <code>LabelEncoder</code> is only intended for the encoding of class labels, hence its name.</p>
+<p>You might be asking why <code>LabelEncoder</code> even exists, given its limitations. There are two reasons.</p>
+<p>First, in older versions of scikit-learn, some classification models were not able to handle string-based labels. <code>LabelEncoder</code> was used to encode those strings as integers so that they could be passed to the model. That limitation was removed a few years ago, and so all scikit-learn classifiers can now handle string-based labels. Therefore, you should never need to use <code>LabelEncoder</code> for encoding your class labels.</p>
+<p>Second, also in order versions of scikit-learn, <code>OneHotEncoder</code> did not accept strings as input. Thus if you had categorical data stored as strings, you actually had to use <code>LabelEncoder</code> to encode the strings as integers before passing them to the <code>OneHotEncoder</code>. Again, that limitation was removed a few years ago, and so you can pass string-based categorical data directly to <code>OneHotEncoder</code>.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1669,12 +1671,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Because of this legacy from older versions of scikit-learn, many people are familiar with LabelEncoder and thus use it to encode features. However, the best practice is to use OrdinalEncoder to encode ordinal features. In fact, it’s rare that you will ever need to use LabelEncoder, which is why I’m not using it in this book.</p>
+<p>Because of this legacy from older versions of scikit-learn, many people are familiar with <code>LabelEncoder</code> and thus use it to encode features. However, the best practice is to use <code>OrdinalEncoder</code> to encode ordinal features. In fact, it’s rare that you will ever need to use <code>LabelEncoder</code>, which is why I’m not using it in this book.</p>
 </section>
 <section id="qa-should-i-encode-numeric-features-as-ordinal-features" class="level2" data-number="3.9">
 <h2 data-number="3.9" class="anchored" data-anchor-id="qa-should-i-encode-numeric-features-as-ordinal-features"><span class="header-section-number">3.9</span> Q&amp;A: Should I encode numeric features as ordinal features?</h2>
 <p>Normally, when you have a continuous numeric feature such as Fare, you pass that feature directly to your Machine Learning model.</p>
-<div id="e3bef392" class="cell" data-execution_count="40">
+<div id="05cc02c3" class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">'Fare'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="39">
 <div>
@@ -1734,17 +1736,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>However, one strategy that is sometimes used with numeric features is to “discretize” or “bin” them into categorical features. In scikit-learn, we can do this using KBinsDiscretizer.</p>
-<div id="a7ea71c5" class="cell" data-execution_count="41">
+<p>However, one strategy that is sometimes used with numeric features is to “discretize” or “bin” them into categorical features. In scikit-learn, we can do this using <code>KBinsDiscretizer</code>.</p>
+<div id="56425c50" class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> KBinsDiscretizer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>When creating an instance of KBinsDiscretizer, you define the number of bins, the binning strategy, and the method used for encoding the result.</p>
-<div id="1575461e" class="cell" data-execution_count="42">
+<p>When creating an instance of <code>KBinsDiscretizer</code>, you define the number of bins, the binning strategy, and the method used for encoding the result.</p>
+<div id="550344f1" class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>kb <span class="op">=</span> KBinsDiscretizer(n_bins<span class="op">=</span><span class="dv">3</span>, strategy<span class="op">=</span><span class="st">'quantile'</span>, encode<span class="op">=</span><span class="st">'ordinal'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Here’s the output when we pass the Fare feature to the fit_transform method.</p>
+<p>Here’s the output when we pass the Fare feature to the <code>fit_transform</code> method.</p>
 <p>Because we specified 3 bins, every sample has been assigned to bin 0 or 1 or 2. The smallest values were assigned to bin 0, the largest values were assigned to bin 2, and the values in between were assigned to bin 1. Thus, we’ve taken a continuous numeric feature and encoded it as an ordinal feature, and this ordinal feature could be passed to the model in place of the numeric feature.</p>
-<div id="c78a9a6c" class="cell" data-execution_count="43">
+<div id="9e3d26a7" class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>kb.fit_transform(df[[<span class="st">'Fare'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="42">
 <pre><code>array([[0.],
@@ -1762,7 +1764,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The obvious follow-up question is: Should we discretize our numeric features? Theoretically, discretization can benefit linear models by helping them to learn non-linear trends. However, my general recommendation is to not use discretization, for three main reasons.</p>
 <p>First, discretization removes all nuance from the data, which makes it harder for a model to learn the actual trends that are present in the data.</p>
 <p>Second, discretization reduces the variation in the data, which makes it easier to find trends that don’t actually exist.</p>
-<p>Third, any possible benefits of discretization are highly dependent on the parameters used with KBinsDiscretizer. Making those decisions by hand creates a risk of overfitting the training data, and making those decisions during a tuning process adds both complexity and processing time, and so neither of those options is particularly attractive to me.</p>
+<p>Third, any possible benefits of discretization are highly dependent on the parameters used with <code>KBinsDiscretizer</code>. Making those decisions by hand creates a risk of overfitting the training data, and making those decisions during a tuning process adds both complexity and processing time, and so neither of those options is particularly attractive to me.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
