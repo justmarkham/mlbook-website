@@ -355,7 +355,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Let’s see an example in the Titanic dataset. We want to use Age as a feature, but note that it has a missing value, encoded as “NaN”. This stands for “not a number”, and it’s how missing values are typically encoded in a pandas DataFrame.</p>
-<div id="f11c93dc" class="cell" data-execution_count="2">
+<div id="184d1903" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <div>
@@ -541,8 +541,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>To start our exploration of this topic, let’s see what happens if we try to add the Age column to our model.</p>
-<p>First, we’ll add Age to the cols list and use that to modify the X DataFrame. Again, notice the missing value in Age.</p>
-<div id="78621842" class="cell" data-execution_count="6">
+<p>First, we’ll add Age to the <code>cols</code> list and use that to modify the <code>X</code> DataFrame. Again, notice the missing value in Age.</p>
+<div id="57b7fd17" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [<span class="st">'Parch'</span>, <span class="st">'Fare'</span>, <span class="st">'Embarked'</span>, <span class="st">'Sex'</span>, <span class="st">'Name'</span>, <span class="st">'Age'</span>]</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[cols]</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -659,24 +659,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Then, we’ll add Age to the ColumnTransformer as a passthrough column.</p>
-<div id="80040b8e" class="cell" data-execution_count="10">
+<p>Then, we’ll add Age to the <code>ColumnTransformer</code> as a passthrough column.</p>
+<div id="3fb718dd" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    (ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    (vect, <span class="st">'Name'</span>),</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'passthrough'</span>, [<span class="st">'Parch'</span>, <span class="st">'Fare'</span>, <span class="st">'Age'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Then, we’ll update the Pipeline to include the modified ColumnTransformer.</p>
-<div id="c1425ea7" class="cell" data-execution_count="11">
+<p>Then, we’ll update the <code>Pipeline</code> to include the modified <code>ColumnTransformer</code>.</p>
+<div id="aeb39488" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> make_pipeline(ct, logreg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Finally, we’ll attempt to fit the Pipeline, but it throws an error due to the presence of a missing value.</p>
-<div id="3250a5a9" class="cell" data-execution_count="12">
+<p>Finally, we’ll attempt to fit the <code>Pipeline</code>, but it throws an error due to the presence of a missing value.</p>
+<div id="6cd3d928" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pipe.fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="3dcd5f9e" class="cell" data-execution_count="13">
+<div id="25952a8e" class="cell" data-execution_count="13">
 <div class="cell-output cell-output-stdout">
-<pre><code>ValueError: Input contains NaN, infinity or a value too large for dtype('float64').</code></pre>
+<pre><code>ValueError: Input contains NaN</code></pre>
 </div>
 </div>
 <p>scikit-learn models generally don’t accept data with missing values, with the exception of histogram-based gradient boosting trees. As such, we’ll need to figure out a way to handle the missing value if we want to include Age in our model.</p>
@@ -684,8 +684,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="three-ways-to-handle-missing-values" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="three-ways-to-handle-missing-values"><span class="header-section-number">7.2</span> Three ways to handle missing values</h2>
 <p>Let’s talk about three different ways we can handle missing values in our dataset.</p>
-<p>The first way is to drop any rows from the DataFrame that have missing values. We can use the dropna method in pandas to do this, and you’ll notice that row 5 is now gone. Note that you would also need to drop the same row from y.</p>
-<div id="cb6bc400" class="cell" data-execution_count="14">
+<p>The first way is to drop any rows from the DataFrame that have missing values. We can use the <code>dropna</code> method in pandas to do this, and you’ll notice that row 5 is now gone. Note that you would also need to drop the same row from <code>y</code>.</p>
+<div id="27b6cf89" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>X.dropna()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <div>
@@ -812,8 +812,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>A second option for handling missing values is to drop any columns that have missing values. Again, we can use the dropna method to do this if we set the axis parameter to “columns”. You can see that row 5 is back, but the Age column is now gone.</p>
-<div id="8f4f03ff" class="cell" data-execution_count="18">
+<p>A second option for handling missing values is to drop any columns that have missing values. Again, we can use the <code>dropna</code> method to do this if we set the <code>axis</code> parameter to <code>'columns'</code>. You can see that row 5 is back, but the Age column is now gone.</p>
+<div id="03fc72b8" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>X.dropna(axis<span class="op">=</span><span class="st">'columns'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <div>
@@ -979,14 +979,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="missing-value-imputation" class="level2" data-number="7.3">
 <h2 data-number="7.3" class="anchored" data-anchor-id="missing-value-imputation"><span class="header-section-number">7.3</span> Missing value imputation</h2>
-<p>In this lesson, we’re going to perform missing value imputation on the Age column so that we can include it in our model. There are three different imputers that we can use in scikit-learn, but we’re going to start with SimpleImputer and I’ll show you the others later in the chapter.</p>
-<p>First, we’ll import SimpleImputer from the impute module and create an instance called imp.</p>
-<div id="a0749c0e" class="cell" data-execution_count="22">
+<p>In this lesson, we’re going to perform missing value imputation on the Age column so that we can include it in our model. There are three different imputers that we can use in scikit-learn, but we’re going to start with <code>SimpleImputer</code> and I’ll show you the others later in the chapter.</p>
+<p>First, we’ll import <code>SimpleImputer</code> from the <code>impute</code> module and create an instance called <code>imp</code>.</p>
+<div id="50e43bc5" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>imp <span class="op">=</span> SimpleImputer()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Then, we’ll pass the Age column to the fit_transform method to perform the imputation. Note that SimpleImputer, like most transformers, requires 2-dimensional input, which is why there are double brackets around Age.</p>
-<div id="9de12c2e" class="cell" data-execution_count="23">
+<p>Then, we’ll pass the Age column to the <code>fit_transform</code> method to perform the imputation. Note that <code>SimpleImputer</code>, like most transformers, requires 2-dimensional input, which is why there are double brackets around Age.</p>
+<div id="158dfa79" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>imp.fit_transform(X[[<span class="st">'Age'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>array([[22.        ],
@@ -1001,7 +1001,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [14.        ]])</code></pre>
 </div>
 </div>
-<p>By default, SimpleImputer fills any missing values with the mean of the non-missing values, which is 28.11 in this case. It also supports other imputation strategies, namely the median value, the most frequent value, and a user-defined value. Note that all of these strategies can be applied to numeric features, but only the most frequent and user-defined strategies can be applied to categorical features.</p>
+<p>By default, <code>SimpleImputer</code> fills any missing values with the mean of the non-missing values, which is 28.11 in this case. It also supports other imputation strategies, namely the median value, the most frequent value, and a user-defined value. Note that all of these strategies can be applied to numeric features, but only the most frequent and user-defined strategies can be applied to categorical features.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1018,35 +1018,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>In order to confirm what value was imputed, we can examine the statistics_ attribute, which was learned from the data during the fit step.</p>
-<div id="b79a238d" class="cell" data-execution_count="24">
+<p>In order to confirm what value was imputed, we can examine the <code>statistics_</code> attribute, which was learned from the data during the fit step.</p>
+<div id="62cbc13d" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>imp.statistics_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="23">
 <pre><code>array([28.11111111])</code></pre>
 </div>
 </div>
-<p>Now that we know how SimpleImputer works, we’ll update the ColumnTransformer to include imputation of the Age column. As a reminder, brackets are required around Age because SimpleImputer expects 2-dimensional input, whereas brackets are not allowed around Name because CountVectorizer expects 1-dimensional input.</p>
-<div id="92129e2d" class="cell" data-execution_count="25">
+<p>Now that we know how <code>SimpleImputer</code> works, we’ll update the <code>ColumnTransformer</code> to include imputation of the Age column. As a reminder, brackets are required around Age because <code>SimpleImputer</code> expects 2-dimensional input, whereas brackets are not allowed around Name because <code>CountVectorizer</code> expects 1-dimensional input.</p>
+<div id="8b70f5b5" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    (ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    (vect, <span class="st">'Name'</span>),</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    (imp, [<span class="st">'Age'</span>]),</span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'passthrough'</span>, [<span class="st">'Parch'</span>, <span class="st">'Fare'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Now we’ll run the fit_transform method, and you can see that there are now 48 columns in the feature matrix, whereas in the last chapter there were 47.</p>
-<div id="1b8ea617" class="cell" data-execution_count="26">
+<p>Now we’ll run the <code>fit_transform</code> method, and you can see that there are now 48 columns in the feature matrix, whereas in the last chapter there were 47.</p>
+<div id="e7b629c5" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>&lt;10x48 sparse matrix of type '&lt;class 'numpy.float64'&gt;'
     with 88 stored elements in Compressed Sparse Row format&gt;</code></pre>
 </div>
 </div>
-<p>Next, we’ll update the Pipeline to include the revised ColumnTransformer, and fit it on X and y. There was no error this time because the one missing value in X was imputed.</p>
-<div id="1a4f10a5" class="cell" data-execution_count="27">
+<p>Next, we’ll update the <code>Pipeline</code> to include the revised <code>ColumnTransformer</code>, and fit it on <code>X</code> and <code>y</code>. There was no error this time because the one missing value in <code>X</code> was imputed.</p>
+<div id="94659ed0" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> make_pipeline(ct, logreg)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>pipe.fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="26">
-<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="7e4dc458-47a6-4e05-99f3-b81fea3a333d" type="checkbox"><label class="sk-toggleable__label" for="7e4dc458-47a6-4e05-99f3-b81fea3a333d">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('columntransformer',
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ddd69451-d270-42b2-b220-c20c16bd42d2" type="checkbox"><label class="sk-toggleable__label" for="ddd69451-d270-42b2-b220-c20c16bd42d2">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('columntransformer',
                  ColumnTransformer(transformers=[('onehotencoder',
                                                   OneHotEncoder(),
                                                   ['Embarked', 'Sex']),
@@ -1057,22 +1057,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                                                  ('passthrough', 'passthrough',
                                                   ['Parch', 'Fare'])])),
                 ('logisticregression',
-                 LogisticRegression(random_state=1, solver='liblinear'))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="46d83779-9945-4221-ace1-2b8d8b5cdc51" type="checkbox"><label class="sk-toggleable__label" for="46d83779-9945-4221-ace1-2b8d8b5cdc51">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('onehotencoder', OneHotEncoder(),
+                 LogisticRegression(random_state=1, solver='liblinear'))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="74b0c713-f08b-4c79-b8c1-0b518faa71f0" type="checkbox"><label class="sk-toggleable__label" for="74b0c713-f08b-4c79-b8c1-0b518faa71f0">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('onehotencoder', OneHotEncoder(),
                                  ['Embarked', 'Sex']),
                                 ('countvectorizer', CountVectorizer(), 'Name'),
                                 ('simpleimputer', SimpleImputer(), ['Age']),
                                 ('passthrough', 'passthrough',
-                                 ['Parch', 'Fare'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="63f5802d-6560-4ed8-89ed-e484f4bf41e4" type="checkbox"><label class="sk-toggleable__label" for="63f5802d-6560-4ed8-89ed-e484f4bf41e4">onehotencoder</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="1975047a-2177-43a5-9a5a-0c5ef54d9406" type="checkbox"><label class="sk-toggleable__label" for="1975047a-2177-43a5-9a5a-0c5ef54d9406">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ef5d77d6-1aef-4fbc-8785-bc0554f3ed74" type="checkbox"><label class="sk-toggleable__label" for="ef5d77d6-1aef-4fbc-8785-bc0554f3ed74">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a415ec82-6ddf-4f2e-a297-72f13836b1ab" type="checkbox"><label class="sk-toggleable__label" for="a415ec82-6ddf-4f2e-a297-72f13836b1ab">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="65ddbeeb-f5b3-489c-bc5f-dbc47678389a" type="checkbox"><label class="sk-toggleable__label" for="65ddbeeb-f5b3-489c-bc5f-dbc47678389a">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="29ee30d9-5b2a-4518-b2e3-3349f4e23c5c" type="checkbox"><label class="sk-toggleable__label" for="29ee30d9-5b2a-4518-b2e3-3349f4e23c5c">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="1c37b22f-8142-45d2-99ac-c144381c02ed" type="checkbox"><label class="sk-toggleable__label" for="1c37b22f-8142-45d2-99ac-c144381c02ed">passthrough</label><div class="sk-toggleable__content"><pre>['Parch', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a6c3d5c1-eb3d-4e7d-97b3-f77b26bb0a3b" type="checkbox"><label class="sk-toggleable__label" for="a6c3d5c1-eb3d-4e7d-97b3-f77b26bb0a3b">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="16caf342-71ae-420c-89bf-8b1ba163dd5f" type="checkbox"><label class="sk-toggleable__label" for="16caf342-71ae-420c-89bf-8b1ba163dd5f">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(random_state=1, solver='liblinear')</pre></div></div></div></div></div></div></div>
+                                 ['Parch', 'Fare'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="cc7acbb2-b526-4b8a-aab0-e1a279945ac5" type="checkbox"><label class="sk-toggleable__label" for="cc7acbb2-b526-4b8a-aab0-e1a279945ac5">onehotencoder</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="26362a3d-7e99-4042-a4c8-8d82aa087a8d" type="checkbox"><label class="sk-toggleable__label" for="26362a3d-7e99-4042-a4c8-8d82aa087a8d">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b2f4f949-4b63-4064-b9b8-20605c68ae40" type="checkbox"><label class="sk-toggleable__label" for="b2f4f949-4b63-4064-b9b8-20605c68ae40">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="c458d577-c314-4081-89e2-b1f489ecd4f7" type="checkbox"><label class="sk-toggleable__label" for="c458d577-c314-4081-89e2-b1f489ecd4f7">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="5c8a92e7-b579-4134-8f22-7cc3009853e9" type="checkbox"><label class="sk-toggleable__label" for="5c8a92e7-b579-4134-8f22-7cc3009853e9">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6806adc6-5e11-405d-9fab-34caa976420a" type="checkbox"><label class="sk-toggleable__label" for="6806adc6-5e11-405d-9fab-34caa976420a">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="89320143-b2d5-4b6c-99b5-93a876e1cb3c" type="checkbox"><label class="sk-toggleable__label" for="89320143-b2d5-4b6c-99b5-93a876e1cb3c">passthrough</label><div class="sk-toggleable__content"><pre>['Parch', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="dce28932-ec46-4d78-863b-9f665bcf06d3" type="checkbox"><label class="sk-toggleable__label" for="dce28932-ec46-4d78-863b-9f665bcf06d3">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="88add787-e4f5-48d4-88e5-99cc920b32fe" type="checkbox"><label class="sk-toggleable__label" for="88add787-e4f5-48d4-88e5-99cc920b32fe">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(random_state=1, solver='liblinear')</pre></div></div></div></div></div></div></div>
 </div>
 </div>
-<p>Before we make predictions, we’re going to examine the Pipeline to confirm the imputation value for Age that was learned from X:</p>
+<p>Before we make predictions, we’re going to examine the <code>Pipeline</code> to confirm the imputation value for Age that was learned from <code>X</code>:</p>
 <ul>
-<li>First, we access the columntransformer step of the Pipeline using the named_steps attribute.</li>
-<li>Then, from that Pipeline step, we access the simpleimputer transformer using the named_transformers_ attribute.</li>
-<li>Finally, from that transformer, we access the statistics_ attribute.</li>
+<li>First, we access the <code>columntransformer</code> step of the <code>Pipeline</code> using the <code>named_steps</code> attribute.</li>
+<li>Then, from that <code>Pipeline</code> step, we access the <code>simpleimputer</code> transformer using the <code>named_transformers_</code> attribute.</li>
+<li>Finally, from that transformer, we access the <code>statistics_</code> attribute.</li>
 </ul>
 <p>This confirms what we saw previously, which is that the imputer learned a value of 28.11 from the Age column.</p>
-<div id="14f2c203" class="cell" data-execution_count="29">
+<div id="294fe2db" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>(pipe.named_steps[<span class="st">'columntransformer'</span>]</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>     .named_transformers_[<span class="st">'simpleimputer'</span>]</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>     .statistics_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1080,8 +1080,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>array([28.11111111])</code></pre>
 </div>
 </div>
-<p>Next, we’ll update the X_new DataFrame to use the same columns as X.</p>
-<div id="fb8859ba" class="cell" data-execution_count="30">
+<p>Next, we’ll update the <code>X_new</code> DataFrame to use the same columns as <code>X</code>.</p>
+<div id="c99a42fe" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>X_new <span class="op">=</span> df_new[cols]</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>X_new</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="28">
@@ -1197,15 +1197,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Finally, we’ll use the fitted Pipeline to make predictions for X_new.</p>
-<div id="a33beee4" class="cell" data-execution_count="34">
+<p>Finally, we’ll use the fitted <code>Pipeline</code> to make predictions for <code>X_new</code>.</p>
+<div id="1c6c6aef" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pipe.predict(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="32">
 <pre><code>array([0, 0, 0, 0, 1, 0, 1, 0, 1, 0])</code></pre>
 </div>
 </div>
-<p>With respect to imputation, it’s worth talking about exactly what happens during the predict step. Since X_new didn’t have any missing values in the Age column, then nothing got imputed during prediction.</p>
-<p>But let’s pretend that X_new did have a missing value in Age. If that was the case, then the imputed value would have been the mean of Age in X, which is 28.11, not the mean of Age in X_new. This is critically important because a transformer is only allowed to learn from the training data, and then apply what it learned to both the training and new data.</p>
+<p>With respect to imputation, it’s worth talking about exactly what happens during the predict step. Since <code>X_new</code> didn’t have any missing values in the Age column, then nothing got imputed during prediction.</p>
+<p>But let’s pretend that <code>X_new</code> did have a missing value in Age. If that was the case, then the imputed value would have been the mean of Age in <code>X</code>, which is 28.11, not the mean of Age in <code>X_new</code>. This is critically important because a transformer is only allowed to learn from the training data, and then apply what it learned to both the training and new data.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1214,13 +1214,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="callout-body-container">
 <p><strong>What would have been imputed for Age in X_new?</strong></p>
 <ul>
-<li>Imputed value would be the mean of Age in <strong>X</strong>, not the mean of Age in <strong>X_new</strong></li>
+<li>Imputed value would be the mean of Age in X, not the mean of Age in X_new</li>
 <li>Transformer is only allowed to learn from the training data</li>
 </ul>
 </div>
 </div>
 </div>
-<p>As we’ve already seen in this book, the OneHotEncoder learns its categories from the training data, the CountVectorizer learns its vocabulary from the training data, and similarly, the SimpleImputer learns its imputation value from the training data. This is one of the main reasons why we run fit_transform on the training data but transform only on the new data.</p>
+<p>As we’ve already seen in this book, the <code>OneHotEncoder</code> learns its categories from the training data, the <code>CountVectorizer</code> learns its vocabulary from the training data, and similarly, the <code>SimpleImputer</code> learns its imputation value from the training data. This is one of the main reasons why we run <code>fit_transform</code> on the training data but <code>transform</code> only on the new data.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1236,17 +1236,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>If you’re struggling with this concept, here’s another way of looking at it that might be helpful to you. Pretend for a second that X_new only contained a single sample, and that sample had a missing Age value. If you passed that X_new to the predict method, it’s clear that scikit-learn has to look to the training data for the imputation value, since there would be no other Age values in X_new for it to examine.</p>
+<p>If you’re struggling with this concept, here’s another way of looking at it that might be helpful to you. Pretend for a second that <code>X_new</code> only contained a single sample, and that sample had a missing Age value. If you passed that <code>X_new</code> to the <code>predict</code> method, it’s clear that scikit-learn has to look to the training data for the imputation value, since there would be no other Age values in <code>X_new</code> for it to examine.</p>
 </section>
 <section id="sec-7-4" class="level2" data-number="7.4">
 <h2 data-number="7.4" class="anchored" data-anchor-id="sec-7-4"><span class="header-section-number">7.4</span> Using “missingness” as a feature</h2>
 <p>When imputing missing values, it’s also possible to use “missingness” as a feature of its own.</p>
-<p>Starting in scikit-learn version 0.21, we can set the add_indicator parameter to True when creating a SimpleImputer.</p>
-<div id="b0cefcc7" class="cell" data-execution_count="35">
+<p>Starting in scikit-learn version 0.21, we can set the <code>add_indicator</code> parameter to <code>True</code> when creating a <code>SimpleImputer</code>.</p>
+<div id="7dd9c660" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>imp_indicator <span class="op">=</span> SimpleImputer(add_indicator<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Then when we use fit_transform, a separate column known as a “missing indicator” is included in the output matrix, and it indicates the presence of missing values.</p>
-<div id="ff6eed3f" class="cell" data-execution_count="36">
+<p>Then when we use <code>fit_transform</code>, a separate column known as a “missing indicator” is included in the output matrix, and it indicates the presence of missing values.</p>
+<div id="a7476e58" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>imp_indicator.fit_transform(X[[<span class="st">'Age'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="34">
 <pre><code>array([[22.        ,  0.        ],
@@ -1277,14 +1277,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>For example, if Age was missing for some samples because older passengers declined to give their ages, and older passengers are more likely to have survived, then there is a relationship between Age being missing and the likelihood of survival. Thus the missingness itself can be a useful feature, and we can include that feature in the model using a missing indicator.</p>
-<p>We’re not going to modify our Pipeline to include a missing indicator at this time, but we’ll return to this concept later in the book.</p>
+<p>We’re not going to modify our <code>Pipeline</code> to include a missing indicator at this time, but we’ll return to this concept later in the book.</p>
 </section>
 <section id="qa-how-do-i-perform-multivariate-imputation" class="level2" data-number="7.5">
 <h2 data-number="7.5" class="anchored" data-anchor-id="qa-how-do-i-perform-multivariate-imputation"><span class="header-section-number">7.5</span> Q&amp;A: How do I perform multivariate imputation?</h2>
-<p>So far in this chapter, we’ve used SimpleImputer for imputation. SimpleImputer does univariate imputation, which means that it only looks at the feature being imputed when deciding what values to impute. Thus when imputing missing values for Age, SimpleImputer only considers the values in the Age column.</p>
+<p>So far in this chapter, we’ve used <code>SimpleImputer</code> for imputation. <code>SimpleImputer</code> does univariate imputation, which means that it only looks at the feature being imputed when deciding what values to impute. Thus when imputing missing values for Age, <code>SimpleImputer</code> only considers the values in the Age column.</p>
 <p>However, there’s another type of imputation called multivariate imputation. The intuition of multivariate imputation is that it can be useful to take other features into account when deciding what value to impute.</p>
-<p>For example, maybe a high Parch and a low Fare is common for kids. Thus if Age is missing for a row which has a high Parch and a low Fare, then you should impute a low Age rather than the mean of Age, which is what SimpleImputer would do.</p>
-<p>Multivariate imputation is available in scikit-learn via the IterativeImputer and KNNImputer classes, and in this lesson I’ll explain how both of them work.</p>
+<p>For example, maybe a high Parch and a low Fare is common for kids. Thus if Age is missing for a row which has a high Parch and a low Fare, then you should impute a low Age rather than the mean of Age, which is what <code>SimpleImputer</code> would do.</p>
+<p>Multivariate imputation is available in scikit-learn via the <code>IterativeImputer</code> and <code>KNNImputer</code> classes, and in this lesson I’ll explain how both of them work.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1306,13 +1306,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>IterativeImputer was introduced in scikit-learn version 0.21. It’s considered experimental, which means that the API and predictions may change in future versions. As such, scikit-learn will only allow you to import the IterativeImputer class from the impute module if you first import the enable_iterative_imputer function from the experimental module. This is scikit-learn’s way of requiring you to acknowledge that you’re using experimental functionality.</p>
-<div id="a1c451a1" class="cell" data-execution_count="37">
+<p><code>IterativeImputer</code> was introduced in scikit-learn version 0.21. It’s considered experimental, which means that the API and predictions may change in future versions. As such, scikit-learn will only allow you to import the <code>IterativeImputer</code> class from the <code>impute</code> module if you first import the <code>enable_iterative_imputer</code> function from the <code>experimental</code> module. This is scikit-learn’s way of requiring you to acknowledge that you’re using experimental functionality.</p>
+<div id="1004fae2" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.experimental <span class="im">import</span> enable_iterative_imputer</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> IterativeImputer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Then, we’ll create an instance of IterativeImputer called imp_iterative, and pass three columns from X to its fit_transform method: Parch, Fare, and Age. Parch and Fare don’t have any missing values, and Age has 1 missing value. You can see that 24.24 was imputed for the missing value of Age.</p>
-<div id="78a32f6c" class="cell" data-execution_count="38">
+<p>Then, we’ll create an instance of <code>IterativeImputer</code> called <code>imp_iterative</code>, and pass three columns from <code>X</code> to its <code>fit_transform</code> method: Parch, Fare, and Age. Parch and Fare don’t have any missing values, and Age has 1 missing value. You can see that 24.24 was imputed for the missing value of Age.</p>
+<div id="59cef7ad" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>imp_iterative <span class="op">=</span> IterativeImputer()</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>imp_iterative.fit_transform(X[[<span class="st">'Parch'</span>, <span class="st">'Fare'</span>, <span class="st">'Age'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="36">
@@ -1328,12 +1328,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [ 0.        , 30.0708    , 14.        ]])</code></pre>
 </div>
 </div>
-<p>Here’s how the IterativeImputer works:</p>
+<p>Here’s how the <code>IterativeImputer</code> works:</p>
 <ol type="1">
 <li>For the 9 rows in which Age is not missing, scikit-learn trains a regression model in which Parch and Fare are the features and Age is the target.</li>
 <li>For the 1 row in which Age is missing, scikit-learn passes the Parch and Fare values to the trained model. The model makes a prediction for Age, and that value is used for imputation.</li>
 </ol>
-<p>In summary, IterativeImputer turned this into a regression problem with 2 features, 9 samples of training data, and 1 sample of new data.</p>
+<p>In summary, <code>IterativeImputer</code> turned this into a regression problem with 2 features, 9 samples of training data, and 1 sample of new data.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1348,12 +1348,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>There are four things I want to comment on about IterativeImputer:</p>
+<p>There are four things I want to comment on about <code>IterativeImputer</code>:</p>
 <ul>
-<li>First, it only works with numerical features. This is unlike SimpleImputer, which also works with categorical features.</li>
-<li>Second, you have to decide which features to pass to IterativeImputer. My advice is to use features that you believe are highly correlated with one another.</li>
-<li>Third, you are allowed to pass it multiple features with missing values. In other words, Parch, Fare, and Age could all have missing values. IterativeImputer will just do three different regression problems, and each column will take a turn being the target.</li>
-<li>Fourth, you can actually choose which regression model IterativeImputer uses for the regression problem. By default, it uses Bayesian ridge regression.</li>
+<li>First, it only works with numerical features. This is unlike <code>SimpleImputer</code>, which also works with categorical features.</li>
+<li>Second, you have to decide which features to pass to <code>IterativeImputer</code>. My advice is to use features that you believe are highly correlated with one another.</li>
+<li>Third, you are allowed to pass it multiple features with missing values. In other words, Parch, Fare, and Age could all have missing values. <code>IterativeImputer</code> will just do three different regression problems, and each column will take a turn being the target.</li>
+<li>Fourth, you can actually choose which regression model <code>IterativeImputer</code> uses for the regression problem. By default, it uses Bayesian ridge regression.</li>
 </ul>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -1371,16 +1371,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Anyway, if you decided you wanted to include it in the ColumnTransformer, you would just specify that Parch, Fare, and Age should be transformed by imp_iterative, and thus there would no longer be any passthrough columns.</p>
-<div id="239c430f" class="cell" data-execution_count="39">
+<p>Anyway, if you decided you wanted to include it in the <code>ColumnTransformer</code>, you would just specify that Parch, Fare, and Age should be transformed by <code>imp_iterative</code>, and thus there would no longer be any passthrough columns.</p>
+<div id="20ab3dc4" class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    (ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    (vect, <span class="st">'Name'</span>),</span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    (imp_iterative, [<span class="st">'Parch'</span>, <span class="st">'Fare'</span>, <span class="st">'Age'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Our other option for multivariate imputation is KNNImputer, which was introduced in scikit-learn version 0.22 but is not considered experimental.</p>
-<p>To use it, we’ll import it from the impute module, create an instance called imp_knn, and then pass the same three columns from X to the fit_transform method. This time, you’ll see that 30.5 was imputed for the missing value of Age.</p>
-<div id="16681e4b" class="cell" data-execution_count="40">
+<p>Our other option for multivariate imputation is <code>KNNImputer</code>, which was introduced in scikit-learn version 0.22 but is not considered experimental.</p>
+<p>To use it, we’ll import it from the <code>impute</code> module, create an instance called <code>imp_knn</code>, and then pass the same three columns from <code>X</code> to the <code>fit_transform</code> method. This time, you’ll see that 30.5 was imputed for the missing value of Age.</p>
+<div id="82110a31" class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> KNNImputer</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>imp_knn <span class="op">=</span> KNNImputer(n_neighbors<span class="op">=</span><span class="dv">2</span>)</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>imp_knn.fit_transform(X[[<span class="st">'Parch'</span>, <span class="st">'Fare'</span>, <span class="st">'Age'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1397,10 +1397,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [ 0.    , 30.0708, 14.    ]])</code></pre>
 </div>
 </div>
-<p>Here’s how the KNNImputer works:</p>
+<p>Here’s how the <code>KNNImputer</code> works:</p>
 <ol type="1">
-<li>First, KNNImputer finds the row in which Age is missing.</li>
-<li>Because I set the n_neighbors parameter to 2, scikit-learn finds the 2 rows that are nearest to this row in which Age is not missing, measured by how close the Parch and Fare values are to this row. In this case, the third and the fifth rows are the two nearest rows.</li>
+<li>First, <code>KNNImputer</code> finds the row in which Age is missing.</li>
+<li>Because I set the <code>n_neighbors</code> parameter to 2, scikit-learn finds the 2 rows that are nearest to this row in which Age is not missing, measured by how close the Parch and Fare values are to this row. In this case, the third and the fifth rows are the two nearest rows.</li>
 <li>Finally, scikit-learn calculates the mean of the Age values from those 2 rows. In this case, it takes the mean of 26 and 35 which is 30.5, and that value is used as the imputation value.</li>
 </ol>
 <div class="callout callout-style-simple callout-note no-icon">
@@ -1411,14 +1411,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="callout-body-container">
 <p><strong>How KNNImputer works:</strong></p>
 <ol type="1">
-<li>Find the row in which <strong>Age is missing</strong></li>
-<li>Find the n_neighbors “nearest” rows in which <strong>Age is not missing</strong></li>
+<li>Find the row in which Age is missing</li>
+<li>Find the n_neighbors “nearest” rows in which Age is not missing</li>
 <li>Calculate the mean of Age from the “nearest” rows</li>
 </ol>
 </div>
 </div>
 </div>
-<p>You might be wondering how you should choose the value for n_neighbors. As you’ll see later in the book, transformer hyperparameters like this should be chosen through a tuning process in the same way that you would tune the hyperparameters for a model.</p>
+<p>You might be wondering how you should choose the value for <code>n_neighbors</code>. As you’ll see later in the book, transformer hyperparameters like this should be chosen through a tuning process in the same way that you would tune the hyperparameters for a model.</p>
 </section>
 <section id="qa-what-are-the-best-practices-for-missing-value-imputation" class="level2" data-number="7.6">
 <h2 data-number="7.6" class="anchored" data-anchor-id="qa-what-are-the-best-practices-for-missing-value-imputation"><span class="header-section-number">7.6</span> Q&amp;A: What are the best practices for missing value imputation?</h2>
@@ -1455,8 +1455,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>An example of this would be if Age was missing because the booking agent forgot to gather that information from a few of the passengers. In other words, the data is just as likely to be missing for an older person as a younger person, and thus missingness is not meaningfully related to Age.</p>
 <p>If you determine that your data is MCAR, here’s what the research indicates:</p>
 <ul>
-<li>If you have a small dataset, then IterativeImputer tends to be more effective than mean imputation.</li>
-<li>If you have a large dataset, IterativeImputer and mean imputation tend to work equally well, though IterativeImputer will have a much higher computational cost.</li>
+<li>If you have a small dataset, then <code>IterativeImputer</code> tends to be more effective than mean imputation.</li>
+<li>If you have a large dataset, <code>IterativeImputer</code> and mean imputation tend to work equally well, though <code>IterativeImputer</code> will have a much higher computational cost.</li>
 <li>And there’s no benefit to adding a missing indicator since the missingness is random.</li>
 </ul>
 <div class="callout callout-style-simple callout-note no-icon">
@@ -1478,7 +1478,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>I mentioned an example of this in a previous lesson, namely if Age was missing because some of the older passengers declined to give their ages. In other words, there is a relationship between missingness and Age.</p>
 <p>If your data is MNAR, here is what the research indicates:</p>
 <ul>
-<li>Mean imputation is more effective than IterativeImputer because IterativeImputer actually obscures the pattern that the model might otherwise be able to learn.</li>
+<li>Mean imputation is more effective than <code>IterativeImputer</code> because <code>IterativeImputer</code> actually obscures the pattern that the model might otherwise be able to learn.</li>
 <li>It’s important that you add a missing indicator so that the model can learn from the pattern of missingness.</li>
 <li>And finally, it’s recommended to use a powerful, non-linear model, since mean imputation tends not to work as well in combination with a linear model.</li>
 </ul>
@@ -1514,7 +1514,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>All of these examples should make clear that if you’re going to impute missing values, it’s important to thoroughly understand your data before choosing an imputation strategy.</p>
-<p>Finally, it’s worth reiterating that histogram-based gradient boosting trees in scikit-learn have built-in support for missing values. In other words, you can pass it data with missing values, and it will handle them internally. This is significant because it has a lower computation cost than complex imputation strategies like IterativeImputer, and yet it can perform just as well or better than imputation across a variety of missing value scenarios.</p>
+<p>Finally, it’s worth reiterating that histogram-based gradient boosting trees in scikit-learn have built-in support for missing values. In other words, you can pass it data with missing values, and it will handle them internally. This is significant because it has a lower computation cost than complex imputation strategies like <code>IterativeImputer</code>, and yet it can perform just as well or better than imputation across a variety of missing value scenarios.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1534,8 +1534,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="qa-whats-the-difference-between-columntransformer-and-featureunion" class="level2" data-number="7.7">
 <h2 data-number="7.7" class="anchored" data-anchor-id="qa-whats-the-difference-between-columntransformer-and-featureunion"><span class="header-section-number">7.7</span> Q&amp;A: What’s the difference between ColumnTransformer and FeatureUnion?</h2>
-<p>As we saw earlier in this chapter, you can add a missing indicator to the output of SimpleImputer by setting the add_indicator parameter to True.</p>
-<div id="d97c56dc" class="cell" data-execution_count="41">
+<p>As we saw earlier in this chapter, you can add a missing indicator to the output of <code>SimpleImputer</code> by setting the <code>add_indicator</code> parameter to <code>True</code>.</p>
+<div id="3702cd10" class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>imp_indicator <span class="op">=</span> SimpleImputer(add_indicator<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>imp_indicator.fit_transform(X[[<span class="st">'Age'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="39">
@@ -1551,9 +1551,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [14.        ,  0.        ]])</code></pre>
 </div>
 </div>
-<p>In this lesson, we’re going to explore a different way to create this same matrix as a way of learning about the FeatureUnion class.</p>
-<p>To create the left column of this matrix, we can use the imp object, which is a SimpleImputer without a missing indicator.</p>
-<div id="bcf50814" class="cell" data-execution_count="42">
+<p>In this lesson, we’re going to explore a different way to create this same matrix as a way of learning about the <code>FeatureUnion</code> class.</p>
+<p>To create the left column of this matrix, we can use the <code>imp</code> object, which is a <code>SimpleImputer</code> without a missing indicator.</p>
+<div id="d10b50a6" class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>imp.fit_transform(X[[<span class="st">'Age'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="40">
 <pre><code>array([[22.        ],
@@ -1568,13 +1568,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [14.        ]])</code></pre>
 </div>
 </div>
-<p>To create the right column of the matrix, we can use the MissingIndicator class. We’ll import the class from the impute module and create an instance called indicator.</p>
-<div id="0e299678" class="cell" data-execution_count="43">
+<p>To create the right column of the matrix, we can use the <code>MissingIndicator</code> class. We’ll import the class from the <code>impute</code> module and create an instance called <code>indicator</code>.</p>
+<div id="e09dc937" class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> MissingIndicator</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>indicator <span class="op">=</span> MissingIndicator()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>When we pass Age to the fit_transform method, it outputs False and True instead of 0 and 1, but otherwise the results are identical to the right column of the matrix.</p>
-<div id="dcb694f0" class="cell" data-execution_count="44">
+<p>When we pass Age to the <code>fit_transform</code> method, it outputs <code>False</code> and <code>True</code> instead of 0 and 1, but otherwise the results are identical to the right column of the matrix.</p>
+<div id="775ddb2a" class="cell" data-execution_count="44">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>indicator.fit_transform(X[[<span class="st">'Age'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="42">
 <pre><code>array([[False],
@@ -1589,14 +1589,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [False]])</code></pre>
 </div>
 </div>
-<p>The final step in recreating our original matrix is to stack these two columns side-by-side, which we can do by using the FeatureUnion class. A FeatureUnion applies multiple transformations to a single input column and stacks the results side-by-side.</p>
-<p>We’ll import the make_union function from the pipeline module, and then create an instance called union that contains both the imp and indicator objects.</p>
-<div id="4b034b87" class="cell" data-execution_count="45">
+<p>The final step in recreating our original matrix is to stack these two columns side-by-side, which we can do by using the <code>FeatureUnion</code> class. A <code>FeatureUnion</code> applies multiple transformations to a single input column and stacks the results side-by-side.</p>
+<p>We’ll import the <code>make_union</code> function from the <code>pipeline</code> module, and then create an instance called <code>union</code> that contains both the <code>imp</code> and <code>indicator</code> objects.</p>
+<div id="c3574fcb" class="cell" data-execution_count="45">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_union</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>union <span class="op">=</span> make_union(imp, indicator)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>When we pass Age to the union’s fit_transform method, it runs both the imp and indicator transformations and stacks the results side-by-side. Note that False and True are converted to 0 and 1 when included in a numeric array, and thus we’ve recreated our original matrix.</p>
-<div id="c258d7d8" class="cell" data-execution_count="46">
+<p>When we pass Age to the <code>union</code>’s <code>fit_transform</code> method, it runs both the <code>imp</code> and <code>indicator</code> transformations and stacks the results side-by-side. Note that <code>False</code> and <code>True</code> are converted to 0 and 1 when included in a numeric array, and thus we’ve recreated our original matrix.</p>
+<div id="e8ac7c47" class="cell" data-execution_count="46">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>union.fit_transform(X[[<span class="st">'Age'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="44">
 <pre><code>array([[22.        ,  0.        ],
@@ -1611,8 +1611,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [14.        ,  0.        ]])</code></pre>
 </div>
 </div>
-<p>Alternatively, we could have achieved the same results using a ColumnTransformer. Specifically, we could have passed the Age column to two separate transformations.</p>
-<div id="3c1aac80" class="cell" data-execution_count="47">
+<p>Alternatively, we could have achieved the same results using a <code>ColumnTransformer</code>. Specifically, we could have passed the Age column to two separate transformations.</p>
+<div id="4a9323c0" class="cell" data-execution_count="47">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    (imp, [<span class="st">'Age'</span>]),</span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    (indicator, [<span class="st">'Age'</span>]))</span>
@@ -1630,10 +1630,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [14.        ,  0.        ]])</code></pre>
 </div>
 </div>
-<p>Stepping back, here’s a quick comparison between FeatureUnion and ColumnTransformer:</p>
+<p>Stepping back, here’s a quick comparison between <code>FeatureUnion</code> and <code>ColumnTransformer</code>:</p>
 <ul>
-<li>A FeatureUnion works on a single input column, and applies multiple different transformations to that one column in parallel.</li>
-<li>A ColumnTransformer works on multiple input columns, and applies a different transformation to each input column in parallel.</li>
+<li>A <code>FeatureUnion</code> works on a single input column, and applies multiple different transformations to that one column in parallel.</li>
+<li>A <code>ColumnTransformer</code> works on multiple input columns, and applies a different transformation to each input column in parallel.</li>
 </ul>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -1657,7 +1657,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>You can see that ColumnTransformer is far more flexible than FeatureUnion, and so my recommendation is that you use ColumnTransformer to do all of your transformations. For the rare case in which you need to apply multiple different transformations in parallel to the same column, you can use either a FeatureUnion or a ColumnTransformer, depending upon which solution makes more sense to you.</p>
+<p>You can see that <code>ColumnTransformer</code> is far more flexible than <code>FeatureUnion</code>, and so my recommendation is that you use <code>ColumnTransformer</code> to do all of your transformations. For the rare case in which you need to apply multiple different transformations in parallel to the same column, you can use either a <code>FeatureUnion</code> or a <code>ColumnTransformer</code>, depending upon which solution makes more sense to you.</p>
 
 
 </section>
