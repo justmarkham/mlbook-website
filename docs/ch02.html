@@ -346,14 +346,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>In this chapter, we’re going to do a quick review of the basic Machine Learning workflow, from loading and exploring a dataset to building and evaluating a model, and then finally using that model to making predictions.</p>
 <p>We’ll start by importing the pandas library and then using its <code>read_csv</code> function to read a dataset directly from a URL.</p>
 <p>We specified that only the first 10 rows should be read in. We’ll work with the entire dataset later in the book, but by starting with just 10 rows, we can more easily examine the input and output of each step.</p>
-<div id="090c1baf" class="cell" data-execution_count="1">
+<div id="877241b1" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/MLtrain'</span>, nrows<span class="op">=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s print out these 10 rows.</p>
 <p>This is the famous Titanic dataset. There’s a lot we can learn by working with this dataset because it contains a diversity of feature types, lots of missing values, and other problems we’ll need to solve.</p>
 <p>The Titanic ship sank in 1912, and each row in this dataset represents one passenger. Some of the passengers survived, represented by a 1 in the Survived column, whereas others did not, represented by a 0.</p>
-<div id="0d3d81bf" class="cell" data-execution_count="2">
+<div id="c662052d" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <div>
@@ -596,7 +596,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>X</code> is the feature matrix, and we’ll use double brackets to select those two columns as a DataFrame.</li>
 <li><code>y</code> is the target, and we’ll use single brackets to select this column as a Series.</li>
 </ul>
-<div id="6e56a6d9" class="cell" data-execution_count="6">
+<div id="50152b39" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[[<span class="st">'Parch'</span>, <span class="st">'Fare'</span>]]</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
@@ -668,7 +668,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="db2ef2d4" class="cell" data-execution_count="7">
+<div id="70bf9e59" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">'Survived'</span>]</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
@@ -691,13 +691,13 @@ Name: Survived, dtype: int64</code></pre>
 <li><code>y</code> is a pandas Series, thus it has 1 dimension.</li>
 </ul>
 <p>By convention, you use an uppercase <code>X</code> because it has 2 dimensions, and you use a lowercase <code>y</code> because it has 1 dimension.</p>
-<div id="b7f36eef" class="cell" data-execution_count="8">
+<div id="907229c5" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>X.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>(10, 2)</code></pre>
 </div>
 </div>
-<div id="206cd2e5" class="cell" data-execution_count="9">
+<div id="43f7b8e3" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>y.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>(10,)</code></pre>
@@ -710,7 +710,7 @@ Name: Survived, dtype: int64</code></pre>
 <p>To start, we’re going to use logistic regression as our model. It’s a good default choice for classification problems because it’s both fast and interpretable.</p>
 <p>We import it from the <code>linear_model</code> module, and then we create an instance called <code>logreg</code>. This is our model object.</p>
 <p>The default solver for logistic regression has changed between different scikit-learn versions, but in this book I’m going to set the solver to liblinear. I’m specifying the <code>solver</code> explicitly and setting a value for <code>random_state</code> so that if you run the same code at home, you will most likely get the same results as me.</p>
-<div id="cccdb83d" class="cell" data-execution_count="10">
+<div id="31b2de5e" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>logreg <span class="op">=</span> LogisticRegression(solver<span class="op">=</span><span class="st">'liblinear'</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -774,7 +774,7 @@ Name: Survived, dtype: int64</code></pre>
 <li>Then we pass it the model object, <code>X</code> and <code>y</code>, the number of cross-validation folds, and the evaluation metric. Although the default metric for classification problems is accuracy, I recommend specifying it explicitly so that there’s no ambiguity.</li>
 <li>When we run <code>cross_val_score</code>, it does the dataset splitting, training, predicting, and evaluation. 3 accuracy scores are returned, and the mean of those scores is 69%.</li>
 </ul>
-<div id="84494acd" class="cell" data-execution_count="11">
+<div id="53354855" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>cross_val_score(logreg, X, y, cv<span class="op">=</span><span class="dv">3</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
@@ -809,7 +809,7 @@ Name: Survived, dtype: int64</code></pre>
 </div>
 <p>We’ll cover these topics in detail later in the book, but for now, let’s assume that we’re happy with the model as-is. Thus, our next steps are to train the model and then use it to make predictions on new data.</p>
 <p>We use the model’s <code>fit</code> method, which instructs the model to try to learn the relationship between <code>X</code> and <code>y</code>.</p>
-<div id="442e5fd2" class="cell" data-execution_count="12">
+<div id="f3335a97" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>logreg.fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>LogisticRegression(random_state=1, solver='liblinear')</code></pre>
@@ -840,7 +840,7 @@ Name: Survived, dtype: int64</code></pre>
 </div>
 <p>Now, let’s read in a new dataset for which we don’t know the target values. Again, we are only going to keep the first 10 rows.</p>
 <p>You’ll notice that it has the same columns as the <code>df</code> DataFrame, except that there’s no Survived column, which is the column that we’re going to predict.</p>
-<div id="ebd99a39" class="cell" data-execution_count="13">
+<div id="2356f9d6" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df_new <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/MLnewdata'</span>, nrows<span class="op">=</span><span class="dv">10</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>df_new</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
@@ -1001,7 +1001,7 @@ Name: Survived, dtype: int64</code></pre>
 </div>
 </div>
 <p>Before we make predictions, we have to define <code>X_new</code>. It has to have the same columns as <code>X</code>, and those columns have to be in the same order.</p>
-<div id="0bb4f77c" class="cell" data-execution_count="17">
+<div id="68dafa38" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>X_new <span class="op">=</span> df_new[[<span class="st">'Parch'</span>, <span class="st">'Fare'</span>]]</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>X_new</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
@@ -1075,7 +1075,7 @@ Name: Survived, dtype: int64</code></pre>
 </div>
 <p>Finally, we’ll use the trained model to make predictions by passing <code>X_new</code> to the predict method, which outputs a NumPy array. There are 10 predictions because it makes 1 prediction for each sample in <code>X_new</code>.</p>
 <p>The predictions are in the same order as the samples in <code>X_new</code>, meaning the first prediction is for the first row in <code>X_new</code>, the second prediction is for the second row in <code>X_new</code>, and so on.</p>
-<div id="763797e8" class="cell" data-execution_count="18">
+<div id="22afc055" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>logreg.predict(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>array([0, 0, 0, 0, 1, 0, 0, 1, 0, 1])</code></pre>
@@ -1152,7 +1152,7 @@ Name: Survived, dtype: int64</code></pre>
 <li>The first way is as a pandas Series, which we can do using a single set of brackets.</li>
 <li>The second way is as a pandas DataFrame with one column, which we can do using two sets of brackets.</li>
 </ul>
-<div id="3e85b875" class="cell" data-execution_count="19">
+<div id="4fe4fa61" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Survived'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="19">
 <pre><code>0    0
@@ -1168,7 +1168,7 @@ Name: Survived, dtype: int64</code></pre>
 Name: Survived, dtype: int64</code></pre>
 </div>
 </div>
-<div id="eae305e7" class="cell" data-execution_count="20">
+<div id="561d9142" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">'Survived'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="20">
 <div>
@@ -1229,26 +1229,26 @@ Name: Survived, dtype: int64</code></pre>
 </div>
 </div>
 <p>These two objects look similar, but they actually have different shapes. The Series is a one-dimensional object, while the DataFrame is a two-dimensional object.</p>
-<div id="86ecdfa7" class="cell" data-execution_count="21">
+<div id="445e4066" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Survived'</span>].shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>(10,)</code></pre>
 </div>
 </div>
-<div id="c2f3d2a8" class="cell" data-execution_count="22">
+<div id="3aa62c3f" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">'Survived'</span>]].shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>(10, 1)</code></pre>
 </div>
 </div>
 <p>The difference between these two objects is more clear if you convert them to NumPy arrays using the <code>to_numpy</code> method.</p>
-<div id="735cd704" class="cell" data-execution_count="23">
+<div id="f541bb86" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Survived'</span>].to_numpy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="23">
 <pre><code>array([0, 1, 1, 1, 0, 0, 0, 0, 1, 1])</code></pre>
 </div>
 </div>
-<div id="0137d785" class="cell" data-execution_count="24">
+<div id="5df6177f" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">'Survived'</span>]].to_numpy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="24">
 <pre><code>array([[0],
@@ -1301,12 +1301,12 @@ Name: Survived, dtype: int64</code></pre>
 <h2 data-number="2.7" class="anchored" data-anchor-id="qa-how-do-i-add-the-models-predictions-to-a-dataframe"><span class="header-section-number">2.7</span> Q&amp;A: How do I add the model’s predictions to a DataFrame?</h2>
 <p>Let’s say that you wanted to match up the 10 predictions output by the model with the 10 rows of the <code>X_new</code> DataFrame so that you can see the predictions next to the features.</p>
 <p>To do this, you would first convert the predictions from a NumPy array to a pandas Series. Note that we are setting the Series index to match the index of <code>X_new</code>, and we’re giving the Series a name.</p>
-<div id="aa01fc08" class="cell" data-execution_count="25">
+<div id="ee1b6f83" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>predictions <span class="op">=</span> pd.Series(logreg.predict(X_new), index<span class="op">=</span>X_new.index,</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>                        name<span class="op">=</span><span class="st">'Prediction'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Then, you use the <code>concat</code> function to concatenate the <code>X_new</code> DataFrame and the predictions Series along the columns axis, which outputs a DataFrame. Note that the name of the Series became the name of that DataFrame column.</p>
-<div id="016fa320" class="cell" data-execution_count="26">
+<p>Then, you use the <code>concat</code> function to concatenate the <code>X_new</code> DataFrame and the <code>predictions</code> Series along the <code>'columns'</code> axis, which outputs a DataFrame. Note that the name of the Series became the name of that DataFrame column.</p>
+<div id="aab91c5d" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>pd.concat([X_new, predictions], axis<span class="op">=</span><span class="st">'columns'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="26">
 <div>
@@ -1392,7 +1392,7 @@ Name: Survived, dtype: int64</code></pre>
 <section id="qa-how-do-i-determine-the-confidence-level-of-each-prediction" class="level2" data-number="2.8">
 <h2 data-number="2.8" class="anchored" data-anchor-id="qa-how-do-i-determine-the-confidence-level-of-each-prediction"><span class="header-section-number">2.8</span> Q&amp;A: How do I determine the confidence level of each prediction?</h2>
 <p>For some classification problems, you are only interested in the predicted class labels.</p>
-<div id="dc397aae" class="cell" data-execution_count="27">
+<div id="cb573e3a" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>logreg.predict(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="27">
 <pre><code>array([0, 0, 0, 0, 1, 0, 0, 1, 0, 1])</code></pre>
@@ -1400,7 +1400,7 @@ Name: Survived, dtype: int64</code></pre>
 </div>
 <p>However, sometimes it’s useful to output the predicted probabilities of class membership using the <code>predict_proba</code> method.</p>
 <p>The output array has 10 rows because the model made predictions for 10 samples, and it has 2 columns because there are 2 possible classes. The left column represents class 0, and the right column represents class 1.</p>
-<div id="3f877701" class="cell" data-execution_count="28">
+<div id="bfde9ea8" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>logreg.predict_proba(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="28">
 <pre><code>array([[0.57804075, 0.42195925],
@@ -1436,7 +1436,7 @@ Name: Survived, dtype: int64</code></pre>
 <li>And as you might imagine, the values in every row will always add up to 1.</li>
 </ul>
 <p>If you need just the second column, meaning the predicted probabilities of class 1, then you can extract it using NumPy’s slicing notation. The <code>:</code> means select all rows, and the <code>1</code> means select the column in the 1 position, which is the second column.</p>
-<div id="81fd608d" class="cell" data-execution_count="29">
+<div id="4da5d2d6" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>logreg.predict_proba(X_new)[:, <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="29">
 <pre><code>array([0.42195925, 0.41724454, 0.43257586, 0.42671165, 0.51642919,
@@ -1472,7 +1472,7 @@ Name: Survived, dtype: int64</code></pre>
 <section id="qa-what-do-the-solver-and-random_state-parameters-do" class="level2" data-number="2.10">
 <h2 data-number="2.10" class="anchored" data-anchor-id="qa-what-do-the-solver-and-random_state-parameters-do"><span class="header-section-number">2.10</span> Q&amp;A: What do the “solver” and “random_state” parameters do?</h2>
 <p>In this chapter, when creating the model object, I set the logistic regression’s <code>solver</code> to liblinear, and I set the <code>random_state</code> to 1. I set these values so that if you ran the same code at home, you would most likely get the same results as me. In this lesson, I’ll explain what these two parameters actually do.</p>
-<div id="ab758d0f" class="cell" data-execution_count="30">
+<div id="7f8963d8" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>logreg <span class="op">=</span> LogisticRegression(solver<span class="op">=</span><span class="st">'liblinear'</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The solver is the algorithm used to solve the optimization problem of calculating the logistic regression’s coefficients. In other words, given the features and the target, the solver figures out the coefficients. The solvers have different strengths and weaknesses, different properties, and ultimately may come up with different results. Here’s a comparison chart from the scikit-learn documentation.</p>
@@ -1514,14 +1514,14 @@ Name: Survived, dtype: int64</code></pre>
 <section id="qa-how-do-i-show-all-of-the-model-parameters" class="level2" data-number="2.11">
 <h2 data-number="2.11" class="anchored" data-anchor-id="qa-how-do-i-show-all-of-the-model-parameters"><span class="header-section-number">2.11</span> Q&amp;A: How do I show all of the model parameters?</h2>
 <p>Starting in scikit-learn version 0.23, when you print any estimator (such as a model, a transformer, or a pipeline), it only shows you the parameters that are not set to their default values. For example, when we print out the <code>logreg</code> model object, it only shows the <code>random_state</code> and <code>solver</code> parameters because we set those explicitly.</p>
-<div id="bde214ed" class="cell" data-execution_count="31">
+<div id="81d3574d" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>logreg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="31">
 <pre><code>LogisticRegression(random_state=1, solver='liblinear')</code></pre>
 </div>
 </div>
 <p>However, you can still see all parameters by running the <code>get_params</code> method.</p>
-<div id="cecf4281" class="cell" data-execution_count="32">
+<div id="cd66cc62" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>logreg.get_params()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="32">
 <pre><code>{'C': 1.0,
@@ -1542,12 +1542,12 @@ Name: Survived, dtype: int64</code></pre>
 </div>
 </div>
 <p>If you like, you can restore the behavior from previous scikit-learn versions by importing the <code>set_config</code> function and then setting the <code>print_changed_only</code> parameter to <code>False</code>.</p>
-<div id="2d6b96c2" class="cell" data-execution_count="33">
+<div id="ad3b22c1" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> set_config</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>set_config(print_changed_only<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now, all parameters will be printed, regardless of whether you’ve changed them.</p>
-<div id="57859e4b" class="cell" data-execution_count="34">
+<div id="346d624d" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>logreg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="34">
 <pre><code>LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
@@ -1558,14 +1558,14 @@ Name: Survived, dtype: int64</code></pre>
 </div>
 </div>
 <p>I prefer the new behavior, so I’m going to set <code>print_changed_only</code> back to <code>True</code>.</p>
-<div id="5be1b3eb" class="cell" data-execution_count="35">
+<div id="b1faa6b3" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>set_config(print_changed_only<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="qa-should-i-shuffle-the-samples-when-using-cross-validation" class="level2" data-number="2.12">
 <h2 data-number="2.12" class="anchored" data-anchor-id="qa-should-i-shuffle-the-samples-when-using-cross-validation"><span class="header-section-number">2.12</span> Q&amp;A: Should I shuffle the samples when using cross-validation?</h2>
 <p>When I ran <code>cross_val_score</code> earlier in this chapter, I passed an integer, 3 in this case, that specified the number of cross-validation folds.</p>
-<div id="91d8cb8a" class="cell" data-execution_count="36">
+<div id="eab85f5e" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>cross_val_score(logreg, X, y, cv<span class="op">=</span><span class="dv">3</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="36">
 <pre><code>array([0.75      , 0.66666667, 0.66666667])</code></pre>
@@ -1573,7 +1573,7 @@ Name: Survived, dtype: int64</code></pre>
 </div>
 <p>This code shows you what happens “under the hood” when you specify <code>cv=3</code> for a classification problem. I’m going to walk through this code so you understand what’s happening and you can modify it when needed.</p>
 <p>First, you’ll notice that we’re importing a class called <code>StratifiedKFold</code>. It’s known as a cross-validation splitter, which means that its role is to split datasets. We create an instance of this class and pass it a 3 so that it will create 3 folds. And then we can pass this instance to <code>cross_val_score</code> instead of an integer.</p>
-<div id="31dde616" class="cell" data-execution_count="37">
+<div id="72162d06" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> StratifiedKFold</span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>kf <span class="op">=</span> StratifiedKFold(<span class="dv">3</span>)</span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>cross_val_score(logreg, X, y, cv<span class="op">=</span>kf, scoring<span class="op">=</span><span class="st">'accuracy'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1601,7 +1601,7 @@ Name: Survived, dtype: int64</code></pre>
 <p>In most cases, it doesn’t matter whether you shuffle the samples before splitting. However, if the order of the samples in your dataset is not arbitrary, then it’s important to randomly shuffle the samples when cross-validating.</p>
 <p>For example, you could imagine that if your dataset was sorted by one of the features, then some folds would only have high values of that feature and other folds would only have low values of that feature, which could result in unreliable cross-validation scores.</p>
 <p>If you do need to shuffle the samples, you simply modify the cross-validation splitter by setting <code>shuffle</code> to <code>True</code>, and then pass that splitter object to <code>cross_val_score</code>. Note that because you are introducing randomness into the process by shuffling, you should also set a <code>random_state</code> to ensure reproducibility.</p>
-<div id="fbc6b044" class="cell" data-execution_count="38">
+<div id="cf55af54" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>kf <span class="op">=</span> StratifiedKFold(<span class="dv">3</span>, shuffle<span class="op">=</span><span class="va">True</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>cross_val_score(logreg, X, y, cv<span class="op">=</span>kf, scoring<span class="op">=</span><span class="st">'accuracy'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="38">

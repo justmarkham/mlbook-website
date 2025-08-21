@@ -366,9 +366,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>So far, here’s the advice that I’ve given for encoding nominal and ordinal features:</p>
 <ul>
-<li>For a nominal feature, you should use OneHotEncoder, and it will output one column for each category.</li>
+<li>For a nominal feature, you should use <code>OneHotEncoder</code>, and it will output one column for each category.</li>
 <li>For an ordinal feature that is already encoded numerically, you should leave it as-is.</li>
-<li>And for an ordinal feature that is encoded as strings, you should use OrdinalEncoder, and it will output a single column using the category ordering that you define.</li>
+<li>And for an ordinal feature that is encoded as strings, you should use <code>OrdinalEncoder</code>, and it will output a single column using the category ordering that you define.</li>
 </ul>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -385,9 +385,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Let’s do a quick recap as to why OneHotEncoder is the preferred approach for a nominal feature, using Embarked as an example.</p>
-<p>Embarked has three categories, so OneHotEncoder would output 3 features. From each of the three features, the model can learn the relationship between the target value and whether or not a given passenger embarked at that port. For example, the model might learn from the first feature that passengers who embarked at C have a higher survival rate than passengers who didn’t embark at C.</p>
-<p>If you were to instead use OrdinalEncoder with Embarked, it would output 1 feature. This is problematic because it would imply an ordering of the categories that doesn’t inherently exist. For example, if passengers who embarked at C and S had high survival rates, and passengers who embarked at Q had low survival rates, there’s no way for a linear model to learn this relationship if Embarked is encoded as a single feature.</p>
+<p>Let’s do a quick recap as to why <code>OneHotEncoder</code> is the preferred approach for a nominal feature, using Embarked as an example.</p>
+<p>Embarked has three categories, so <code>OneHotEncoder</code> would output 3 features. From each of the three features, the model can learn the relationship between the target value and whether or not a given passenger embarked at that port. For example, the model might learn from the first feature that passengers who embarked at C have a higher survival rate than passengers who didn’t embark at C.</p>
+<p>If you were to instead use <code>OrdinalEncoder</code> with Embarked, it would output 1 feature. This is problematic because it would imply an ordering of the categories that doesn’t inherently exist. For example, if passengers who embarked at C and S had high survival rates, and passengers who embarked at Q had low survival rates, there’s no way for a linear model to learn this relationship if Embarked is encoded as a single feature.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -411,7 +411,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="f000df33" class="cell" data-execution_count="2">
+<div id="4dce1201" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Embarked'</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <pre><code>S    644
@@ -425,12 +425,12 @@ Name: Embarked, dtype: int64</code></pre>
 <section id="preparing-the-census-dataset" class="level2" data-number="17.2">
 <h2 data-number="17.2" class="anchored" data-anchor-id="preparing-the-census-dataset"><span class="header-section-number">17.2</span> Preparing the census dataset</h2>
 <p>We’ll use a new dataset for this chapter, namely a dataset of US census data from 1994.</p>
-<p>We’ll read the dataset into a new DataFrame called census.</p>
-<div id="395f6e57" class="cell" data-execution_count="3">
+<p>We’ll read the dataset into a new DataFrame called <code>census</code>.</p>
+<div id="267423e2" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>census <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/censusdataset'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We’re only going to use the categorical features, which we can explore by using the DataFrame describe method.</p>
-<div id="f46daf52" class="cell" data-execution_count="4">
+<p>We’re only going to use the categorical features, which we can explore by using the DataFrame <code>describe</code> method.</p>
+<div id="c5ac2bef" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>census.describe(include<span class="op">=</span><span class="st">'object'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <div>
@@ -523,8 +523,8 @@ Name: Embarked, dtype: int64</code></pre>
 </div>
 </div>
 <p>The column labeled “class” is actually our target. This column indicates whether the person has an income of more or less than fifty thousand dollars a year.</p>
-<p>We can view the class proportions by normalizing the output of value_counts.</p>
-<div id="b031bfa5" class="cell" data-execution_count="9">
+<p>We can view the class proportions by normalizing the output of <code>value_counts</code>.</p>
+<div id="a4b5a0b5" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>census[<span class="st">'class'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code> &lt;=50K    0.760718
@@ -532,8 +532,8 @@ Name: Embarked, dtype: int64</code></pre>
 Name: class, dtype: float64</code></pre>
 </div>
 </div>
-<p>When defining our X DataFrame, which I’m calling census_X, we’re only going to use the 8 categorical columns, which I’ve listed out manually. And we’ll use “class” as our y Series, which I’m calling census_y.</p>
-<div id="b8419c0a" class="cell" data-execution_count="10">
+<p>When defining our <code>X</code> DataFrame, which I’m calling <code>census_X</code>, we’re only going to use the 8 categorical columns, which I’ve listed out manually. And we’ll use class as our <code>y</code> Series, which I’m calling <code>census_y</code>.</p>
+<div id="f0b853a4" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>census_cols <span class="op">=</span> [<span class="st">'workclass'</span>, <span class="st">'education'</span>, <span class="st">'marital-status'</span>, <span class="st">'occupation'</span>,</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>               <span class="st">'relationship'</span>, <span class="st">'race'</span>, <span class="st">'sex'</span>, <span class="st">'native-country'</span>]</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>census_X <span class="op">=</span> census[census_cols]</span>
@@ -542,14 +542,14 @@ Name: class, dtype: float64</code></pre>
 </section>
 <section id="setting-up-the-encoders" class="level2" data-number="17.3">
 <h2 data-number="17.3" class="anchored" data-anchor-id="setting-up-the-encoders"><span class="header-section-number">17.3</span> Setting up the encoders</h2>
-<p>We’re going to be testing the effectiveness of both OneHotEncoder and OrdinalEncoder with these 8 features. For this experiment, we would normally just create instances using the default arguments.</p>
-<div id="5b70ef14" class="cell" data-execution_count="11">
+<p>We’re going to be testing the effectiveness of both <code>OneHotEncoder</code> and <code>OrdinalEncoder</code> with these 8 features. For this experiment, we would normally just create instances using the default arguments.</p>
+<div id="b13165d2" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ohe <span class="op">=</span> OneHotEncoder()</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>oe <span class="op">=</span> OrdinalEncoder()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Notice that we created an instance of OrdinalEncoder without defining the category ordering. This is because we’re treating all of the features as nominal, and as such there is no logical ordering.</p>
-<p>As a result, OrdinalEncoder would simply learn the categories for each feature in alphabetical order, which we can confirm by fitting the OrdinalEncoder and checking the categories_ attribute.</p>
-<div id="fc2cba81" class="cell" data-execution_count="12">
+<p>Notice that we created an instance of <code>OrdinalEncoder</code> without defining the category ordering. This is because we’re treating all of the features as nominal, and as such there is no logical ordering.</p>
+<p>As a result, <code>OrdinalEncoder</code> would simply learn the categories for each feature in alphabetical order, which we can confirm by fitting the <code>OrdinalEncoder</code> and checking the <code>categories_</code> attribute.</p>
+<div id="3b1beb15" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>oe.fit(census_X).categories_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>[array([' ?', ' Federal-gov', ' Local-gov', ' Never-worked', ' Private',
@@ -584,7 +584,7 @@ Name: class, dtype: float64</code></pre>
 </div>
 </div>
 <p>That being said, we’re actually going to run into a problem with encoding due to our highest cardinality feature, native-country. Let’s take a look at it and see why.</p>
-<div id="870b22ba" class="cell" data-execution_count="13">
+<div id="46c8cadb" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>census_X[<span class="st">'native-country'</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code> United-States                 43832
@@ -612,8 +612,8 @@ Name: class, dtype: float64</code></pre>
  Portugal                         67
  Taiwan                           65
  Iran                             59
- Nicaragua                        49
  Greece                           49
+ Nicaragua                        49
  Peru                             46
  Ecuador                          45
  France                           38
@@ -622,9 +622,9 @@ Name: class, dtype: float64</code></pre>
  Hong                             30
  Cambodia                         28
  Trinadad&amp;Tobago                  27
+ Laos                             23
  Yugoslavia                       23
  Outlying-US(Guam-USVI-etc)       23
- Laos                             23
  Scotland                         21
  Honduras                         20
  Hungary                          19
@@ -633,7 +633,7 @@ Name: native-country, dtype: int64</code></pre>
 </div>
 </div>
 <p>You can see that one of the categories appears only once in the dataset. As we talked about in <a href="ch15.html#sec-15-7" class="quarto-xref">lesson&nbsp;<span>15.7</span></a>, rare category values can cause problems with cross-validation.</p>
-<p>In this case, it will definitely create a problem, because that sample is guaranteed to appear in the test fold but not a training fold during one of the runs of cross-validation. That will cause an error for both OneHotEncoder and OrdinalEncoder.</p>
+<p>In this case, it will definitely create a problem, because that sample is guaranteed to appear in the test fold but not a training fold during one of the runs of cross-validation. That will cause an error for both <code>OneHotEncoder</code> and <code>OrdinalEncoder</code>.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -649,13 +649,13 @@ Name: native-country, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<p>In the case of OneHotEncoder, the solution is simply to set the handle_unknown parameter to “ignore”.</p>
-<div id="3ebe947c" class="cell" data-execution_count="14">
+<p>In the case of <code>OneHotEncoder</code>, the solution is simply to set the <code>handle_unknown</code> parameter to <code>'ignore'</code>.</p>
+<div id="a905fc6d" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ohe_ignore <span class="op">=</span> OneHotEncoder(handle_unknown<span class="op">=</span><span class="st">'ignore'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Starting in scikit-learn version 0.24, OrdinalEncoder will have a similar handle_unknown parameter that could be used for this situation.</p>
-<p>But for now, the best solution is to define the categories in advance for each feature using a list comprehension. The list comprehension iterates through the feature columns, extracts the unique values from each column, and stores the result in a list called “cats”.</p>
-<div id="63368dac" class="cell" data-execution_count="15">
+<p>Starting in scikit-learn version 0.24, <code>OrdinalEncoder</code> has a similar <code>handle_unknown</code> parameter that could be used for this situation.</p>
+<p>But for now, the best solution is to define the categories in advance for each feature using a list comprehension. The list comprehension iterates through the feature columns, extracts the unique values from each column, and stores the result in a list called <code>cats</code>.</p>
+<div id="a1a30969" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>cats <span class="op">=</span> [census_X[col].unique() <span class="cf">for</span> col <span class="kw">in</span> census_X[census_cols]]</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>cats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
@@ -691,57 +691,57 @@ Name: native-country, dtype: int64</code></pre>
        dtype=object)]</code></pre>
 </div>
 </div>
-<p>Then, we can pass the “cats” list to the categories parameter of OrdinalEncoder when creating an instance. This solves our problem since no unknown categories will ever appear during cross-validation.</p>
-<div id="86445705" class="cell" data-execution_count="16">
+<p>Then, we can pass the <code>cats</code> list to the <code>categories</code> parameter of <code>OrdinalEncoder</code> when creating an instance. This solves our problem since no unknown categories will ever appear during cross-validation.</p>
+<div id="b6ef0a98" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>oe_cats <span class="op">=</span> OrdinalEncoder(categories<span class="op">=</span>cats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="encoding-nominal-features-for-a-linear-model" class="level2" data-number="17.4">
 <h2 data-number="17.4" class="anchored" data-anchor-id="encoding-nominal-features-for-a-linear-model"><span class="header-section-number">17.4</span> Encoding nominal features for a linear model</h2>
-<p>Now that we’ve set up our OneHotEncoder, called “ohe_ignore”, and our OrdinalEncoder, called “oe_cats”, let’s see what happens when we pass census_X to fit_transform and then check the shape.</p>
-<p>As expected, the OneHotEncoder creates a lot of columns due to the high-cardinality features, whereas the OrdinalEncoder creates only one column for each of the eight features.</p>
-<div id="8af2af3b" class="cell" data-execution_count="17">
+<p>Now that we’ve set up our <code>OneHotEncoder</code>, called <code>ohe_ignore</code>, and our <code>OrdinalEncoder</code>, called <code>oe_cats</code>, let’s see what happens when we pass <code>census_X</code> to <code>fit_transform</code> and then check the shape.</p>
+<p>As expected, the <code>OneHotEncoder</code> creates a lot of columns due to the high-cardinality features, whereas the <code>OrdinalEncoder</code> creates only one column for each of the eight features.</p>
+<div id="e4dbd941" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ohe_ignore.fit_transform(census_X).shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>(48842, 102)</code></pre>
 </div>
 </div>
-<div id="b588db27" class="cell" data-execution_count="18">
+<div id="1dfd78a4" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>oe_cats.fit_transform(census_X).shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>(48842, 8)</code></pre>
 </div>
 </div>
-<p>Now let’s actually test the advice that I’ve given, which is that OneHotEncoder should be used for nominal features, to see if this advice still holds for high-cardinality features.</p>
-<p>The simplest method for doing this is to create two Pipelines. One of them uses OneHotEncoder and the other uses OrdinalEncoder, and both end in a logistic regression model.</p>
-<div id="b977fefb" class="cell" data-execution_count="19">
+<p>Now let’s actually test the advice that I’ve given, which is that <code>OneHotEncoder</code> should be used for nominal features, to see if this advice still holds for high-cardinality features.</p>
+<p>The simplest method for doing this is to create two <code>Pipeline</code>s. One of them uses <code>OneHotEncoder</code> and the other uses <code>OrdinalEncoder</code>, and both end in a logistic regression model.</p>
+<div id="f0593381" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ohe_logreg <span class="op">=</span> make_pipeline(ohe_ignore, logreg)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>oe_logreg <span class="op">=</span> make_pipeline(oe_cats, logreg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We’ll cross-validate each Pipeline using all features and then compare the accuracies. We’ll also time the operations to see if there are significant differences.</p>
-<div id="f2419dcd" class="cell" data-execution_count="20">
+<p>We’ll cross-validate each <code>Pipeline</code> using all features and then compare the accuracies. We’ll also time the operations to see if there are significant differences.</p>
+<div id="0f914f9a" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>time cross_val_score(ohe_logreg, census_X, census_y, cv<span class="op">=</span><span class="dv">5</span>, <span class="op">\</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                      scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>CPU times: user 587 ms, sys: 11.1 ms, total: 598 ms
-Wall time: 609 ms</code></pre>
+<pre><code>CPU times: user 579 ms, sys: 6.28 ms, total: 586 ms
+Wall time: 589 ms</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="19">
 <pre><code>0.8329920571424309</code></pre>
 </div>
 </div>
-<div id="2d95f320" class="cell" data-execution_count="21">
+<div id="9f3d9491" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>time cross_val_score(oe_logreg, census_X, census_y, cv<span class="op">=</span><span class="dv">5</span>, <span class="op">\</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                      scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>CPU times: user 506 ms, sys: 4.34 ms, total: 510 ms
-Wall time: 511 ms</code></pre>
+<pre><code>CPU times: user 505 ms, sys: 3.91 ms, total: 509 ms
+Wall time: 509 ms</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>0.7547398152859307</code></pre>
 </div>
 </div>
-<p>The two Pipelines take around the same amount of time to run, but the accuracy of the OneHotEncoder Pipeline is 0.833, which is significantly better than the 0.755 accuracy of the OrdinalEncoder Pipeline. This would suggest that at least for a linear model like logistic regression, OneHotEncoder should be used for nominal features, even when the features have high cardinality.</p>
+<p>The two Pipelines take around the same amount of time to run, but the accuracy of the <code>OneHotEncoder</code> <code>Pipeline</code> is 0.833, which is significantly better than the 0.755 accuracy of the <code>OrdinalEncoder</code> <code>Pipeline</code>. This would suggest that at least for a linear model like logistic regression, <code>OneHotEncoder</code> should be used for nominal features, even when the features have high cardinality.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -763,37 +763,37 @@ Wall time: 511 ms</code></pre>
 <section id="encoding-nominal-features-for-a-non-linear-model" class="level2" data-number="17.5">
 <h2 data-number="17.5" class="anchored" data-anchor-id="encoding-nominal-features-for-a-non-linear-model"><span class="header-section-number">17.5</span> Encoding nominal features for a non-linear model</h2>
 <p>Let’s now do the same comparison as the previous lesson, except this time we’ll use random forests, which is a tree-based non-linear model that we used in chapter 11.</p>
-<p>First, we’ll create two more Pipelines, one using OneHotEncoder and the other using OrdinalEncoder, and both ending in a random forest model.</p>
-<div id="cfbaa1f4" class="cell" data-execution_count="22">
+<p>First, we’ll create two more <code>Pipeline</code>s. One uses <code>OneHotEncoder</code> and the other uses <code>OrdinalEncoder</code>, and both end in a random forest model.</p>
+<div id="0de0131a" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>ohe_rf <span class="op">=</span> make_pipeline(ohe_ignore, rf)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>oe_rf <span class="op">=</span> make_pipeline(oe_cats, rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Then, we’ll cross-validate each Pipeline using all features.</p>
-<div id="9f0be368" class="cell" data-execution_count="23">
+<p>Then, we’ll cross-validate each <code>Pipeline</code> using all features.</p>
+<div id="f111514f" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>time cross_val_score(ohe_rf, census_X, census_y, cv<span class="op">=</span><span class="dv">5</span>, <span class="op">\</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>                      scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>CPU times: user 40.3 s, sys: 302 ms, total: 40.6 s
-Wall time: 5.94 s</code></pre>
+<pre><code>CPU times: user 38.4 s, sys: 333 ms, total: 38.7 s
+Wall time: 5.7 s</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>0.8260513856992514</code></pre>
 </div>
 </div>
-<div id="7f5d432e" class="cell" data-execution_count="24">
+<div id="e3d23512" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>time cross_val_score(oe_rf, census_X, census_y, cv<span class="op">=</span><span class="dv">5</span>, <span class="op">\</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                      scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>CPU times: user 6.49 s, sys: 304 ms, total: 6.79 s
-Wall time: 1.55 s</code></pre>
+<pre><code>CPU times: user 6.19 s, sys: 305 ms, total: 6.49 s
+Wall time: 1.5 s</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="23">
 <pre><code>0.8245362761024548</code></pre>
 </div>
 </div>
-<p>We can see that the accuracies are about the same for the OneHotEncoder Pipeline (0.826) and the OrdinalEncoder Pipeline (0.825), even though we were using the OrdinalEncoder on nominal features, which would normally be considered improper.</p>
-<p>How can this be? Well, because of how decision trees recursively split features, the random forest model can approximately learn the relationships present in categorical features even when they’re encoded as single columns with OrdinalEncoder.</p>
-<p>It’s also worth noting that the OrdinalEncoder Pipeline is significantly faster than the OneHotEncoder Pipeline, which is due to the much smaller feature set created by the OrdinalEncoder.</p>
+<p>We can see that the accuracies are about the same for the <code>OneHotEncoder</code> <code>Pipeline</code> (0.826) and the <code>OrdinalEncoder</code> <code>Pipeline</code> (0.825), even though we were using the <code>OrdinalEncoder</code> on nominal features, which would normally be considered improper.</p>
+<p>How can this be? Well, because of how decision trees recursively split features, the random forest model can approximately learn the relationships present in categorical features even when they’re encoded as single columns with <code>OrdinalEncoder</code>.</p>
+<p>It’s also worth noting that the <code>OrdinalEncoder</code> <code>Pipeline</code> is significantly faster than the <code>OneHotEncoder</code> <code>Pipeline</code> due to the much smaller feature set created by the <code>OrdinalEncoder</code>.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -819,9 +819,9 @@ Wall time: 1.55 s</code></pre>
 </section>
 <section id="combining-the-encodings" class="level2" data-number="17.6">
 <h2 data-number="17.6" class="anchored" data-anchor-id="combining-the-encodings"><span class="header-section-number">17.6</span> Combining the encodings</h2>
-<p>One final variation that we can try is to use the OneHotEncoder for all features except for education. And since education is actually an ordinal feature, we can use the OrdinalEncoder with it and define the category ordering.</p>
+<p>One final variation that we can try is to use the <code>OneHotEncoder</code> for all features except for education. And since education is actually an ordinal feature, we can use the <code>OrdinalEncoder</code> with it and define the category ordering.</p>
 <p>Here are the education categories.</p>
-<div id="30df10bc" class="cell" data-execution_count="25">
+<div id="69b6906d" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>census_X[<span class="st">'education'</span>].unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="24">
 <pre><code>array([' 11th', ' HS-grad', ' Assoc-acdm', ' Some-college', ' 10th',
@@ -830,57 +830,57 @@ Wall time: 1.55 s</code></pre>
        ' Preschool'], dtype=object)</code></pre>
 </div>
 </div>
-<p>We’ll manually define the category ordering, from “Preschool” through “Doctorate”, and then create an instance of OrdinalEncoder using that ordering.</p>
-<div id="27a8aa33" class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>cats <span class="op">=</span> [[<span class="st">' Preschool'</span>, <span class="st">' 1st-4th'</span>, <span class="st">' 5th-6th'</span>, <span class="st">' 7th-8th'</span>, <span class="st">' 9th'</span>, <span class="st">' 10th'</span>,</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>         <span class="st">' 11th'</span>, <span class="st">' 12th'</span>, <span class="st">' HS-grad'</span>, <span class="st">' Some-college'</span>, <span class="st">' Assoc-voc'</span>,</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>         <span class="st">' Assoc-acdm'</span>, <span class="st">' Bachelors'</span>, <span class="st">' Masters'</span>, <span class="st">' Prof-school'</span>,</span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>         <span class="st">' Doctorate'</span>]]</span>
+<p>We’ll manually define the category ordering, from “Preschool” through “Doctorate”, and then create an instance of <code>OrdinalEncoder</code> using that ordering.</p>
+<div id="7eb4db9d" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>cats <span class="op">=</span> [[<span class="st">' Preschool'</span>, <span class="st">' 1st-4th'</span>, <span class="st">' 5th-6th'</span>, <span class="st">' 7th-8th'</span>, <span class="st">' 9th'</span>,</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>         <span class="st">' 10th'</span>, <span class="st">' 11th'</span>, <span class="st">' 12th'</span>, <span class="st">' HS-grad'</span>, <span class="st">' Some-college'</span>,</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>         <span class="st">' Assoc-voc'</span>, <span class="st">' Assoc-acdm'</span>, <span class="st">' Bachelors'</span>, <span class="st">' Masters'</span>,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>         <span class="st">' Prof-school'</span>, <span class="st">' Doctorate'</span>]]</span>
 <span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>oe_cats <span class="op">=</span> OrdinalEncoder(categories<span class="op">=</span>cats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Then we’ll create a ColumnTransformer that applies the OrdinalEncoder to education, and applies the OneHotEncoder to all other features.</p>
-<div id="e93ef396" class="cell" data-execution_count="27">
+<p>Then we’ll create a <code>ColumnTransformer</code> that applies the <code>OrdinalEncoder</code> to education, and applies the <code>OneHotEncoder</code> to all other features.</p>
+<div id="ccf8d1e2" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    (oe_cats, [<span class="st">'education'</span>]),</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    remainder<span class="op">=</span>ohe_ignore)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>When we pass census_X to the fit_transform, it creates 87 feature columns, compared to the 102 columns that were created when we only used the OneHotEncoder.</p>
-<div id="f3f82e56" class="cell" data-execution_count="28">
+<p>When we pass <code>census_X</code> to the <code>fit_transform</code>, it creates 87 feature columns, compared to the 102 columns that were created when we only used the <code>OneHotEncoder</code>.</p>
+<div id="76b9e796" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(census_X).shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="27">
 <pre><code>(48842, 87)</code></pre>
 </div>
 </div>
-<p>Finally, we’ll create two Pipelines. Both of them start with the same ColumnTransformer, but one ends with logistic regression while the other ends with random forests.</p>
-<div id="f156ed01" class="cell" data-execution_count="29">
+<p>Finally, we’ll create two <code>Pipeline</code>s. Both of them start with the same <code>ColumnTransformer</code>, but one ends with logistic regression while the other ends with random forests.</p>
+<div id="d5463d6b" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>oe_ohe_logreg <span class="op">=</span> make_pipeline(ct, logreg)</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>oe_ohe_rf <span class="op">=</span> make_pipeline(ct, rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>When we cross-validate the first Pipeline, the accuracy is 0.832, which is nearly the same as the 0.833 achieved by the logistic regression Pipeline that used OneHotEncoding for all features.</p>
-<div id="c6a179e6" class="cell" data-execution_count="30">
+<p>When we cross-validate the first <code>Pipeline</code>, the accuracy is 0.832, which is nearly the same as the 0.833 achieved by the logistic regression <code>Pipeline</code> that used <code>OneHotEncoder</code> for all features.</p>
+<div id="2cc4cfee" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>time cross_val_score(oe_ohe_logreg, census_X, census_y, cv<span class="op">=</span><span class="dv">5</span>, <span class="op">\</span></span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>                      scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>CPU times: user 665 ms, sys: 8.61 ms, total: 674 ms
-Wall time: 674 ms</code></pre>
+<pre><code>CPU times: user 612 ms, sys: 7.23 ms, total: 619 ms
+Wall time: 619 ms</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="29">
 <pre><code>0.8315588308601922</code></pre>
 </div>
 </div>
-<p>When we cross-validate the second Pipeline, the accuracy is 0.825, which is nearly the same as the 0.826 achieved by the random forest Pipeline that used OneHotEncoding for all features.</p>
-<div id="d9e933f0" class="cell" data-execution_count="31">
+<p>When we cross-validate the second <code>Pipeline</code>, the accuracy is 0.825, which is nearly the same as the 0.826 achieved by the random forest <code>Pipeline</code> that used <code>OneHotEncoder</code> for all features.</p>
+<div id="3925f39a" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>time cross_val_score(oe_ohe_rf, census_X, census_y, cv<span class="op">=</span><span class="dv">5</span>, <span class="op">\</span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>                      scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>CPU times: user 41.2 s, sys: 302 ms, total: 41.5 s
-Wall time: 6.03 s</code></pre>
+<pre><code>CPU times: user 38.8 s, sys: 337 ms, total: 39.2 s
+Wall time: 5.89 s</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="30">
 <pre><code>0.8251300537921482</code></pre>
 </div>
 </div>
-<p>In summary, encoding the education feature with OrdinalEncoder and the seven other features with OneHotEncoder performed basically the same as encoding all eight features with OneHotEncoder. However, it’s certainly possible that the OrdinalEncoder could provide a benefit under other circumstances.</p>
+<p>In summary, encoding the education feature with <code>OrdinalEncoder</code> and the seven other features with <code>OneHotEncoder</code> performed basically the same as encoding all eight features with <code>OneHotEncoder</code>. However, it’s certainly possible that the <code>OrdinalEncoder</code> could provide a benefit under other circumstances.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -908,11 +908,13 @@ Wall time: 6.03 s</code></pre>
 </section>
 <section id="best-practices-for-encoding" class="level2" data-number="17.7">
 <h2 data-number="17.7" class="anchored" data-anchor-id="best-practices-for-encoding"><span class="header-section-number">17.7</span> Best practices for encoding</h2>
-<p>Let’s summarize what we’ve learned in this chapter.</p>
-<p>If you have nominal features, and you’re using a linear model, you should definitely use OneHotEncoder, regardless of whether the features have high cardinality.</p>
-<p>If you have nominal features, and you’re using a non-linear model, you can try using OneHotEncoder, and you can try using OrdinalEncoder without defining the category ordering, and then see which option performs better.</p>
-<p>If you have ordinal features, regardless of the type of model, you can try using OneHotEncoder, and you can try using OrdinalEncoder while defining the category ordering, and then see which option performs better.</p>
-<p>In all cases, keep in mind that if the features have high cardinality, OrdinalEncoder is likely to run significantly faster than OneHotEncoder, which may or may not matter in your particular case.</p>
+<p>Let’s summarize what we’ve learned in this chapter:</p>
+<ul>
+<li>If you have nominal features, and you’re using a linear model, you should definitely use <code>OneHotEncoder</code>, regardless of whether the features have high cardinality.</li>
+<li>If you have nominal features, and you’re using a non-linear model, you can try using <code>OneHotEncoder</code>, and you can try using <code>OrdinalEncoder</code> without defining the category ordering, and then see which option performs better.</li>
+<li>If you have ordinal features, regardless of the type of model, you can try using <code>OneHotEncoder</code>, and you can try using <code>OrdinalEncoder</code> while defining the category ordering, and then see which option performs better.</li>
+</ul>
+<p>In all cases, keep in mind that if the features have high cardinality, <code>OrdinalEncoder</code> is likely to run significantly faster than <code>OneHotEncoder</code>, which may or may not matter in your particular case.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
