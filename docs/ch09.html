@@ -337,7 +337,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="9.1" class="anchored" data-anchor-id="recap-of-our-workflow"><span class="header-section-number">9.1</span> Recap of our workflow</h2>
 <p>In this chapter, we’re going to review the workflow that we’ve built so far and also discuss the concept of data leakage.</p>
 <p>To start, we’re going to walk through all of the code that’s necessary to recreate our workflow up to this point. We begin by importing pandas, the three transformer classes we’re using, one modeling class, and two composition functions.</p>
-<div id="798db674" class="cell" data-execution_count="2">
+<div id="232f0f5c" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> OneHotEncoder</span>
@@ -347,33 +347,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next, we create a list of the six columns we’re going to select from our data.</p>
-<div id="d7ad0eec" class="cell" data-execution_count="3">
+<div id="dc7a03dc" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [<span class="st">'Parch'</span>, <span class="st">'Fare'</span>, <span class="st">'Embarked'</span>, <span class="st">'Sex'</span>, <span class="st">'Name'</span>, <span class="st">'Age'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, we read in all of the training data and use it to define our <code>X</code> and <code>y</code>.</p>
-<div id="498886ed" class="cell" data-execution_count="4">
+<div id="56511741" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/MLtrain'</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[cols]</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">'Survived'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And we read in all of the new data and use it to define <code>X_new</code>.</p>
-<div id="f5e55e28" class="cell" data-execution_count="5">
+<div id="64edfd33" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df_new <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/MLnewdata'</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>X_new <span class="op">=</span> df_new[cols]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We create four instances of our transformers, namely two different instances of <code>SimpleImputer</code> and one instance each of <code>OneHotEncoder</code> and <code>CountVectorizer</code>.</p>
-<div id="9a0f39ed" class="cell" data-execution_count="6">
+<div id="6616e89d" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>imp <span class="op">=</span> SimpleImputer()</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>imp_constant <span class="op">=</span> SimpleImputer(strategy<span class="op">=</span><span class="st">'constant'</span>, fill_value<span class="op">=</span><span class="st">'missing'</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>ohe <span class="op">=</span> OneHotEncoder()</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>vect <span class="op">=</span> CountVectorizer()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We create a two-step transformer <code>Pipeline</code> of constant value imputation and one-hot encoding.</p>
-<div id="44fb1ab0" class="cell" data-execution_count="7">
+<div id="5c42e926" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>imp_ohe <span class="op">=</span> make_pipeline(imp_constant, ohe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And then we build the <code>ColumnTransformer</code>, which imputes and one-hot encodes Embarked and Sex, vectorizes Name, imputes Age and Fare, and passes through Parch.</p>
-<div id="72b8549d" class="cell" data-execution_count="8">
+<div id="9423765d" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    (imp_ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    (vect, <span class="st">'Name'</span>),</span>
@@ -381,11 +381,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'passthrough'</span>, [<span class="st">'Parch'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We also create an instance of <code>LogisticRegression</code>.</p>
-<div id="6c27a5af" class="cell" data-execution_count="9">
+<div id="c4e4a371" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>logreg <span class="op">=</span> LogisticRegression(solver<span class="op">=</span><span class="st">'liblinear'</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Finally, we create a two-step modeling <code>Pipeline</code>, fit the <code>Pipeline</code> to <code>X</code> and <code>y</code>, and use the fitted <code>Pipeline</code> to make predictions on <code>X_new</code>.</p>
-<div id="efb7a20e" class="cell" data-execution_count="10">
+<div id="9d1c8e15" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> make_pipeline(ct, logreg)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>pipe.fit(X, y)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>pipe.predict(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -449,13 +449,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="callout-body-container">
 <p><strong>ColumnTransformer vs Pipeline:</strong></p>
 <ul>
-<li><strong>ColumnTransformer:</strong>
+<li><strong><code>ColumnTransformer</code>:</strong>
 <ul>
 <li>Selects subsets of columns, transforms them independently, stacks the results side-by-side</li>
 <li>Only includes transformers</li>
 <li>Does not have steps (transformers operate in parallel)</li>
 </ul></li>
-<li><strong>Pipeline:</strong>
+<li><strong><code>Pipeline</code>:</strong>
 <ul>
 <li>Series of steps that occur in order</li>
 <li>Output of each step becomes the input to the next step</li>
@@ -466,10 +466,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Finally, we can print out the <code>Pipeline</code> to see a similar diagram. You can see that our workflow includes a transformer <code>Pipeline</code>, meaning a <code>Pipeline</code> that ends in a transformer, inside a <code>ColumnTransformer</code>, which is inside of a modeling <code>Pipeline</code>, meaning a <code>Pipeline</code> that ends in a model.</p>
-<div id="2343a5b0" class="cell" data-execution_count="11">
+<div id="173f7cc7" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pipe</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
-<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6700e218-550b-44e8-b03f-5e34ad880b80" type="checkbox"><label class="sk-toggleable__label" for="6700e218-550b-44e8-b03f-5e34ad880b80">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('columntransformer',
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="91936276-4fb7-4d9d-b26a-fbaaeb7a016e" type="checkbox"><label class="sk-toggleable__label" for="91936276-4fb7-4d9d-b26a-fbaaeb7a016e">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('columntransformer',
                  ColumnTransformer(transformers=[('pipeline',
                                                   Pipeline(steps=[('simpleimputer',
                                                                    SimpleImputer(fill_value='missing',
@@ -485,7 +485,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                                                  ('passthrough', 'passthrough',
                                                   ['Parch'])])),
                 ('logisticregression',
-                 LogisticRegression(random_state=1, solver='liblinear'))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="c8398029-bf4d-488c-9ce6-1484d5dcc9a2" type="checkbox"><label class="sk-toggleable__label" for="c8398029-bf4d-488c-9ce6-1484d5dcc9a2">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
+                 LogisticRegression(random_state=1, solver='liblinear'))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="30f9d726-85f7-46aa-b3c3-79403e20e640" type="checkbox"><label class="sk-toggleable__label" for="30f9d726-85f7-46aa-b3c3-79403e20e640">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline',
                                  Pipeline(steps=[('simpleimputer',
                                                   SimpleImputer(fill_value='missing',
                                                                 strategy='constant')),
@@ -495,7 +495,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                                 ('countvectorizer', CountVectorizer(), 'Name'),
                                 ('simpleimputer', SimpleImputer(),
                                  ['Age', 'Fare']),
-                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="94a2f4e3-9f32-4b19-8269-616c13088dfc" type="checkbox"><label class="sk-toggleable__label" for="94a2f4e3-9f32-4b19-8269-616c13088dfc">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="89f81ae2-b72f-4ddf-8ec2-226aae642fcc" type="checkbox"><label class="sk-toggleable__label" for="89f81ae2-b72f-4ddf-8ec2-226aae642fcc">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b9da2337-a170-479d-acbb-e1994623e952" type="checkbox"><label class="sk-toggleable__label" for="b9da2337-a170-479d-acbb-e1994623e952">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="347fbfd2-59fb-4be2-b70d-28a46d04d0ee" type="checkbox"><label class="sk-toggleable__label" for="347fbfd2-59fb-4be2-b70d-28a46d04d0ee">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6e82c3ef-76fe-41fb-843f-e2687aa7bf3b" type="checkbox"><label class="sk-toggleable__label" for="6e82c3ef-76fe-41fb-843f-e2687aa7bf3b">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="4943102f-d5b7-4886-9044-1e07fde050e2" type="checkbox"><label class="sk-toggleable__label" for="4943102f-d5b7-4886-9044-1e07fde050e2">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="c4357830-6898-4633-b881-273f8590c1b5" type="checkbox"><label class="sk-toggleable__label" for="c4357830-6898-4633-b881-273f8590c1b5">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0c34e079-f335-47b0-a1f5-691b4f1fa489" type="checkbox"><label class="sk-toggleable__label" for="0c34e079-f335-47b0-a1f5-691b4f1fa489">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b6694105-df39-45ba-bbd4-916de88cdcb2" type="checkbox"><label class="sk-toggleable__label" for="b6694105-df39-45ba-bbd4-916de88cdcb2">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="7f852865-5f6e-4af0-b18e-ab9fa48b56d1" type="checkbox"><label class="sk-toggleable__label" for="7f852865-5f6e-4af0-b18e-ab9fa48b56d1">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(random_state=1, solver='liblinear')</pre></div></div></div></div></div></div></div>
+                                ('passthrough', 'passthrough', ['Parch'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="02ad54a5-a92c-4ae0-a4c2-5272f1b5b6ae" type="checkbox"><label class="sk-toggleable__label" for="02ad54a5-a92c-4ae0-a4c2-5272f1b5b6ae">pipeline</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="4687c812-eb45-4651-b78e-7ad01768f9d5" type="checkbox"><label class="sk-toggleable__label" for="4687c812-eb45-4651-b78e-7ad01768f9d5">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="47116f08-89dc-4bca-b3b6-474b3f3ac8ae" type="checkbox"><label class="sk-toggleable__label" for="47116f08-89dc-4bca-b3b6-474b3f3ac8ae">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="92ec3b78-5eb0-4ee1-a661-003075bf0746" type="checkbox"><label class="sk-toggleable__label" for="92ec3b78-5eb0-4ee1-a661-003075bf0746">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8603eddb-4c8c-4395-9848-2c97f6cfa4b8" type="checkbox"><label class="sk-toggleable__label" for="8603eddb-4c8c-4395-9848-2c97f6cfa4b8">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="983e32f2-be21-45b5-b102-27e8201272b1" type="checkbox"><label class="sk-toggleable__label" for="983e32f2-be21-45b5-b102-27e8201272b1">simpleimputer</label><div class="sk-toggleable__content"><pre>['Age', 'Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b6ac5f9c-0b1c-45c2-aa3f-67a300c7664b" type="checkbox"><label class="sk-toggleable__label" for="b6ac5f9c-0b1c-45c2-aa3f-67a300c7664b">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="dd8fde37-f084-4cad-81ee-39a2a498f066" type="checkbox"><label class="sk-toggleable__label" for="dd8fde37-f084-4cad-81ee-39a2a498f066">passthrough</label><div class="sk-toggleable__content"><pre>['Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="003ba79f-c064-47bd-a60b-1b26fc756905" type="checkbox"><label class="sk-toggleable__label" for="003ba79f-c064-47bd-a60b-1b26fc756905">passthrough</label><div class="sk-toggleable__content"><pre>passthrough</pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="14a7b532-74dd-423c-abba-43a5fd95b07f" type="checkbox"><label class="sk-toggleable__label" for="14a7b532-74dd-423c-abba-43a5fd95b07f">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(random_state=1, solver='liblinear')</pre></div></div></div></div></div></div></div>
 </div>
 </div>
 </section>
@@ -528,22 +528,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td style="text-align: left;"><strong>Encoding text data</strong></td>
-<td style="text-align: left;">CountVectorizer</td>
+<td style="text-align: left;"><code>CountVectorizer</code></td>
 <td style="text-align: left;">Not available</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><strong>One-hot encoding</strong></td>
-<td style="text-align: left;">OneHotEncoder</td>
-<td style="text-align: left;">get_dummies (results in larger DataFrame)</td>
+<td style="text-align: left;"><code>OneHotEncoder</code></td>
+<td style="text-align: left;"><code>get_dummies</code> (results in larger DataFrame)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><strong>Imputing missing values</strong></td>
-<td style="text-align: left;">SimpleImputer &amp; other imputers</td>
-<td style="text-align: left;">fillna (results in data leakage)</td>
+<td style="text-align: left;"><code>SimpleImputer</code> &amp; others</td>
+<td style="text-align: left;"><code>fillna</code> (results in data leakage)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><strong>Cross-validation and tuning</strong></td>
-<td style="text-align: left;">Your entire Pipeline</td>
+<td style="text-align: left;">Your entire <code>Pipeline</code></td>
 <td style="text-align: left;">Just your model</td>
 </tr>
 </tbody>
@@ -633,8 +633,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>How does scikit-learn prevent data leakage?</strong></p>
 <ul>
 <li>Transformers have separate fit and transform steps</li>
-<li>Pipeline methods call fit_transform and transform at the appropriate times</li>
-<li>cross_val_score splits the data prior to performing transformations</li>
+<li>Pipeline methods call <code>fit_transform</code> and <code>transform</code> at the appropriate times</li>
+<li><code>cross_val_score</code> splits the data prior to performing transformations</li>
 </ul>
 </div>
 </div>
