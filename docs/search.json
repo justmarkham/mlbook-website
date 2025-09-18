@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Master Machine Learning with scikit-learn",
     "section": "",
-    "text": "About this book\nThis is a practical guide to help you transition from Machine Learning novice to skilled Machine Learning practitioner.\nThroughout the book, you’ll learn the best practices for proper Machine Learning and how to apply those practices to your own Machine Learning problems.\nBy the end of this book, you’ll be more confident when tackling new Machine Learning problems because you’ll understand what steps you need to take, why you need to take them, and how to correctly execute those steps using scikit-learn.\nYou’ll know what problems you might run into, and you’ll know exactly how to solve them.\nBecause you’re learning a better way to work in scikit-learn, your code will be easier to write and to read, and you’ll get better Machine Learning results faster than before!",
+    "text": "About this book\nThis is a practical guide to help you transform from Machine Learning novice to skilled Machine Learning practitioner.\nThroughout the book, you’ll learn the best practices for proper Machine Learning and how to apply those practices to your own Machine Learning problems.\nBy the end of this book, you’ll be more confident when tackling new Machine Learning problems because you’ll understand what steps you need to take, why you need to take them, and how to correctly execute those steps using scikit-learn.\nYou’ll know what problems you might run into, and you’ll know exactly how to solve them.\nBecause you’re learning a better way to work in scikit-learn, your code will be easier to write and to read, and you’ll get better Machine Learning results faster than before!",
     "crumbs": [
       "About this book"
     ]
@@ -70,11 +70,11 @@
     ]
   },
   {
-    "objectID": "index.html#license",
-    "href": "index.html#license",
+    "objectID": "index.html#copyright",
+    "href": "index.html#copyright",
     "title": "Master Machine Learning with scikit-learn",
-    "section": "License",
-    "text": "License\nThe content of this book is protected by copyright, and may not be copied or reproduced without the author’s permission.",
+    "section": "Copyright",
+    "text": "Copyright\nCopyright © 2025 by Kevin Markham. All rights reserved.\nNo part of this publication may be reproduced, distributed, or transmitted in any form or by any means, including photocopying, recording, or other electronic or mechanical methods, without the prior written permission of the author, except as permitted by U.S. copyright law. For permission requests, please contact kevin@dataschool.io.",
     "crumbs": [
       "About this book"
     ]
