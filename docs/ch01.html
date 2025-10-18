@@ -375,7 +375,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>How you will benefit from this book:</strong></p>
 <ul>
 <li>Knowledge of best practices</li>
-<li>Confidence when tackling new ML problems</li>
+<li>Confidence when tackling new Machine Learning problems</li>
 <li>Ability to anticipate and solve problems</li>
 <li>Improved code quality</li>
 <li>Better, faster results</li>
@@ -388,11 +388,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="1.2" class="anchored" data-anchor-id="scikit-learn-vs-deep-learning"><span class="header-section-number">1.2</span> scikit-learn vs Deep Learning</h2>
 <p>If you want to solve any Machine Learning problem using Python, then I always recommend starting with scikit-learn. Here’s why:</p>
 <ul>
-<li>It provides a consistent interface to a huge number of Machine Learning models</li>
-<li>It offers many options and tuning parameters but uses sensible defaults</li>
-<li>It includes a rich set of functionality to support the entire Machine Learning workflow</li>
-<li>It has exceptional documentation</li>
-<li>And there is an active community of researchers and developers who continue to improve and support the library</li>
+<li>It provides a consistent interface to a huge number of Machine Learning models.</li>
+<li>It offers many options and tuning parameters but uses sensible defaults.</li>
+<li>It includes a rich set of functionality to support the entire Machine Learning workflow.</li>
+<li>It has exceptional documentation.</li>
+<li>There is an active community of researchers and developers who continue to improve and support the library.</li>
 </ul>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -411,12 +411,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>In fact, scikit-learn was the most popular Machine Learning tool in Kaggle’s most recent “State of Machine Learning” report, with more than 80% of data scientists using it.</p>
-<p>For many Machine Learning problems, scikit-learn will be the only library you need. However, there are some specialized problems for which a deep learning library such as TensorFlow, PyTorch, or Keras will provide superior results. That being said, deep learning does have some significant drawbacks:</p>
+<p>In fact, scikit-learn was the most popular Machine Learning tool in Kaggle’s most recent “State of Machine Learning” report, with more than 80% of Data Scientists using it.</p>
+<p>For many Machine Learning problems, scikit-learn will be the only library you need. However, there are some specialized problems for which a Deep Learning library such as TensorFlow, PyTorch, or Keras will provide superior results. That being said, Deep Learning does have some significant drawbacks:</p>
 <ul>
-<li>Deep learning requires more computational resources</li>
-<li>Deep learning libraries have a higher learning curve</li>
-<li>And deep learning models are less interpretable than non-deep learning models</li>
+<li>Deep Learning requires more computational resources.</li>
+<li>Deep Learning libraries have a higher learning curve.</li>
+<li>Deep Learning models are less interpretable than other models.</li>
 </ul>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -424,7 +424,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-body-container">
-<p><strong>Drawbacks of deep learning:</strong></p>
+<p><strong>Drawbacks of Deep Learning:</strong></p>
 <ul>
 <li>More computational resources</li>
 <li>Higher learning curve</li>
@@ -433,7 +433,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>In other words, I only recommend using deep learning if you already know that you need it to solve your particular problem. But for the majority of Machine Learning problems, you are likely to get similar results using scikit-learn, and you will get those results much faster and easier with scikit-learn.</p>
+<p>In other words, I only recommend using Deep Learning if you already know that you need it to solve your particular problem. But for the majority of Machine Learning problems, you are likely to get similar results using scikit-learn, and you will get those results much faster and easier with scikit-learn.</p>
 </section>
 <section id="prerequisite-skills" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="prerequisite-skills"><span class="header-section-number">1.3</span> Prerequisite skills</h2>
@@ -471,11 +471,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>If you’ve used scikit-learn before but you just need a refresher, there’s no need to take my introductory course because I’ll be reviewing the Machine Learning workflow in the next chapter.</p>
-<p>Finally, I should note that we will perform a few basic pandas operations in the book, including reading a CSV file and selecting columns from a DataFrame. However, it’s not a problem at all if you’re new to pandas because I will explain that code as we go.</p>
+<p>Finally, I should note that we will perform a few basic pandas operations in the book, including reading a CSV file and selecting columns from a DataFrame. However, it’s not a problem if you’re new to pandas because I will explain that code as we go.</p>
 </section>
 <section id="setup-and-software-versions" class="level2" data-number="1.4">
 <h2 data-number="1.4" class="anchored" data-anchor-id="setup-and-software-versions"><span class="header-section-number">1.4</span> Setup and software versions</h2>
-<p>To follow along with this book, you’ll need to have access to scikit-learn and pandas, which are both open source Python libraries. The easiest way to install scikit-learn and pandas (and their dependencies) is to download the <a href="https://www.anaconda.com/download">Anaconda distribution</a> of Python.</p>
+<p>To follow along with this book, you’ll need to have access to scikit-learn and pandas, both of which are open source Python libraries. The easiest way to install scikit-learn and pandas (and their dependencies) is to download the <a href="https://www.anaconda.com/download">Anaconda distribution</a> of Python.</p>
 <p>For other installation options, visit the <a href="https://scikit-learn.org">scikit-learn</a> and <a href="https://pandas.pydata.org">pandas</a> websites.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -499,7 +499,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Because we’ll be using some of the latest scikit-learn functionality, it’s important that you are running a modern version of scikit-learn. To check your version, just open your code editor and run this code. Note that there are two underscores before and after the word “version”.</p>
-<div id="1cd4739d" class="cell" data-execution_count="1">
+<div id="967b13a4" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>sklearn.__version__</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -523,7 +523,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>You are also welcome to use a later version of scikit-learn, such as 0.24, 1.0, or beyond. Throughout the book, I’ll mention any changes to scikit-learn in those versions that are relevant to the book.</p>
 <p>Regarding the pandas library, this book uses version 1.2.4, but any version should work just fine.</p>
-<div id="f8ddef35" class="cell" data-execution_count="2">
+<div id="1dee268a" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pandas.__version__</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
@@ -553,7 +553,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>In chapter 1, which is this chapter, we’re getting you ready for the book.</li>
 <li>In chapter 2, we’ll walk through the basic Machine Learning workflow, from loading a dataset to building a model to making predictions.</li>
-<li>In chapter 3, we’ll focus on one of the most important data preprocessing steps, which is the encoding of categorical features.</li>
+<li>In chapter 3, we’ll focus on one of the most important data preprocessing steps, namely the encoding of categorical features.</li>
 <li>In chapter 4, we’ll see how to use <code>ColumnTransformer</code> and <code>Pipeline</code> to make our workflow more powerful and efficient.</li>
 <li>In chapter 5, we’ll review the workflow we’ve built so far to make sure you understand the key concepts before we start adding additional complexity.</li>
 <li>In chapter 6, we’ll learn how to create features from unstructured text data.</li>
@@ -563,14 +563,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>In chapter 10, we’ll take a deep dive into how to efficiently tune our <code>Pipeline</code> for maximum performance.</li>
 <li>In chapter 11, we’ll try out a non-linear model called “random forests” and figure out how to tune it without overextending our computing resources.</li>
 <li>In chapter 12, we’ll learn how to ensemble our different models two different ways and how to tune the ensemble for even better performance.</li>
-<li>In chapter 13, we’ll discuss the benefits of feature selection and then try out a handful of different automated methods for selecting features.</li>
+<li>In chapter 13, we’ll discuss the benefits of feature selection and then try out a handful of automated methods for selecting features.</li>
 <li>In chapter 14, we’ll experiment with standardizing our features to see if that improves our model performance.</li>
 <li>In chapter 15, we’ll create a variety of new features within our <code>Pipeline</code> and discuss why you might want to do all of your feature engineering using scikit-learn rather than pandas.</li>
 <li>In chapter 16, we’ll do one final review of the workflow that we created throughout the book.</li>
 <li>In chapter 17, we’ll experiment with different ways of handling categorical features with lots of unique values.</li>
 <li>In chapter 18, we’ll thoroughly explore the problem of class imbalance and the processes you can use to work around it.</li>
 <li>In chapter 19, we’ll walk through my complete workflow for handling class imbalance so that you can see a demonstration of the best practices.</li>
-<li>And finally, in chapter 20, we’ll discuss how you can keep learning and improving your skills on your own.</li>
+<li>Finally, in chapter 20, we’ll discuss how you can keep learning and improving your skills on your own.</li>
 </ul>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -621,7 +621,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Finally, I wanted to mention that this book won’t be focusing on high-level algorithm selection, such as whether you should use a logistic regression model or a random forests model for your particular problem. That’s because I’ve found that the workflow is more important and will have a greater impact on your overall Machine Learning results than your ability to pick between algorithms.</p>
-<p>In fact, once you’ve mastered the workflow, you can iterate through different algorithms quickly even if you don’t deeply understand them. And even if you did understand all of the algorithms, it’s hard to know in advance which one will work best for a given problem, which is why it’s so important to build a reusable workflow that enables you to switch between algorithms easily.</p>
+<p>In fact, once you’ve mastered the workflow, you can iterate through different algorithms quickly even if you don’t deeply understand them. Even if you did understand all of the algorithms, it’s hard to know in advance which one will work best for a given problem, which is why it’s so important to build a reusable workflow that enables you to switch between algorithms easily.</p>
 <p>The bottom line is that understanding the algorithms is still useful, but the workflow is even more important, and so that’s the focus of this book.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -663,9 +663,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>I chose these datasets for three main reasons:</p>
-<p>First, I wanted to use small-to-medium size datasets that could be read via URL so that you aren’t required to download any files for this book, which is more convenient for everyone.</p>
-<p>Second, using smaller datasets means that computationally intense operations such as grid search won’t take many hours to run. This will save you a lot of time, especially if you’re working through the book without the latest and greatest hardware.</p>
-<p>Third, I believe you’ll actually understand the lessons better because we’re not using huge datasets. From years of teaching experience, I’ve found that you will never master complex processes until you understand the simpler building blocks in great detail.</p>
+<ul>
+<li>First, I wanted to use small-to-medium size datasets that could be read via URL so that you aren’t required to download any files for this book, which is more convenient for everyone.</li>
+<li>Second, using smaller datasets means that computationally intense operations (such as grid search) won’t take many hours to run. This will save you a lot of time, especially if you’re working through the book without the latest and greatest hardware.</li>
+<li>Third, I believe you’ll actually understand the lessons better because we’re not using huge datasets. From years of teaching experience, I’ve found that you will never master complex processes until you understand the simple building blocks in great detail.</li>
+</ul>
 <p>In this book, we’re going to be examining the inputs and outputs from different workflow steps in detail, and that’s not practical when you have thousands of features or hundreds of thousands of samples.</p>
 <p>In fact, we’re going to be spending the next few chapters with just 10 rows of data, which might sound crazy, but is actually the ideal way to truly understand how the different scikit-learn components work together.</p>
 <div class="callout callout-style-simple callout-note no-icon">
@@ -702,7 +704,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Teaching Machine Learning for 10+ years</li>
 <li>Passionate about teaching people who are new to the field</li>
 <li>Degree in Computer Engineering</li>
-<li>Lives in Asheville, North Carolina</li>
+<li>Living in Asheville, North Carolina</li>
 </ul>
 </div>
 </div>

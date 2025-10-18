@@ -297,23 +297,22 @@ ul.task-list li input[type="checkbox"] {
 <section id="qa-how-do-i-read-the-scikit-learn-documentation" class="level2" data-number="20.1">
 <h2 data-number="20.1" class="anchored" data-anchor-id="qa-how-do-i-read-the-scikit-learn-documentation"><span class="header-section-number">20.1</span> Q&amp;A: How do I read the scikit-learn documentation?</h2>
 <p>In order to become truly proficient with scikit-learn and go beyond what I’ve covered in this book, you need to be able to read the <a href="https://scikit-learn.org/stable/">documentation</a>. In this lesson, I’m going to walk through the five main pages and page types that you need to be familiar with.</p>
-<p>The first page is the <a href="https://scikit-learn.org/stable/api/">API reference</a>, which you can get to by clicking on API from the top navigation bar. The API Reference gives you a high-level view of everything available in scikit-learn. Namely, it lists all of the classes and functions, organized by module.</p>
+<p>The first page is the <a href="https://scikit-learn.org/stable/api/">API Reference</a>, which you can get to by clicking on API from the top navigation bar. The API Reference gives you a high-level view of everything available in scikit-learn. Namely, it lists all of the classes and functions, organized by module.</p>
 <p>For example, this is the <a href="https://scikit-learn.org/stable/api/sklearn.compose.html"><code>compose</code> module</a>. There’s a brief description of the module, a link to the relevant section of the User Guide, and descriptions of the two classes and two functions contained in the module. If we wanted to learn more about <code>ColumnTransformer</code>, we could click on it and be taken to the class documentation.</p>
 <p>The <a href="https://scikit-learn.org/stable/modules/generated/sklearn.compose.ColumnTransformer.html">class documentation</a> is the second type of page you need to be familiar with. It gives you a detailed view of a class, in this case the <code>ColumnTransformer</code> class. At the top is the class signature, which lists the parameters and their default values. Starting in version 0.23, everything after the <code>*</code> needs to be passed as a keyword argument, also known as a named argument, rather than by position. There’s also a link to the source code for the class.</p>
 <p>Next is the class description, a link to the relevant section of the User Guide, and sometimes the version in which the class was introduced. Next you’ll see the same parameters from the class signature, except here it provides a detailed description of each parameter and the expected data type. Below the parameters are the attributes. As a reminder, attributes will end with an underscore if they are learned or estimated from the data during the fit step.</p>
 <p>Next are links to any related functions or classes, any important notes, and some simple usage examples. The next big section is a list of the methods. It starts with a description of each method, and below that you can see the parameters and return values for each method. Again, you can click on “source” to view the source code for any method. Finally, there are links to examples that use this class.</p>
 <p>Let’s scroll back to the top of the page, and then click over to the <a href="https://scikit-learn.org/stable/modules/compose.html#column-transformer">User Guide</a> for <code>ColumnTransformer</code>. The User Guide is the third type of page you need to be familiar with, and you’ll know you’re in the User Guide when you see the numbered sections. The User Guide is more like a tutorial, because it explains why you might want to use a particular class and advice for how to use that class properly. It often discusses related functions and classes, and includes additional usage examples.</p>
 <p>Let’s go back to the class documentation for <code>ColumnTransformer</code>, scroll to the bottom, and click on an <a href="https://scikit-learn.org/stable/auto_examples/compose/plot_column_transformer.html">example</a>. Examples are the fourth type of page you need to be familiar with. Examples vary in structure and length, but their distinguishing feature is that they demonstrate how to solve a particular problem from start to finish. You’ll always see imports at the top, and buttons on the right to run the example online or download the example to your computer.</p>
-<p>Let’s go back to the class documentation for <code>ColumnTransformer</code> one more time, and then scroll up to parameters. Sometimes in the documentation, you’ll see highlighted terms that are not classes or functions, such as “fit” and “transform” in this case. If you click on it, you’ll be taken to the <a href="https://scikit-learn.org/stable/glossary.html">Glossary</a>, which is the fifth page you need to be familiar with. The Glossary defines almost all of the important terms used in the scikit-learn documentation. If you just want to browse through it, you can access it through the More menu in the top navigation bar.</p>
-<p>Let me now summarize the five pages and page types we walked through, and describe how I use them:</p>
+<p>Let’s go back to the class documentation for <code>ColumnTransformer</code> one more time, and then scroll up to the top of the parameters section. Sometimes in the documentation, you’ll see linked terms that are not classes or functions, such as “fit” and “transform” in this case. If you click on it, you’ll be taken to the <a href="https://scikit-learn.org/stable/glossary.html">Glossary</a>, which is the fifth page you need to be familiar with. The Glossary defines almost all of the important terms used in the scikit-learn documentation. If you just want to browse through it, you can access it through the More menu in the top navigation bar.</p>
+<p>Let me now summarize the five pages and page types we walked through, and describe how I use each of them:</p>
 <ul>
-<li>The first page is the <a href="https://scikit-learn.org/stable/api/">API reference</a>. I go here when I want to see what classes or functions are in a particular module. For example, if I wanted to review all of the classes and functions that are available for preprocessing, the API reference is the fastest way to do this.</li>
+<li>The first page is the <a href="https://scikit-learn.org/stable/api/">API Reference</a>. I go here when I want to see what classes or functions are in a particular module. For example, if I wanted to review all of the classes and functions that are available for preprocessing, the API Reference is the fastest way to do this.</li>
 <li>The second page type is the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.compose.ColumnTransformer.html">class documentation</a>. I go here any time I need to understand a particular class in-depth, especially all of its parameters and attributes.</li>
 <li>The third page type is the <a href="https://scikit-learn.org/stable/user_guide.html">User Guide</a>. I go here when I need more context about a particular class or function, or advice about how to use it properly.</li>
 <li>The fourth page type is <a href="https://scikit-learn.org/stable/auto_examples/">Examples</a>. I go here when I need to see a more complex usage example of a particular class, since the examples in the class documentation and User Guide are purposefully simple.</li>
-<li>The fifth page is the <a href="https://scikit-learn.org/stable/glossary.html">Glossary</a>. I go here when I need to understand a particular term and it’s not covered in the User Guide.</li>
+<li>The fifth page is the <a href="https://scikit-learn.org/stable/glossary.html">Glossary</a>. I go here when I need to understand a particular term that is not already explained in the User Guide.</li>
 </ul>
-<p>If you’re ever unsure where to start, you can click on User Guide in the top navigation bar and just start browsing the section that seems most relevant, or you can do a search in the search box.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -322,7 +321,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="callout-body-container">
 <p><strong>Key pages in the documentation:</strong></p>
 <ul>
-<li><strong>API reference:</strong> List of classes and functions in each module</li>
+<li><strong>API Reference:</strong> List of classes and functions in each module</li>
 <li><strong>Class documentation:</strong> Detailed view of a class</li>
 <li><strong>User Guide:</strong> Advice for proper usage of a class or function</li>
 <li><strong>Examples:</strong> More complex usage examples</li>
@@ -331,12 +330,13 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
+<p>If you’re ever unsure where to start, you can click on User Guide in the top navigation bar and just start browsing the section that seems most relevant, or you can do a search in the search box.</p>
 </section>
 <section id="qa-how-do-i-stay-up-to-date-with-new-scikit-learn-features" class="level2" data-number="20.2">
 <h2 data-number="20.2" class="anchored" data-anchor-id="qa-how-do-i-stay-up-to-date-with-new-scikit-learn-features"><span class="header-section-number">20.2</span> Q&amp;A: How do I stay up-to-date with new scikit-learn features?</h2>
 <p>After every major release of scikit-learn, I recommend reviewing the <a href="https://scikit-learn.org/stable/auto_examples/release_highlights/">Release Highlights</a>, which are linked from the top of the home page. This page summarizes a small subset of updates that the scikit-learn developers have judged to be especially important or exciting.</p>
 <p>I also recommend that you review the <a href="https://scikit-learn.org/stable/whats_new.html">detailed release notes</a>, which are linked from the Release Highlights and are also linked from the More menu under “Release History”. This will give you the most comprehensive look at all of the new features, enhancements, and API changes. Even if you aren’t upgrading right away, it can help you to decide whether to upgrade and warn you about future API changes so that you can start preparing your code now.</p>
-<p>Reading this page might seem like an overwhelming task given its length, but my recommendation is to skip past any modules that you never import and only read through the modules that you actually use.</p>
+<p>Reading this page might seem like an overwhelming task given its length, but my recommendation is to skip past any modules you never import and only read through the modules you actually use.</p>
 <p>While reading about a particular change, you can click through to the class documentation for more details. If you still have questions after reading the class documentation, you can click on the number on the right to read through the GitHub pull request that introduced this feature or change. Often, the pull request will include a long conversation about the reasons for the change and why it’s designed in a certain way. These kinds of details are not always captured in the documentation, and they can help you to build a more in-depth knowledge of scikit-learn.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -360,7 +360,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="qa-how-do-i-improve-my-machine-learning-skills" class="level2" data-number="20.3">
 <h2 data-number="20.3" class="anchored" data-anchor-id="qa-how-do-i-improve-my-machine-learning-skills"><span class="header-section-number">20.3</span> Q&amp;A: How do I improve my Machine Learning skills?</h2>
-<p>If you want to get better at Machine Learning, my top recommendation is to practice what you’ve learned in this book as much as possible. I recommend choosing different types of problems and datasets so that you can learn how to adapt these skills to all different types of situations. During that process, you are likely to learn about other topics and scikit-learn modules that we didn’t cover in this book, which will expand your Machine Learning and scikit-learn fluency.</p>
+<p>If you want to get better at Machine Learning, my top recommendation is to practice what you’ve learned in this book as much as possible. I recommend choosing different types of problems and datasets so that you can learn how to adapt these skills to all different types of situations. During that process, you are likely to learn about other topics and scikit-learn modules that we didn’t cover in the book, which will expand your Machine Learning and scikit-learn fluency.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -394,7 +394,7 @@ ul.task-list li input[type="checkbox"] {
 <ul>
 <li>Learn which models are worth trying</li>
 <li>Learn how to tune those models</li>
-<li>Learn how to interpret those models</li>
+<li>Learn how to interpret the results of those models</li>
 </ul></li>
 <li><strong>Resource:</strong>
 <ul>
@@ -408,24 +408,23 @@ ul.task-list li input[type="checkbox"] {
 <section id="qa-how-do-i-learn-deep-learning" class="level2" data-number="20.4">
 <h2 data-number="20.4" class="anchored" data-anchor-id="qa-how-do-i-learn-deep-learning"><span class="header-section-number">20.4</span> Q&amp;A: How do I learn Deep Learning?</h2>
 <p>As I mentioned at the beginning of this book, there are some specialized problems for which a Deep Learning library will provide results that are superior to what you could achieve with scikit-learn. As such, you may decide that you’d like to spend your time learning how to use Deep Learning.</p>
-<p>Deep Learning is a fast-moving field, but one course that has stayed up-to-date and is taught in an approachable way is <a href="https://course.fast.ai"><em>Practical Deep Learning for Coders</em></a>. It’s available for free and is complemented by a book, a deep learning library called fastai, and a huge online community.</p>
-<p>Although Deep Learning has a higher learning curve than Machine Learning, it is based on many of the same fundamental principles that you’ve learned in this book, and so you’re well-positioned to begin learning Deep Learning.</p>
+<p>Deep Learning is a fast-moving field, but one course that has stayed up-to-date and is taught in an approachable way is <a href="https://course.fast.ai"><em>Practical Deep Learning for Coders</em></a>. It’s available for free and is complemented by a book, a Deep Learning library called fastai, and a huge online community.</p>
+<p>Although Deep Learning has a higher learning curve than Machine Learning, it’s based on many of the same fundamental principles that you’ve learned in this book, and so you’re well-positioned to begin learning Deep Learning.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-body-container">
-<p><strong>Learning Deep Learning:</strong></p>
+<p><strong>Learn Deep Learning:</strong></p>
 <ul>
-<li><strong>Why?</strong>
+<li><strong>Benefit:</strong>
 <ul>
 <li>Deep Learning will provide superior results for some specialized problems</li>
 </ul></li>
-<li><strong>How?</strong>
+<li><strong>Resource:</strong>
 <ul>
 <li><em>Practical Deep Learning for Coders</em> (free course)</li>
-<li>Higher learning curve than Machine Learning, but based on many of the same principles</li>
 </ul></li>
 </ul>
 </div>
