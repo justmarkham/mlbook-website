@@ -495,7 +495,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Because we’ll be using some of the latest scikit-learn functionality, it’s important that you are running a modern version of scikit-learn. To check your version, just open your code editor and run this code. Note that there are two underscores before and after the word “version”.</p>
-<div id="967b13a4" class="cell" data-execution_count="1">
+<div id="73e47716" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>sklearn.__version__</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -519,7 +519,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>You are also welcome to use a later version of scikit-learn, such as 0.24, 1.0, or beyond. Throughout the book, I’ll mention any changes to scikit-learn in those versions that are relevant to the book.</p>
 <p>Regarding the pandas library, this book uses version 1.2.4, but any version should work just fine.</p>
-<div id="1dee268a" class="cell" data-execution_count="2">
+<div id="df49fcde" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pandas.__version__</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
@@ -664,8 +664,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Second, using smaller datasets means that computationally intense operations (such as grid search) won’t take many hours to run. This will save you a lot of time, especially if you’re working through the book without the latest and greatest hardware.</li>
 <li>Third, I believe you’ll actually understand the lessons better because we’re not using huge datasets. From years of teaching experience, I’ve found that you will never master complex processes until you understand the simple building blocks in great detail.</li>
 </ul>
-<p>In this book, we’re going to be examining the inputs and outputs from different workflow steps in detail, and that’s not practical when you have thousands of features or hundreds of thousands of samples.</p>
-<p>In fact, we’re going to be spending the next few chapters with just 10 rows of data, which might sound crazy, but is actually the ideal way to truly understand how the different scikit-learn components work together.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -681,6 +679,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p>In this book, we’re going to be examining the inputs and outputs from different workflow steps in detail, and that’s not practical when you have thousands of features or hundreds of thousands of samples.</p>
+<p>In fact, we’re going to be spending the next few chapters with just 10 rows of data, which might sound crazy, but is actually the ideal way to truly understand how the different scikit-learn components work together.</p>
 <p>The great news is that once you master the workflow you’ll learn in this book, you’ll be able to handle datasets of almost any size without changing a single step. In other words, the knowledge you gain here will 100% transfer to far more complex datasets, and yet you will still understand in detail what is actually going on inside your code.</p>
 </section>
 <section id="meet-the-author" class="level2" data-number="1.7">
