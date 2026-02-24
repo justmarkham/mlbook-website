@@ -364,7 +364,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="transformer-1-rounding-numerical-values" class="level2" data-number="15.2">
 <h2 data-number="15.2" class="anchored" data-anchor-id="transformer-1-rounding-numerical-values"><span class="header-section-number">15.2</span> Transformer 1: Rounding numerical values</h2>
 <p>To start, we’re going to redefine <code>df</code> as a 10-row dataset. This will make it much easier for you to see how custom transformers work.</p>
-<div id="580b09c0" class="cell" data-execution_count="2">
+<div id="dd7253ef" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/MLtrain'</span>, nrows<span class="op">=</span><span class="dv">10</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
@@ -536,9 +536,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>First, let’s pretend we believe Fare would be a better feature if we rounded it up to the next integer. We can do this using NumPy’s <code>ceil</code> function, which is short for ceiling. Notice that each value in Fare has now been rounded up.</p>
-<p>In general, NumPy functions are a good choice for custom transformations because both scikit-learn and pandas use NumPy under-the-hood.</p>
-<p>Notice that we passed it a 2D object, namely a one-column DataFrame, and it returned a 2D object, again a one-column DataFrame. This will turn out to be a useful characteristic for custom transformations, as you’ll see later in the chapter.</p>
-<div id="57ca1057" class="cell" data-execution_count="6">
+<p>In general, NumPy functions are a good choice for custom transformations because both scikit-learn and pandas use NumPy “under the hood”.</p>
+<p>Note that we passed it a 2D object, namely a one-column DataFrame, and it returned a 2D object, again a one-column DataFrame. This will turn out to be a useful characteristic for custom transformations, as you’ll see later in the chapter.</p>
+<div id="5c4be665" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>np.ceil(df[[<span class="st">'Fare'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <div>
@@ -599,13 +599,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>In order to do this transformation within scikit-learn, we need to convert the <code>ceil</code> function into a scikit-learn transformer using the <code>FunctionTransformer</code> class, which we’ll import from the <code>preprocessing</code> module.</p>
-<p>We simply pass the <code>ceil</code> function to <code>FunctionTransformer</code>, and it returns a transformer object, which we’ll call <code>ceiling</code>. Note that if you’re using a version of scikit-learn prior to 0.22, you should also include the argument <code>validate=False</code> any time you’re using <code>FunctionTransformer</code>.</p>
-<div id="a431762e" class="cell" data-execution_count="7">
+<p>We simply pass the <code>ceil</code> function to <code>FunctionTransformer</code>, and it returns a transformer object, which we’ll call <code>ceiling</code>. (Note that if you’re using a version of scikit-learn prior to 0.22, you should also include the argument <code>validate=False</code> any time you’re using <code>FunctionTransformer</code>.)</p>
+<div id="5612843b" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> FunctionTransformer</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>ceiling <span class="op">=</span> FunctionTransformer(np.ceil)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Because <code>ceiling</code> is a transformer, you can pass Fare to its <code>fit_transform</code> method, which performs the same transformation as before. This is the simplest example of feature engineering within scikit-learn.</p>
-<div id="e7d588f8" class="cell" data-execution_count="8">
+<div id="1b93a4f2" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ceiling.fit_transform(df[[<span class="st">'Fare'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <div>
@@ -666,8 +666,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Like any transformer, <code>ceiling</code> can be included in a <code>ColumnTransformer</code>. For the moment, we’ll create a <code>ColumnTransformer</code> instance that only includes the <code>ceiling</code> transformer, though we’ll add more transformers throughout the chapter.</p>
-<p>Finally, we’ll pass <code>df</code> to its <code>fit_transform</code> method, which confirms that it works. As we’ve seen throughout the book, <code>ColumnTransformer</code> always outputs a NumPy array or sparse matrix, and in this case it outputs a NumPy array.</p>
-<div id="f22ab966" class="cell" data-execution_count="9">
+<p>Finally, we’ll pass <code>df</code> to its <code>fit_transform</code> method, which confirms that it works. As we’ve seen throughout the book, <code>ColumnTransformer</code> always outputs a NumPy array or a sparse matrix, and in this case it outputs a NumPy array.</p>
+<div id="a4ff91e9" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    (ceiling, [<span class="st">'Fare'</span>]))</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -688,7 +688,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="transformer-2-clipping-numerical-values" class="level2" data-number="15.3">
 <h2 data-number="15.3" class="anchored" data-anchor-id="transformer-2-clipping-numerical-values"><span class="header-section-number">15.3</span> Transformer 2: Clipping numerical values</h2>
 <p>Let’s look at the 10-row dataset again.</p>
-<div id="4a904e08" class="cell" data-execution_count="10">
+<div id="eb12520e" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <div>
@@ -860,7 +860,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>For our second transformation, let’s pretend we believe Age would be a better feature if we limited the values to the range 5 to 60, such that all values below 5 are rounded up to 5, and all values above 60 are rounded down to 60. We can do this using NumPy’s <code>clip</code> function. Note that it has two required arguments, <code>a_min</code> and <code>a_max</code>, which define the limits.</p>
 <p>In this case, the only value that changed was row 7, in which 2.0 became 5.0.</p>
-<div id="c6b70fa8" class="cell" data-execution_count="14">
+<div id="46c95924" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>np.clip(df[[<span class="st">'Age'</span>]], a_min<span class="op">=</span><span class="dv">5</span>, a_max<span class="op">=</span><span class="dv">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <div>
@@ -921,11 +921,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>We’ll convert NumPy’s <code>clip</code> function to a transformer called <code>clip</code>, though this time we need to pass the <code>a_min</code> and <code>a_max</code> arguments to the <code>FunctionTransformer</code>’s <code>kw_args</code> parameter.</p>
-<div id="1777fb85" class="cell" data-execution_count="15">
+<div id="c0c18324" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>clip <span class="op">=</span> FunctionTransformer(np.clip, kw_args<span class="op">=</span>{<span class="st">'a_min'</span>:<span class="dv">5</span>, <span class="st">'a_max'</span>:<span class="dv">60</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We’ll check that the <code>clip</code> transformer works by running the <code>fit_transform</code> method and passing it the Age column.</p>
-<div id="11cca061" class="cell" data-execution_count="16">
+<div id="e7a75a52" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>clip.fit_transform(df[[<span class="st">'Age'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <div>
@@ -986,7 +986,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Finally, we’ll add the <code>clip</code> transformer to the <code>ColumnTransformer</code>, and confirm that the <code>ColumnTransformer</code> still works as expected, which it does.</p>
-<div id="51022f99" class="cell" data-execution_count="17">
+<div id="b1c85d55" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    (ceiling, [<span class="st">'Fare'</span>]),</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    (clip, [<span class="st">'Age'</span>]))</span>
@@ -1008,7 +1008,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="transformer-3-extracting-string-values" class="level2" data-number="15.4">
 <h2 data-number="15.4" class="anchored" data-anchor-id="transformer-3-extracting-string-values"><span class="header-section-number">15.4</span> Transformer 3: Extracting string values</h2>
 <p>Let’s look at the dataset again.</p>
-<div id="47895514" class="cell" data-execution_count="18">
+<div id="d773e201" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <div>
@@ -1180,7 +1180,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>For our third transformation, let’s assume that the first letter of Cabin indicates the deck they were staying on, which we believe might be predictive. Our first thought might be to use the Series string <code>slice</code> method to extract the first character.</p>
 <p>This works, but notice that the output is a 1D object, namely a pandas Series. This is problematic because a function (once transformed) must return 2D output in order to be used in a <code>ColumnTransformer</code>.</p>
-<div id="df03bab2" class="cell" data-execution_count="22">
+<div id="b54a16a9" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Cabin'</span>].<span class="bu">str</span>.<span class="bu">slice</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>0    NaN
@@ -1197,9 +1197,9 @@ Name: Cabin, dtype: object</code></pre>
 </div>
 </div>
 <p>To resolve this, we’ll use the DataFrame <code>apply</code> method with a <code>lambda</code>. It still extracts the first character, but notice that it now returns 2D output. Also notice that it accepts 2D input, which means that it will be able to operate on multiple columns if we like.</p>
-<div id="8745d76a" class="cell" data-execution_count="23">
+<div id="4766ef17" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">'Cabin'</span>]].<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.<span class="bu">str</span>.<span class="bu">slice</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="23">
+<div class="cell-output cell-output-display" data-execution_count="24">
 <div>
 
 
@@ -1259,19 +1259,19 @@ Name: Cabin, dtype: object</code></pre>
 </div>
 <p>Since this doesn’t already exist as a standalone function, our next step is to convert this operation into a custom function called <code>first_letter</code>.</p>
 <p>This function would work, but notice that it requires the input to be a pandas DataFrame, since <code>apply</code> is a DataFrame method. That may be problematic since <code>ColumnTransformer</code>s accept both DataFrames and NumPy arrays as input. As such, it’s better to write a function that will work regardless of whether the input is a DataFrame or a NumPy array.</p>
-<div id="759622e6" class="cell" data-execution_count="24">
+<div id="04a9b884" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> first_letter(df):</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df.<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.<span class="bu">str</span>.<span class="bu">slice</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can revise the function to work with both DataFrames and NumPy arrays by converting the input to a DataFrame explicitly before using the <code>apply</code> method.</p>
-<div id="c2ba8481" class="cell" data-execution_count="25">
+<div id="a512972d" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> first_letter(df):</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(df).<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.<span class="bu">str</span>.<span class="bu">slice</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We’ll check that the function works. Again, notice that it accepts 2D input and returns 2D output, which is what we want.</p>
-<div id="df6c41d0" class="cell" data-execution_count="26">
+<p>We’ll check that the function works. Again, note that it accepts 2D input and returns 2D output, which is what we want.</p>
+<div id="04bc44b3" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>first_letter(df[[<span class="st">'Cabin'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="26">
+<div class="cell-output cell-output-display" data-execution_count="28">
 <div>
 
 
@@ -1329,76 +1329,18 @@ Name: Cabin, dtype: object</code></pre>
 </div>
 </div>
 </div>
-<p>Next, we’ll convert the function to a transformer called <code>letter</code>, and check that it works.</p>
-<div id="815d4ebf" class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>letter <span class="op">=</span> FunctionTransformer(first_letter)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>letter.fit_transform(df[[<span class="st">'Cabin'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="27">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Cabin</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>NaN</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>C</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>NaN</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>C</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>NaN</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">5</td>
-<td>NaN</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">6</td>
-<td>E</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">7</td>
-<td>NaN</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">8</td>
-<td>NaN</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">9</td>
-<td>NaN</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
+<p>Next, we’ll convert the function to a transformer called <code>letter</code>.</p>
+<div id="0219c96c" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>letter <span class="op">=</span> FunctionTransformer(first_letter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Finally, we’ll add the <code>letter</code> transformer to the <code>ColumnTransformer</code> and check that it works, which it does.</p>
-<div id="00b179bf" class="cell" data-execution_count="28">
+<div id="de95151c" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    (ceiling, [<span class="st">'Fare'</span>]),</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    (clip, [<span class="st">'Age'</span>]),</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    (letter, [<span class="st">'Cabin'</span>]))</span>
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="28">
+<div class="cell-output cell-output-display" data-execution_count="30">
 <pre><code>array([[8.0, 22.0, nan],
        [72.0, 38.0, 'C'],
        [8.0, 26.0, nan],
@@ -1444,9 +1386,9 @@ Name: Cabin, dtype: object</code></pre>
 <section id="transformer-4-combining-two-features" class="level2" data-number="15.6">
 <h2 data-number="15.6" class="anchored" data-anchor-id="transformer-4-combining-two-features"><span class="header-section-number">15.6</span> Transformer 4: Combining two features</h2>
 <p>Let’s look at the dataset one more time.</p>
-<div id="6e726c0d" class="cell" data-execution_count="29">
+<div id="e6d92c80" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div class="cell-output cell-output-display" data-execution_count="31">
 <div>
 
 
@@ -1616,9 +1558,9 @@ Name: Cabin, dtype: object</code></pre>
 </div>
 <p>For our fourth transformation, let’s say we believe that a passenger’s total number of family members aboard, meaning SibSp plus Parch, is more predictive than either feature individually.</p>
 <p>To create this feature, we can use the DataFrame’s <code>sum</code> method over the 1 axis. However, this outputs a 1D object, which will not work with a <code>ColumnTransformer</code>.</p>
-<div id="032010c7" class="cell" data-execution_count="33">
+<div id="a3b86943" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">'SibSp'</span>, <span class="st">'Parch'</span>]].<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display" data-execution_count="35">
 <pre><code>0    1
 1    1
 2    0
@@ -1633,46 +1575,8 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>To resolve this issue, we can use NumPy’s <code>reshape</code> method. Since it’s a NumPy method, we need to first convert the DataFrame into a NumPy array, then use NumPy’s <code>sum</code> method, then chain the <code>reshape</code> method on the end to convert the output into a 2D object. If you’re not familiar with the <code>reshape</code> method, this notation specifies that the second dimension should be 1 and the first dimension should be inferred.</p>
-<div id="bfa978a4" class="cell" data-execution_count="34">
+<div id="fe0c3900" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>np.array(df[[<span class="st">'SibSp'</span>, <span class="st">'Parch'</span>]]).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>).reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="34">
-<pre><code>array([[1],
-       [1],
-       [0],
-       [1],
-       [0],
-       [0],
-       [0],
-       [4],
-       [2],
-       [1]])</code></pre>
-</div>
-</div>
-<p>Next, we’ll convert this operation into a function called <code>sum_cols</code>. This function will work regardless of whether the input is a DataFrame or a NumPy array.</p>
-<div id="7064481b" class="cell" data-execution_count="35">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sum_cols(df):</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array(df).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>).reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>As always, we’ll check that the function works.</p>
-<div id="1a09c9c5" class="cell" data-execution_count="36">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>sum_cols(df[[<span class="st">'SibSp'</span>, <span class="st">'Parch'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="36">
-<pre><code>array([[1],
-       [1],
-       [0],
-       [1],
-       [0],
-       [0],
-       [0],
-       [4],
-       [2],
-       [1]])</code></pre>
-</div>
-</div>
-<p>Since it does work, we’ll convert the function to a transformer called <code>total</code>, and check that it also works.</p>
-<div id="144b8a35" class="cell" data-execution_count="37">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>total <span class="op">=</span> FunctionTransformer(sum_cols)</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>total.fit_transform(df[[<span class="st">'SibSp'</span>, <span class="st">'Parch'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="37">
 <pre><code>array([[1],
        [1],
@@ -1686,15 +1590,40 @@ dtype: int64</code></pre>
        [1]])</code></pre>
 </div>
 </div>
+<p>Next, we’ll convert this operation into a function called <code>sum_cols</code>. This function will work regardless of whether the input is a DataFrame or a NumPy array.</p>
+<div id="90a0397a" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sum_cols(df):</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array(df).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>).reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As always, we’ll check that the function works.</p>
+<div id="95fe57ba" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>sum_cols(df[[<span class="st">'SibSp'</span>, <span class="st">'Parch'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+<pre><code>array([[1],
+       [1],
+       [0],
+       [1],
+       [0],
+       [0],
+       [0],
+       [4],
+       [2],
+       [1]])</code></pre>
+</div>
+</div>
+<p>Since it does work, we’ll convert the function to a transformer called <code>total</code>.</p>
+<div id="172a898f" class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>total <span class="op">=</span> FunctionTransformer(sum_cols)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>Finally, we’ll add the <code>total</code> transformer to the <code>ColumnTransformer</code>, specify that it should be applied to the SibSp and Parch columns, and then check that it all works together, which it does.</p>
-<div id="47df5292" class="cell" data-execution_count="38">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    (ceiling, [<span class="st">'Fare'</span>]),</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    (clip, [<span class="st">'Age'</span>]),</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    (letter, [<span class="st">'Cabin'</span>]),</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    (total, [<span class="st">'SibSp'</span>, <span class="st">'Parch'</span>]))</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="38">
+<div id="3adbce83" class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    (ceiling, [<span class="st">'Fare'</span>]),</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    (clip, [<span class="st">'Age'</span>]),</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    (letter, [<span class="st">'Cabin'</span>]),</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    (total, [<span class="st">'SibSp'</span>, <span class="st">'Parch'</span>]))</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="41">
 <pre><code>array([[8.0, 22.0, nan, 1],
        [72.0, 38.0, 'C', 1],
        [8.0, 26.0, nan, 0],
@@ -1712,20 +1641,20 @@ dtype: int64</code></pre>
 <h2 data-number="15.7" class="anchored" data-anchor-id="sec-15-7"><span class="header-section-number">15.7</span> Revising the transformers</h2>
 <p>At this point, we’ve built four custom transformers and tested them out on 10 rows. Now, we want to apply them to our entire dataset, along with all of our other transformations.</p>
 <p>Before we start, let’s review our original <code>ColumnTransformer</code>.</p>
-<div id="5b5c7983" class="cell" data-execution_count="39">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    (imp_ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    (vect, <span class="st">'Name'</span>),</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    (imp, [<span class="st">'Age'</span>, <span class="st">'Fare'</span>]),</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'passthrough'</span>, [<span class="st">'Parch'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="244f4209" class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    (imp_ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    (vect, <span class="st">'Name'</span>),</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    (imp, [<span class="st">'Age'</span>, <span class="st">'Fare'</span>]),</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'passthrough'</span>, [<span class="st">'Parch'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s compare that with the <code>ColumnTransformer</code> containing our custom transformations.</p>
-<div id="2a910fe6" class="cell" data-execution_count="40">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    (ceiling, [<span class="st">'Fare'</span>]),</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    (clip, [<span class="st">'Age'</span>]),</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    (letter, [<span class="st">'Cabin'</span>]),</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    (total, [<span class="st">'SibSp'</span>, <span class="st">'Parch'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fbe8201a" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    (ceiling, [<span class="st">'Fare'</span>]),</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    (clip, [<span class="st">'Age'</span>]),</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    (letter, [<span class="st">'Cabin'</span>]),</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    (total, [<span class="st">'SibSp'</span>, <span class="st">'Parch'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>In order to combine the custom transformations with our original transformations, there are three issues we’ll need to handle:</p>
 <ul>
@@ -1749,33 +1678,33 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>To start, we’ll define <code>df</code> as the entire dataset.</p>
-<div id="568eb671" class="cell" data-execution_count="41">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/MLtrain'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="4404979c" class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/MLtrain'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, we’ll add Cabin and SibSp to the list of columns, and update <code>X</code> and <code>X_new</code> to include these columns. That solves issue number one.</p>
-<div id="2ee8e343" class="cell" data-execution_count="42">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [<span class="st">'Parch'</span>, <span class="st">'Fare'</span>, <span class="st">'Embarked'</span>, <span class="st">'Sex'</span>, <span class="st">'Name'</span>, <span class="st">'Age'</span>, <span class="st">'Cabin'</span>,</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>        <span class="st">'SibSp'</span>]</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[cols]</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>X_new <span class="op">=</span> df_new[cols]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="5fbcf40f" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [<span class="st">'Parch'</span>, <span class="st">'Fare'</span>, <span class="st">'Embarked'</span>, <span class="st">'Sex'</span>, <span class="st">'Name'</span>, <span class="st">'Age'</span>, <span class="st">'Cabin'</span>,</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>        <span class="st">'SibSp'</span>]</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[cols]</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>X_new <span class="op">=</span> df_new[cols]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next, let’s handle issue number two, which is the missing values in Fare and Age. Remember how we used a <code>Pipeline</code> to combine imputation and one-hot encoding for Embarked and Sex? We’ll do something similar for Fare and Age:</p>
 <ul>
 <li>For Fare, we’ll create a <code>Pipeline</code> called <code>imp_ceiling</code> that does imputation before ceiling.</li>
 <li>For Age, we’ll create a <code>Pipeline</code> called <code>imp_clip</code> that does imputation before clipping.</li>
 </ul>
-<div id="bbf5e28b" class="cell" data-execution_count="43">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>imp_ceiling <span class="op">=</span> make_pipeline(imp, ceiling)</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>imp_clip <span class="op">=</span> make_pipeline(imp, clip)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="07f53463" class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>imp_ceiling <span class="op">=</span> make_pipeline(imp, ceiling)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>imp_clip <span class="op">=</span> make_pipeline(imp, clip)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Finally, we’ll tackle issue number three, which will turn out to be the most complicated issue. Let’s slice the first letter of Cabin and then take the <code>value_counts</code> of the result to see why:</p>
 <ul>
 <li>First, it contains missing values, so imputation will be required.</li>
 <li>Second, letters are strings, so one-hot encoding will be required.</li>
 </ul>
-<div id="4159d9d7" class="cell" data-execution_count="44">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>X[<span class="st">'Cabin'</span>].<span class="bu">str</span>.<span class="bu">slice</span>(<span class="dv">0</span>, <span class="dv">1</span>).value_counts(dropna<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="44">
+<div id="19b098d3" class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>X[<span class="st">'Cabin'</span>].<span class="bu">str</span>.<span class="bu">slice</span>(<span class="dv">0</span>, <span class="dv">1</span>).value_counts(dropna<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="47">
 <pre><code>NaN    687
 C       59
 B       47
@@ -1806,8 +1735,8 @@ Name: Cabin, dtype: int64</code></pre>
 </div>
 </div>
 <p>Although the problem is complicated, the solution is simple: We need to set the <code>handle_unknown</code> parameter to <code>'ignore'</code>, which we learned about back in <a href="ch03.html#sec-3-5" class="quarto-xref">lesson&nbsp;<span>3.5</span></a>.</p>
-<div id="66a18224" class="cell" data-execution_count="45">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>ohe_ignore <span class="op">=</span> OneHotEncoder(handle_unknown<span class="op">=</span><span class="st">'ignore'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="2411965a" class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>ohe_ignore <span class="op">=</span> OneHotEncoder(handle_unknown<span class="op">=</span><span class="st">'ignore'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To resolve all of these issues with the Cabin column, we’ll create a three-step <code>Pipeline</code>:</p>
 <ul>
@@ -1815,8 +1744,8 @@ Name: Cabin, dtype: int64</code></pre>
 <li>Step 2 is <code>imp_constant</code>, which imputes the constant value “missing”.</li>
 <li>Step 3 is <code>ohe_ignore</code>, which one-hot encodes the results.</li>
 </ul>
-<div id="dfbec038" class="cell" data-execution_count="46">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>letter_imp_ohe <span class="op">=</span> make_pipeline(letter, imp_constant, ohe_ignore)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="aca26d56" class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>letter_imp_ohe <span class="op">=</span> make_pipeline(letter, imp_constant, ohe_ignore)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now that the three big issues in this lesson have been resolved, we’re finally ready to update our primary <code>ColumnTransformer</code>:</p>
 <ul>
@@ -1826,29 +1755,29 @@ Name: Cabin, dtype: int64</code></pre>
 <li>For Cabin, we’ll use <code>letter_imp_ohe</code>.</li>
 <li>For SibSp and Parch, we’ll use <code>total</code>.</li>
 </ul>
-<div id="1c944800" class="cell" data-execution_count="47">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>    (imp_ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    (vect, <span class="st">'Name'</span>),</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    (imp_ceiling, [<span class="st">'Fare'</span>]),</span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    (imp_clip, [<span class="st">'Age'</span>]),</span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    (letter_imp_ohe, [<span class="st">'Cabin'</span>]),</span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>    (total, [<span class="st">'SibSp'</span>, <span class="st">'Parch'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="09a7bfe1" class="cell" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>ct <span class="op">=</span> make_column_transformer(</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    (imp_ohe, [<span class="st">'Embarked'</span>, <span class="st">'Sex'</span>]),</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    (vect, <span class="st">'Name'</span>),</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    (imp_ceiling, [<span class="st">'Fare'</span>]),</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    (imp_clip, [<span class="st">'Age'</span>]),</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    (letter_imp_ohe, [<span class="st">'Cabin'</span>]),</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    (total, [<span class="st">'SibSp'</span>, <span class="st">'Parch'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We’ll check that it works by passing <code>X</code> to the <code>fit_transform</code> method.</p>
-<div id="0279c9c0" class="cell" data-execution_count="48">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="48">
+<div id="f98ef567" class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>ct.fit_transform(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="51">
 <pre><code>&lt;891x1527 sparse matrix of type '&lt;class 'numpy.float64'&gt;'
     with 8360 stored elements in Compressed Sparse Row format&gt;</code></pre>
 </div>
 </div>
 <p>Then we’ll update the <code>Pipeline</code> to use the new <code>ColumnTransformer</code>.</p>
-<div id="170c43a5" class="cell" data-execution_count="49">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> make_pipeline(ct, logreg)</span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>pipe</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="49">
-<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f6383d5d-451e-41e1-ad63-5de6bc9f7f8e" type="checkbox"><label class="sk-toggleable__label" for="f6383d5d-451e-41e1-ad63-5de6bc9f7f8e">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('columntransformer',
+<div id="70afb011" class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> make_pipeline(ct, logreg)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>pipe</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="52">
+<style>div.sk-top-container {color: black;background-color: white;}div.sk-toggleable {background-color: white;}label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.2em 0.3em;box-sizing: border-box;text-align: center;}div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}div.sk-estimator {font-family: monospace;background-color: #f0f8ff;margin: 0.25em 0.25em;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;}div.sk-estimator:hover {background-color: #d4ebff;}div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;}div.sk-item {z-index: 1;}div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}div.sk-parallel-item:only-child::after {width: 0;}div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0.2em;box-sizing: border-box;padding-bottom: 0.1em;background-color: white;position: relative;}div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}div.sk-label-container {position: relative;z-index: 2;text-align: center;}div.sk-container {display: inline-block;position: relative;}</style><div class="sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="c499ef4b-8e31-451d-95da-0949423f5280" type="checkbox"><label class="sk-toggleable__label" for="c499ef4b-8e31-451d-95da-0949423f5280">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('columntransformer',
                  ColumnTransformer(transformers=[('pipeline-1',
                                                   Pipeline(steps=[('simpleimputer',
                                                                    SimpleImputer(fill_value='missing',
@@ -1862,7 +1791,7 @@ Name: Cabin, dtype: int64</code></pre>
                                                   Pipeline(steps=[('simpleimputer',
                                                                    SimpleImputer()),
                                                                   ('functiontr...
-                                                                   FunctionTransformer(func=<function first_letter="" at="" 0x11f699f70="">)),
+                                                                   FunctionTransformer(func=<function first_letter="" at="" 0x11eafaaf0="">)),
                                                                   ('simpleimputer',
                                                                    SimpleImputer(fill_value='missing',
                                                                                  strategy='constant')),
@@ -1870,10 +1799,10 @@ Name: Cabin, dtype: int64</code></pre>
                                                                    OneHotEncoder(handle_unknown='ignore'))]),
                                                   ['Cabin']),
                                                  ('functiontransformer',
-                                                  FunctionTransformer(func=<function sum_cols="" at="" 0x11f6a08b0="">),
+                                                  FunctionTransformer(func=<function sum_cols="" at="" 0x11eafab80="">),
                                                   ['SibSp', 'Parch'])])),
                 ('logisticregression',
-                 LogisticRegression(random_state=1, solver='liblinear'))])</function></function></pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="1357dd0a-bae7-4c05-b4b2-c00fa768e76d" type="checkbox"><label class="sk-toggleable__label" for="1357dd0a-bae7-4c05-b4b2-c00fa768e76d">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline-1',
+                 LogisticRegression(random_state=1, solver='liblinear'))])</function></function></pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="c06ca0cb-bb8e-4359-8473-e0bfc1230a49" type="checkbox"><label class="sk-toggleable__label" for="c06ca0cb-bb8e-4359-8473-e0bfc1230a49">columntransformer: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('pipeline-1',
                                  Pipeline(steps=[('simpleimputer',
                                                   SimpleImputer(fill_value='missing',
                                                                 strategy='constant')),
@@ -1888,7 +1817,7 @@ Name: Cabin, dtype: int64</code></pre>
                                                   FunctionTransformer(func=&lt;...
                                 ('pipeline-4',
                                  Pipeline(steps=[('functiontransformer',
-                                                  FunctionTransformer(func=<function first_letter="" at="" 0x11f699f70="">)),
+                                                  FunctionTransformer(func=<function first_letter="" at="" 0x11eafaaf0="">)),
                                                  ('simpleimputer',
                                                   SimpleImputer(fill_value='missing',
                                                                 strategy='constant')),
@@ -1896,15 +1825,15 @@ Name: Cabin, dtype: int64</code></pre>
                                                   OneHotEncoder(handle_unknown='ignore'))]),
                                  ['Cabin']),
                                 ('functiontransformer',
-                                 FunctionTransformer(func=<function sum_cols="" at="" 0x11f6a08b0="">),
-                                 ['SibSp', 'Parch'])])</function></function></pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b0481a7a-a432-4f13-ba4b-ad97a02f2830" type="checkbox"><label class="sk-toggleable__label" for="b0481a7a-a432-4f13-ba4b-ad97a02f2830">pipeline-1</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="fa851427-e596-419a-8ee1-75d85e893db9" type="checkbox"><label class="sk-toggleable__label" for="fa851427-e596-419a-8ee1-75d85e893db9">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="828162fe-da88-42d0-8cde-7f4af4318f8b" type="checkbox"><label class="sk-toggleable__label" for="828162fe-da88-42d0-8cde-7f4af4318f8b">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="575491b5-cc9c-4c1f-b586-c97ee2290487" type="checkbox"><label class="sk-toggleable__label" for="575491b5-cc9c-4c1f-b586-c97ee2290487">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="2e6915ad-7013-4607-b95c-163722bad3c2" type="checkbox"><label class="sk-toggleable__label" for="2e6915ad-7013-4607-b95c-163722bad3c2">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="63e9ccbd-c057-4f2e-ac83-0f883bbf958a" type="checkbox"><label class="sk-toggleable__label" for="63e9ccbd-c057-4f2e-ac83-0f883bbf958a">pipeline-2</label><div class="sk-toggleable__content"><pre>['Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="86318a9b-4020-462f-a0c7-82f1315ba274" type="checkbox"><label class="sk-toggleable__label" for="86318a9b-4020-462f-a0c7-82f1315ba274">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="5e257b75-adc1-4431-9d37-42ed4d06c38d" type="checkbox"><label class="sk-toggleable__label" for="5e257b75-adc1-4431-9d37-42ed4d06c38d">FunctionTransformer</label><div class="sk-toggleable__content"><pre>FunctionTransformer(func=<ufunc 'ceil'="">)</ufunc></pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a4538b2e-d4cb-47e6-90bc-e80e8d2ffb94" type="checkbox"><label class="sk-toggleable__label" for="a4538b2e-d4cb-47e6-90bc-e80e8d2ffb94">pipeline-3</label><div class="sk-toggleable__content"><pre>['Age']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="d8463e21-5c04-470d-9ef1-d35c5ac66505" type="checkbox"><label class="sk-toggleable__label" for="d8463e21-5c04-470d-9ef1-d35c5ac66505">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8fffce58-b9ee-47ef-bbd8-cf2d55be54ba" type="checkbox"><label class="sk-toggleable__label" for="8fffce58-b9ee-47ef-bbd8-cf2d55be54ba">FunctionTransformer</label><div class="sk-toggleable__content"><pre>FunctionTransformer(func=<function clip="" at="" 0x10445e550="">,
-                    kw_args={'a_max': 60, 'a_min': 5})</function></pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f8e23def-150f-476f-8504-6d0afae0f116" type="checkbox"><label class="sk-toggleable__label" for="f8e23def-150f-476f-8504-6d0afae0f116">pipeline-4</label><div class="sk-toggleable__content"><pre>['Cabin']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="1cfab99b-7ab0-4546-8931-1082e5a4a0b9" type="checkbox"><label class="sk-toggleable__label" for="1cfab99b-7ab0-4546-8931-1082e5a4a0b9">FunctionTransformer</label><div class="sk-toggleable__content"><pre>FunctionTransformer(func=<function first_letter="" at="" 0x11f699f70="">)</function></pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f265d065-240d-4b63-a1f1-c437112352ea" type="checkbox"><label class="sk-toggleable__label" for="f265d065-240d-4b63-a1f1-c437112352ea">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ee79f007-f677-4841-acc4-b1449b6e1210" type="checkbox"><label class="sk-toggleable__label" for="ee79f007-f677-4841-acc4-b1449b6e1210">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder(handle_unknown='ignore')</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a0c6a227-8c4e-4eda-909f-18d6ca4cb860" type="checkbox"><label class="sk-toggleable__label" for="a0c6a227-8c4e-4eda-909f-18d6ca4cb860">functiontransformer</label><div class="sk-toggleable__content"><pre>['SibSp', 'Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="504c42f4-d299-4e10-9d42-bac278160eba" type="checkbox"><label class="sk-toggleable__label" for="504c42f4-d299-4e10-9d42-bac278160eba">FunctionTransformer</label><div class="sk-toggleable__content"><pre>FunctionTransformer(func=<function sum_cols="" at="" 0x11f6a08b0="">)</function></pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="bc363304-9d73-4064-ac4b-2f7c08c72065" type="checkbox"><label class="sk-toggleable__label" for="bc363304-9d73-4064-ac4b-2f7c08c72065">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(random_state=1, solver='liblinear')</pre></div></div></div></div></div></div></div>
+                                 FunctionTransformer(func=<function sum_cols="" at="" 0x11eafab80="">),
+                                 ['SibSp', 'Parch'])])</function></function></pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8b14be32-c843-47fb-985f-d4e0d29db78c" type="checkbox"><label class="sk-toggleable__label" for="8b14be32-c843-47fb-985f-d4e0d29db78c">pipeline-1</label><div class="sk-toggleable__content"><pre>['Embarked', 'Sex']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="77f6fbfd-e88f-4e65-9713-5407c72044f7" type="checkbox"><label class="sk-toggleable__label" for="77f6fbfd-e88f-4e65-9713-5407c72044f7">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="7cabbc9c-cdf6-432d-8817-e4e2426b30f7" type="checkbox"><label class="sk-toggleable__label" for="7cabbc9c-cdf6-432d-8817-e4e2426b30f7">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="385a84a7-3b0f-463e-b9b0-ec3a9b38f2fd" type="checkbox"><label class="sk-toggleable__label" for="385a84a7-3b0f-463e-b9b0-ec3a9b38f2fd">countvectorizer</label><div class="sk-toggleable__content"><pre>Name</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="88da37aa-5a1d-4cc3-9795-5c961d14d252" type="checkbox"><label class="sk-toggleable__label" for="88da37aa-5a1d-4cc3-9795-5c961d14d252">CountVectorizer</label><div class="sk-toggleable__content"><pre>CountVectorizer()</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="09bf865c-265c-420a-bfea-07f6c913d7b9" type="checkbox"><label class="sk-toggleable__label" for="09bf865c-265c-420a-bfea-07f6c913d7b9">pipeline-2</label><div class="sk-toggleable__content"><pre>['Fare']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b4f58cdd-e33d-40a2-801e-8e3529655bf0" type="checkbox"><label class="sk-toggleable__label" for="b4f58cdd-e33d-40a2-801e-8e3529655bf0">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0d384a32-e1ff-42d4-b79c-b876027b92a7" type="checkbox"><label class="sk-toggleable__label" for="0d384a32-e1ff-42d4-b79c-b876027b92a7">FunctionTransformer</label><div class="sk-toggleable__content"><pre>FunctionTransformer(func=<ufunc 'ceil'="">)</ufunc></pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="feb27d81-e336-442c-9881-cc185f474ca5" type="checkbox"><label class="sk-toggleable__label" for="feb27d81-e336-442c-9881-cc185f474ca5">pipeline-3</label><div class="sk-toggleable__content"><pre>['Age']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="70dd76be-7b10-4dbb-a0a7-5a28ef5ab965" type="checkbox"><label class="sk-toggleable__label" for="70dd76be-7b10-4dbb-a0a7-5a28ef5ab965">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer()</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3a9a3c57-4dae-452f-a438-f3233493e947" type="checkbox"><label class="sk-toggleable__label" for="3a9a3c57-4dae-452f-a438-f3233493e947">FunctionTransformer</label><div class="sk-toggleable__content"><pre>FunctionTransformer(func=<function clip="" at="" 0x103b03c10="">,
+                    kw_args={'a_max': 60, 'a_min': 5})</function></pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="160f8070-2263-4ce1-b12c-c820b0c93605" type="checkbox"><label class="sk-toggleable__label" for="160f8070-2263-4ce1-b12c-c820b0c93605">pipeline-4</label><div class="sk-toggleable__content"><pre>['Cabin']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="bcb3a5d3-cb53-4c87-9ae4-183fa31ec09d" type="checkbox"><label class="sk-toggleable__label" for="bcb3a5d3-cb53-4c87-9ae4-183fa31ec09d">FunctionTransformer</label><div class="sk-toggleable__content"><pre>FunctionTransformer(func=<function first_letter="" at="" 0x11eafaaf0="">)</function></pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="d6462139-226c-4acf-979e-3339570299fb" type="checkbox"><label class="sk-toggleable__label" for="d6462139-226c-4acf-979e-3339570299fb">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(fill_value='missing', strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="312c68a5-0536-4dd9-8fae-07d71c5c048c" type="checkbox"><label class="sk-toggleable__label" for="312c68a5-0536-4dd9-8fae-07d71c5c048c">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder(handle_unknown='ignore')</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="76fb144a-12c9-4263-8e1e-78052646b5cb" type="checkbox"><label class="sk-toggleable__label" for="76fb144a-12c9-4263-8e1e-78052646b5cb">functiontransformer</label><div class="sk-toggleable__content"><pre>['SibSp', 'Parch']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="400b1fa1-8707-4e80-b1ac-3d8debb55987" type="checkbox"><label class="sk-toggleable__label" for="400b1fa1-8707-4e80-b1ac-3d8debb55987">FunctionTransformer</label><div class="sk-toggleable__content"><pre>FunctionTransformer(func=<function sum_cols="" at="" 0x11eafab80="">)</function></pre></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="20f037d9-2127-4fcd-81ce-3890dda10280" type="checkbox"><label class="sk-toggleable__label" for="20f037d9-2127-4fcd-81ce-3890dda10280">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(random_state=1, solver='liblinear')</pre></div></div></div></div></div></div></div>
 </div>
 </div>
 <p>When we cross-validate the <code>Pipeline</code>, the accuracy is 0.827, which is higher than our baseline accuracy of 0.811. And it’s very likely that its accuracy could be further improved through hyperparameter tuning.</p>
-<div id="091cf322" class="cell" data-execution_count="51">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>cross_val_score(pipe, X, y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="50">
+<div id="3f6ffcb4" class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>cross_val_score(pipe, X, y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'accuracy'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="53">
 <pre><code>0.8271483271608812</code></pre>
 </div>
 </div>
@@ -1929,10 +1858,10 @@ Name: Cabin, dtype: int64</code></pre>
 </div>
 </div>
 <p>Finally, we’ll fit the <code>Pipeline</code> to <code>X</code> and <code>y</code> and use it to make predictions for <code>X_new</code>.</p>
-<div id="5347f534" class="cell" data-execution_count="52">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>pipe.fit(X, y)</span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>pipe.predict(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="51">
+<div id="26ccd5c2" class="cell" data-execution_count="55">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>pipe.fit(X, y)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>pipe.predict(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="54">
 <pre><code>array([0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1,
        1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1,
        1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1,
@@ -1958,13 +1887,13 @@ Name: Cabin, dtype: int64</code></pre>
 <section id="qa-how-do-i-fix-incorrect-data-types-within-a-pipeline" class="level2" data-number="15.8">
 <h2 data-number="15.8" class="anchored" data-anchor-id="qa-how-do-i-fix-incorrect-data-types-within-a-pipeline"><span class="header-section-number">15.8</span> Q&amp;A: How do I fix incorrect data types within a Pipeline?</h2>
 <p>Let’s say that you have the following DataFrame.</p>
-<div id="038cba0c" class="cell" data-execution_count="53">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>demo <span class="op">=</span> pd.DataFrame({<span class="st">'A'</span>: [<span class="st">'10'</span>, <span class="st">'20'</span>, <span class="st">'30'</span>],</span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>                     <span class="st">'B'</span>: [<span class="st">'40'</span>, <span class="st">'50'</span>, <span class="st">'60'</span>],</span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>                     <span class="st">'C'</span>: [<span class="dv">70</span>, <span class="dv">80</span>, <span class="dv">90</span>],</span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>                     <span class="st">'D'</span>: [<span class="st">'x'</span>, <span class="st">'y'</span>, <span class="st">'z'</span>]})</span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>demo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="52">
+<div id="7a0e85da" class="cell" data-execution_count="56">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>demo <span class="op">=</span> pd.DataFrame({<span class="st">'A'</span>: [<span class="st">'10'</span>, <span class="st">'20'</span>, <span class="st">'30'</span>],</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>                     <span class="st">'B'</span>: [<span class="st">'40'</span>, <span class="st">'50'</span>, <span class="st">'60'</span>],</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>                     <span class="st">'C'</span>: [<span class="dv">70</span>, <span class="dv">80</span>, <span class="dv">90</span>],</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>                     <span class="st">'D'</span>: [<span class="st">'x'</span>, <span class="st">'y'</span>, <span class="st">'z'</span>]})</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>demo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="55">
 <div>
 
 
@@ -2007,9 +1936,9 @@ Name: Cabin, dtype: int64</code></pre>
 </div>
 </div>
 <p>It may look like the first three columns are all integers, but columns A and B are actually object columns because the numbers are being stored as strings, which is a common problem in real datasets.</p>
-<div id="e1d769a5" class="cell" data-execution_count="54">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>demo.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="53">
+<div id="27773567" class="cell" data-execution_count="57">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>demo.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="56">
 <pre><code>A    object
 B    object
 C     int64
@@ -2018,60 +1947,8 @@ dtype: object</code></pre>
 </div>
 </div>
 <p>These data types need to be fixed in order for a scikit-learn model to understand them. Within pandas, you can do this using the DataFrame method <code>astype</code>.</p>
-<div id="6d27a8fa" class="cell" data-execution_count="55">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>demo[[<span class="st">'A'</span>, <span class="st">'B'</span>]].astype(<span class="st">'int'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="54">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">A</th>
-<th data-quarto-table-cell-role="th">B</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>10</td>
-<td>40</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>20</td>
-<td>50</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>30</td>
-<td>60</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-<p>As you can see, this changes the data types of columns A and B to integer.</p>
-<div id="ad67a1bd" class="cell" data-execution_count="56">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>demo[[<span class="st">'A'</span>, <span class="st">'B'</span>]].astype(<span class="st">'int'</span>).dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="55">
-<pre><code>A    int64
-B    int64
-dtype: object</code></pre>
-</div>
-</div>
-<p>To incorporate this into a scikit-learn <code>Pipeline</code>, we would first define a custom function called <code>make_integer</code> that converts DataFrame columns to integers.</p>
-<div id="e8d4b044" class="cell" data-execution_count="57">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_integer(df):</span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(df).astype(<span class="st">'int'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Then, we can convert the function to a transformer called <code>integer</code>, and check that it works.</p>
-<div id="1eb98348" class="cell" data-execution_count="58">
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>integer <span class="op">=</span> FunctionTransformer(make_integer)</span>
-<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>integer.fit_transform(demo[[<span class="st">'A'</span>, <span class="st">'B'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="1b59458b" class="cell" data-execution_count="58">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>demo[[<span class="st">'A'</span>, <span class="st">'B'</span>]].astype(<span class="st">'int'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="57">
 <div>
 
@@ -2106,23 +1983,75 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<p>You can see that the data types are now integer.</p>
-<div id="be27ac24" class="cell" data-execution_count="59">
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>integer.fit_transform(demo[[<span class="st">'A'</span>, <span class="st">'B'</span>]]).dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>As you can see, this changes the data types of columns A and B to integer.</p>
+<div id="fbf74d09" class="cell" data-execution_count="59">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>demo[[<span class="st">'A'</span>, <span class="st">'B'</span>]].astype(<span class="st">'int'</span>).dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="58">
 <pre><code>A    int64
 B    int64
 dtype: object</code></pre>
 </div>
 </div>
+<p>To incorporate this into a scikit-learn <code>Pipeline</code>, we would first define a custom function called <code>make_integer</code> that converts DataFrame columns to integers.</p>
+<div id="5de226b9" class="cell" data-execution_count="60">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_integer(df):</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(df).astype(<span class="st">'int'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, we can convert the function to a transformer called <code>integer</code>, and check that it works.</p>
+<div id="12c8100c" class="cell" data-execution_count="61">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>integer <span class="op">=</span> FunctionTransformer(make_integer)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>integer.fit_transform(demo[[<span class="st">'A'</span>, <span class="st">'B'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="60">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">A</th>
+<th data-quarto-table-cell-role="th">B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>10</td>
+<td>40</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>20</td>
+<td>50</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>30</td>
+<td>60</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>You can see that the data types are now integer.</p>
+<div id="74cfda94" class="cell" data-execution_count="62">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>integer.fit_transform(demo[[<span class="st">'A'</span>, <span class="st">'B'</span>]]).dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="61">
+<pre><code>A    int64
+B    int64
+dtype: object</code></pre>
+</div>
+</div>
 <p>What I’ve shown so far is a reasonable strategy, and it will work in many cases. However, let’s modify the demo DataFrame slightly.</p>
-<div id="b2d48b76" class="cell" data-execution_count="60">
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>demo.loc[<span class="dv">2</span>, <span class="st">'B'</span>] <span class="op">=</span> <span class="st">''</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="066de480" class="cell" data-execution_count="63">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>demo.loc[<span class="dv">2</span>, <span class="st">'B'</span>] <span class="op">=</span> <span class="st">''</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>As you can see, the value 60 has been replaced by an empty string.</p>
-<div id="fc5cb0b0" class="cell" data-execution_count="61">
-<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>demo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="60">
+<div id="637aaec0" class="cell" data-execution_count="64">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>demo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="63">
 <div>
 
 
@@ -2165,18 +2094,18 @@ dtype: object</code></pre>
 </div>
 </div>
 <p>If we try to use our <code>integer</code> transformer on the revised DataFrame, it will error because the <code>astype</code> method doesn’t know how to handle an empty string.</p>
-<div id="56920904" class="cell" data-execution_count="62">
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>integer.fit_transform(demo[[<span class="st">'A'</span>, <span class="st">'B'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="57eba6f6" class="cell" data-execution_count="65">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>integer.fit_transform(demo[[<span class="st">'A'</span>, <span class="st">'B'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="df0351fb" class="cell" data-execution_count="63">
+<div id="b74dacd7" class="cell" data-execution_count="66">
 <div class="cell-output cell-output-stdout">
 <pre><code>ValueError: invalid literal for int() with base 10: ''</code></pre>
 </div>
 </div>
 <p>An alternative strategy is to use the pandas function <code>to_numeric</code> and apply it to each of the columns. As you can see, <code>to_numeric</code> replaced the empty string with <code>NaN</code>.</p>
-<div id="da986793" class="cell" data-execution_count="64">
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>demo[[<span class="st">'A'</span>, <span class="st">'B'</span>]].<span class="bu">apply</span>(pd.to_numeric)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="62">
+<div id="844e31c3" class="cell" data-execution_count="67">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>demo[[<span class="st">'A'</span>, <span class="st">'B'</span>]].<span class="bu">apply</span>(pd.to_numeric)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="65">
 <div>
 
 
@@ -2211,24 +2140,24 @@ dtype: object</code></pre>
 </div>
 </div>
 <p>Column A is now an integer column, and column B is now a float column since integer columns don’t currently support NumPy’s <code>NaN</code> value.</p>
-<div id="fec67cc9" class="cell" data-execution_count="65">
-<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>demo[[<span class="st">'A'</span>, <span class="st">'B'</span>]].<span class="bu">apply</span>(pd.to_numeric).dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="63">
+<div id="80344ec2" class="cell" data-execution_count="68">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>demo[[<span class="st">'A'</span>, <span class="st">'B'</span>]].<span class="bu">apply</span>(pd.to_numeric).dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="66">
 <pre><code>A      int64
 B    float64
 dtype: object</code></pre>
 </div>
 </div>
 <p>If we wanted to use this in the <code>Pipeline</code>, we would create a custom function called <code>make_number</code>.</p>
-<div id="15877abe" class="cell" data-execution_count="66">
-<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_number(df):</span>
-<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(df).<span class="bu">apply</span>(pd.to_numeric)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="a794ccd6" class="cell" data-execution_count="69">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_number(df):</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(df).<span class="bu">apply</span>(pd.to_numeric)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then we would convert the function to a transformer called <code>number</code>, and check that it works.</p>
-<div id="e4ec458f" class="cell" data-execution_count="67">
-<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>number <span class="op">=</span> FunctionTransformer(make_number)</span>
-<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>number.fit_transform(demo[[<span class="st">'A'</span>, <span class="st">'B'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="65">
+<div id="dc0598d7" class="cell" data-execution_count="70">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>number <span class="op">=</span> FunctionTransformer(make_number)</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>number.fit_transform(demo[[<span class="st">'A'</span>, <span class="st">'B'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="68">
 <div>
 
 
@@ -2267,10 +2196,10 @@ dtype: object</code></pre>
 <section id="qa-how-do-i-create-features-from-datetime-data" class="level2" data-number="15.9">
 <h2 data-number="15.9" class="anchored" data-anchor-id="qa-how-do-i-create-features-from-datetime-data"><span class="header-section-number">15.9</span> Q&amp;A: How do I create features from datetime data?</h2>
 <p>To demonstrate how to create date-based features, I’m going to read a tiny dataset of reported UFO sightings into a DataFrame.</p>
-<div id="ca529895" class="cell" data-execution_count="68">
-<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>ufo <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/ufosample'</span>, parse_dates<span class="op">=</span>[<span class="st">'Date'</span>])</span>
-<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>ufo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="66">
+<div id="2ff83cb6" class="cell" data-execution_count="71">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>ufo <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/ufosample'</span>, parse_dates<span class="op">=</span>[<span class="st">'Date'</span>])</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>ufo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="69">
 <div>
 
 
@@ -2334,9 +2263,9 @@ dtype: object</code></pre>
 </div>
 </div>
 <p>Because we parsed the Date column during file reading, it uses the special datetime data type.</p>
-<div id="3e77be40" class="cell" data-execution_count="69">
-<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>ufo.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="67">
+<div id="85e132ea" class="cell" data-execution_count="72">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>ufo.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="70">
 <pre><code>Date     datetime64[ns]
 City             object
 State            object
@@ -2345,9 +2274,9 @@ dtype: object</code></pre>
 </div>
 </div>
 <p>Because of the datetime data type, we can access various properties of the Date column using the <code>dt</code> accessor. For example, we can easily access the day of the month using the <code>day</code> attribute.</p>
-<div id="3e488960" class="cell" data-execution_count="70">
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>ufo[<span class="st">'Date'</span>].dt.day</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="68">
+<div id="104bba68" class="cell" data-execution_count="73">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>ufo[<span class="st">'Date'</span>].dt.day</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="71">
 <pre><code>0    4
 1    4
 2    5
@@ -2358,14 +2287,14 @@ Name: Date, dtype: int64</code></pre>
 </div>
 </div>
 <p>Let’s say that you wanted to use day of month as a feature. The first step would be to create a custom function like we’ve done previously called <code>day_of_month</code>.</p>
-<div id="34dbbfca" class="cell" data-execution_count="71">
-<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> day_of_month(df):</span>
-<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df.<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.dt.day)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="0e889eb7" class="cell" data-execution_count="74">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> day_of_month(df):</span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df.<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.dt.day)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can see that this function works. However, it’s not quite optimal because it assumes that the object being passed in is a DataFrame with the datetime data type.</p>
-<div id="f331ee7e" class="cell" data-execution_count="72">
-<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>day_of_month(ufo[[<span class="st">'Date'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="70">
+<div id="2222442a" class="cell" data-execution_count="75">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>day_of_month(ufo[[<span class="st">'Date'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="73">
 <div>
 
 
@@ -2409,21 +2338,21 @@ Name: Date, dtype: int64</code></pre>
 </div>
 <p>Let’s make the function more robust by enabling it to handle NumPy arrays and by doing the datetime conversion within the function.</p>
 <p>Here’s one option. As you can see, it converts the object to a DataFrame, and then it converts each column to datetime format before accessing the <code>day</code> attribute.</p>
-<div id="697f7026" class="cell" data-execution_count="73">
-<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> day_of_month(df):</span>
-<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(df).<span class="bu">apply</span>(<span class="kw">lambda</span> x: pd.to_datetime(x).dt.day)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="7e1d4fa2" class="cell" data-execution_count="76">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> day_of_month(df):</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(df).<span class="bu">apply</span>(<span class="kw">lambda</span> x: pd.to_datetime(x).dt.day)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Another option is to convert all columns to datetime format within the DataFrame constructor rather than within the <code>apply</code> method.</p>
-<div id="b235b57c" class="cell" data-execution_count="74">
-<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> day_of_month(df):</span>
-<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(df, dtype<span class="op">=</span>np.datetime64).<span class="bu">apply</span>(<span class="kw">lambda</span> x:</span>
-<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a>                                                       x.dt.day)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="164beb2d" class="cell" data-execution_count="77">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> day_of_month(df):</span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(df, dtype<span class="op">=</span>np.datetime64).<span class="bu">apply</span>(<span class="kw">lambda</span> x:</span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>                                                       x.dt.day)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To check that it works, we’ll read in the UFO dataset again, but this time we’ll leave the Date column as an object column.</p>
-<div id="b5fbf3ef" class="cell" data-execution_count="75">
-<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>ufo <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/ufosample'</span>)</span>
-<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>ufo.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="73">
+<div id="f935051b" class="cell" data-execution_count="78">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>ufo <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/ufosample'</span>)</span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>ufo.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="76">
 <pre><code>Date     object
 City     object
 State    object
@@ -2432,9 +2361,9 @@ dtype: object</code></pre>
 </div>
 </div>
 <p>We can see that the <code>day_of_month</code> function still works, even though Date is an object column.</p>
-<div id="a6fa05f7" class="cell" data-execution_count="76">
-<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>day_of_month(ufo[[<span class="st">'Date'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="74">
+<div id="b8279c85" class="cell" data-execution_count="79">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>day_of_month(ufo[[<span class="st">'Date'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="77">
 <div>
 
 
@@ -2477,10 +2406,10 @@ dtype: object</code></pre>
 </div>
 </div>
 <p>Finally, we’ll convert the <code>day_of_month</code> function into a transformer called <code>day</code>, and check that it works as well.</p>
-<div id="8a6ba2b6" class="cell" data-execution_count="77">
-<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>day <span class="op">=</span> FunctionTransformer(day_of_month)</span>
-<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>day.fit_transform(ufo[[<span class="st">'Date'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="75">
+<div id="a81956c5" class="cell" data-execution_count="80">
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>day <span class="op">=</span> FunctionTransformer(day_of_month)</span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>day.fit_transform(ufo[[<span class="st">'Date'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="78">
 <div>
 
 
@@ -2546,9 +2475,9 @@ dtype: object</code></pre>
 </div>
 </div>
 <p>Let’s see how we can create feature interactions in scikit-learn. We’ll assume that we’ve decided to create interactions between Fare, SibSp, and Parch. Here are the first three and last three rows of each of those features.</p>
-<div id="3dd92ef6" class="cell" data-execution_count="78">
-<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>X[[<span class="st">'Fare'</span>, <span class="st">'SibSp'</span>, <span class="st">'Parch'</span>]].to_numpy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="76">
+<div id="1085a037" class="cell" data-execution_count="81">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>X[[<span class="st">'Fare'</span>, <span class="st">'SibSp'</span>, <span class="st">'Parch'</span>]].to_numpy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="79">
 <pre><code>array([[ 7.25  ,  1.    ,  0.    ],
        [71.2833,  1.    ,  0.    ],
        [ 7.925 ,  0.    ,  0.    ],
@@ -2559,18 +2488,18 @@ dtype: object</code></pre>
 </div>
 </div>
 <p>Our first step is to import the <code>PolynomialFeatures</code> class from the <code>preprocessing</code> module, and then create an instance called <code>poly</code>. We’ll set the <code>include_bias</code> parameter to <code>False</code> to avoid creating a column of ones in the result, and we’ll set the <code>interaction_only</code> parameter to <code>True</code> to avoid creating the square of each feature.</p>
-<div id="4ff58a10" class="cell" data-execution_count="79">
-<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span>
-<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>poly <span class="op">=</span> PolynomialFeatures(include_bias<span class="op">=</span><span class="va">False</span>, interaction_only<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="13cae8b9" class="cell" data-execution_count="82">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>poly <span class="op">=</span> PolynomialFeatures(include_bias<span class="op">=</span><span class="va">False</span>, interaction_only<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>When we run the <code>fit_transform</code> method and pass it those three columns, it outputs six columns:</p>
 <ul>
 <li>The first three columns of the output are the original three columns: Fare, SibSp, and Parch.</li>
 <li>The next three columns are our interaction terms: Fare × SibSp, Fare × Parch, and SibSp × Parch.</li>
 </ul>
-<div id="76798552" class="cell" data-execution_count="80">
-<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>poly.fit_transform(X[[<span class="st">'Fare'</span>, <span class="st">'SibSp'</span>, <span class="st">'Parch'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="78">
+<div id="f5dae127" class="cell" data-execution_count="83">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>poly.fit_transform(X[[<span class="st">'Fare'</span>, <span class="st">'SibSp'</span>, <span class="st">'Parch'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="81">
 <pre><code>array([[ 7.25  ,  1.    ,  0.    ,  7.25  ,  0.    ,  0.    ],
        [71.2833,  1.    ,  0.    , 71.2833,  0.    ,  0.    ],
        [ 7.925 ,  0.    ,  0.    ,  0.    ,  0.    ,  0.    ],
@@ -2647,41 +2576,41 @@ dtype: object</code></pre>
 <h2 data-number="15.11" class="anchored" data-anchor-id="qa-how-do-i-save-a-pipeline-with-custom-transformers"><span class="header-section-number">15.11</span> Q&amp;A: How do I save a Pipeline with custom transformers?</h2>
 <p>If you save a <code>Pipeline</code> using pickle or joblib, and the <code>Pipeline</code> includes custom transformers, then the saved <code>Pipeline</code> can only be loaded into a new environment if the functions it depends on are defined in the new environment.</p>
 <p>For example, let’s import pickle and use it to save our current <code>Pipeline</code>.</p>
-<div id="e8c556f4" class="cell" data-execution_count="81">
-<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pickle</span>
-<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'pipe.pickle'</span>, <span class="st">'wb'</span>) <span class="im">as</span> f:</span>
-<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a>    pickle.dump(pipe, f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="c0b2473f" class="cell" data-execution_count="84">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pickle</span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'pipe.pickle'</span>, <span class="st">'wb'</span>) <span class="im">as</span> f:</span>
+<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a>    pickle.dump(pipe, f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s pretend that we’re in a brand new environment and we want to make predictions for <code>X_new</code> using our saved <code>Pipeline</code>. Because the <code>Pipeline</code> includes custom transformers which use the <code>first_letter</code> and <code>sum_cols</code> functions, those two functions need to be defined in the new environment.</p>
-<div id="40f3dd23" class="cell" data-execution_count="82">
-<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> first_letter(df):</span>
-<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(df).<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.<span class="bu">str</span>.<span class="bu">slice</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="43919ef1" class="cell" data-execution_count="85">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> first_letter(df):</span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(df).<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.<span class="bu">str</span>.<span class="bu">slice</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="1c0142fa" class="cell" data-execution_count="83">
-<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sum_cols(df):</span>
-<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array(df).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>).reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="ff654a06" class="cell" data-execution_count="86">
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sum_cols(df):</span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array(df).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>).reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Because those functions depend on pandas and NumPy, then these libraries also need to be imported into the new environment.</p>
-<div id="ce4655f9" class="cell" data-execution_count="84">
-<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="11313e5d" class="cell" data-execution_count="87">
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we can load our saved <code>Pipeline</code> into the <code>pipe_from_pickle</code> object.</p>
-<div id="57f117cd" class="cell" data-execution_count="85">
-<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'pipe.pickle'</span>, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
-<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>    pipe_from_pickle <span class="op">=</span> pickle.load(f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="e1d456a8" class="cell" data-execution_count="88">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'pipe.pickle'</span>, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a>    pipe_from_pickle <span class="op">=</span> pickle.load(f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We also need to create the <code>X_new</code> object in our environment.</p>
-<div id="5438f46e" class="cell" data-execution_count="86">
-<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [<span class="st">'Parch'</span>, <span class="st">'Fare'</span>, <span class="st">'Embarked'</span>, <span class="st">'Sex'</span>, <span class="st">'Name'</span>, <span class="st">'Age'</span>, <span class="st">'Cabin'</span>,</span>
-<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a>        <span class="st">'SibSp'</span>]</span>
-<span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a>df_new <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/MLnewdata'</span>)</span>
-<span id="cb94-4"><a href="#cb94-4" aria-hidden="true" tabindex="-1"></a>X_new <span class="op">=</span> df_new[cols]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="b74fe938" class="cell" data-execution_count="89">
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [<span class="st">'Parch'</span>, <span class="st">'Fare'</span>, <span class="st">'Embarked'</span>, <span class="st">'Sex'</span>, <span class="st">'Name'</span>, <span class="st">'Age'</span>, <span class="st">'Cabin'</span>,</span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>        <span class="st">'SibSp'</span>]</span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>df_new <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/MLnewdata'</span>)</span>
+<span id="cb93-4"><a href="#cb93-4" aria-hidden="true" tabindex="-1"></a>X_new <span class="op">=</span> df_new[cols]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Finally, we can make predictions using the saved <code>Pipeline</code>.</p>
-<div id="b586a500" class="cell" data-execution_count="87">
-<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>pipe_from_pickle.predict(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="85">
+<div id="ee9c33f5" class="cell" data-execution_count="90">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>pipe_from_pickle.predict(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="88">
 <pre><code>array([0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1,
        1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1,
        1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1,
@@ -2705,19 +2634,19 @@ dtype: object</code></pre>
 </div>
 <p>If the process above seems too cumbersome, one alternative is to use a Python library called cloudpickle, which extends the functionality of pickle to allow you to save user-defined functions.</p>
 <p>All you have to do is install cloudpickle, import it, and then save the <code>Pipeline</code> using cloudpickle instead of pickle. Notice that the cloudpickle code is exactly the same as the pickle code, except you use the <code>dump</code> function from cloudpickle instead of from pickle.</p>
-<div id="cf71ecfa" class="cell" data-execution_count="88">
-<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cloudpickle</span>
-<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'pipe.pickle'</span>, <span class="st">'wb'</span>) <span class="im">as</span> f:</span>
-<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a>    cloudpickle.dump(pipe, f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="63125f3b" class="cell" data-execution_count="91">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cloudpickle</span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'pipe.pickle'</span>, <span class="st">'wb'</span>) <span class="im">as</span> f:</span>
+<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a>    cloudpickle.dump(pipe, f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, in your new environment, you’ll be able to load the saved <code>Pipeline</code> using pickle and use it to make predictions without having to define the custom functions in that environment.</p>
-<div id="0aef699f" class="cell" data-execution_count="89">
-<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'pipe.pickle'</span>, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
-<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>    pipe_from_pickle <span class="op">=</span> pickle.load(f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="f531513e" class="cell" data-execution_count="92">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'pipe.pickle'</span>, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>    pipe_from_pickle <span class="op">=</span> pickle.load(f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="4a2067f2" class="cell" data-execution_count="90">
-<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>pipe_from_pickle.predict(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="88">
+<div id="4db5be3c" class="cell" data-execution_count="93">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>pipe_from_pickle.predict(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="91">
 <pre><code>array([0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1,
        1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1,
        1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1,
