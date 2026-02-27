@@ -344,7 +344,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Class imbalance can occur in both binary classification problems, meaning there are two classes, and multiclass problems, meaning there are more than two classes. In binary classification, the class that has more samples is called the “majority class”, and the class that has fewer samples is called the “minority class”.</p>
 <p>So why does class imbalance even matter? In brief, Machine Learning models often have a harder time predicting the minority class because there are fewer examples of this class to learn from. In other words, your model won’t be able to learn as much about the patterns in the minority class, and thus it may have a hard time differentiating between the classes.</p>
 <p>Keep in mind that some class imbalance is present in most datasets. In the Titanic dataset, for example, the majority class represents 62% of the samples and the minority class represents 38%. There’s even more imbalance in the census dataset, with a split of 76% to 24%.</p>
-<div id="ecbd7857" class="cell" data-execution_count="2">
+<div id="bce903c3" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>y.value_counts(normalize<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <pre><code>0    0.616162
@@ -352,7 +352,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 Name: Survived, dtype: float64</code></pre>
 </div>
 </div>
-<div id="3180e033" class="cell" data-execution_count="3">
+<div id="184494c3" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>census_y.value_counts(normalize<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <pre><code> &lt;=50K    0.760718
@@ -386,7 +386,7 @@ Name: class, dtype: float64</code></pre>
 <p>For this chapter, we’re going to use a dataset of mammography scans that were designed to detect the presence of cancer.</p>
 <p>We’ll read in the dataset using pandas. You can see that there are 6 features as well as a target column called “class”. Each sample represents an object of interest that was extracted from a scan, and each object was translated into these features using a computer vision algorithm.</p>
 <p>The class column has two possible values, -1 and 1. -1 means the object did not indicate the presence of cancer, and 1 means the object did indicate the presence of cancer. These labels were assigned by a human expert and thus represent the “ground truth” labels for the dataset.</p>
-<div id="e9540bd7" class="cell" data-execution_count="4">
+<div id="5e8f5db0" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>scan <span class="op">=</span> pd.read_csv(<span class="st">'http://bit.ly/scanrecords'</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>scan.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
@@ -464,7 +464,7 @@ Name: class, dtype: float64</code></pre>
 </div>
 </div>
 <p>As you might expect, -1 (meaning “non-cancerous”) is the majority class, and 1 (meaning “cancerous”) is the minority class. You would call this severe class imbalance because the minority class makes up only 2% of the dataset.</p>
-<div id="dc923ef7" class="cell" data-execution_count="5">
+<div id="c9d2762b" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>scan[<span class="st">'class'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>'-1'    0.97675
@@ -473,7 +473,7 @@ Name: class, dtype: float64</code></pre>
 </div>
 </div>
 <p>Although scikit-learn doesn’t require it, we’re going to map the strings in the class column to the integers 0 and 1, in which 0 means “non-cancerous” and 1 means “cancerous”.</p>
-<div id="c498b5bd" class="cell" data-execution_count="6">
+<div id="2bee8bdf" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>scan[<span class="st">'class'</span>] <span class="op">=</span> scan[<span class="st">'class'</span>].<span class="bu">map</span>({<span class="st">"'-1'"</span>:<span class="dv">0</span>, <span class="st">"'1'"</span>:<span class="dv">1</span>})</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>scan.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
@@ -551,7 +551,7 @@ Name: class, dtype: float64</code></pre>
 </div>
 </div>
 <p>Now that the dataset is ready, we’re going to define two objects, <code>scan_X</code> and <code>scan_y</code>, to represent the feature matrix and the target.</p>
-<div id="2404ff2d" class="cell" data-execution_count="7">
+<div id="dd9b6bd2" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>scan_X <span class="op">=</span> scan.drop(<span class="st">'class'</span>, axis<span class="op">=</span><span class="st">'columns'</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>scan_y <span class="op">=</span> scan[<span class="st">'class'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -596,7 +596,7 @@ Name: class, dtype: float64</code></pre>
 </div>
 </div>
 <p>Let’s start by splitting the dataset into training and testing sets. We’ll use a split of 75% of the rows for training and 25% of the rows for testing, and we’ll set a <code>random_state</code> for reproducibility.</p>
-<div id="7ba0571d" class="cell" data-execution_count="8">
+<div id="00423d80" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(scan_X, scan_y,</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                                                    test_size<span class="op">=</span><span class="fl">0.25</span>,</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                                                    random_state<span class="op">=</span><span class="dv">1</span>,</span>
@@ -619,7 +619,7 @@ Name: class, dtype: float64</code></pre>
 </div>
 <p>Now we’ll fit our logistic regression model on the training set, and use the fitted model to make predictions on the testing set. The <code>predict</code> method outputs class predictions of 0 or 1, which we’ll store as <code>y_pred</code>.</p>
 <p>As an aside, we’re not using a <code>Pipeline</code> here because the features are entirely numeric and don’t need any preprocessing. Though if you were using a <code>Pipeline</code>, you would just use <code>pipe.fit</code> and <code>pipe.predict</code> instead.</p>
-<div id="25f20294" class="cell" data-execution_count="9">
+<div id="2541f17c" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>logreg.fit(X_train, y_train)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> logreg.predict(X_test)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>y_pred</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -629,7 +629,7 @@ Name: class, dtype: float64</code></pre>
 </div>
 <p>Finally, let’s evaluate the model’s predictions. We’ve used accuracy as our evaluation metric throughout the book, so we’ll try that here. We have to import the <code>accuracy_score</code> function from the <code>metrics</code> module, and then we pass it the true values followed by the predicted values.</p>
 <p>It outputs an accuracy of 98%, which sounds great. But as you might recall, about 98% of the target values are 0, so an uninformed model could achieve 98% accuracy by always predicting class 0.</p>
-<div id="5118dedb" class="cell" data-execution_count="10">
+<div id="d622806d" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>accuracy_score(y_test, y_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
@@ -642,7 +642,7 @@ Name: class, dtype: float64</code></pre>
 <h2 data-number="18.4" class="anchored" data-anchor-id="exploring-the-results-with-a-confusion-matrix"><span class="header-section-number">18.4</span> Exploring the results with a confusion matrix</h2>
 <p>Before we choose an evaluation metric other than accuracy, let’s first use a confusion matrix to get a better understanding of our results.</p>
 <p>We’ll import it from the <code>metrics</code> module, and then pass it the true values followed by the predicted values. (Note that the order is important, because your confusion matrix will be incorrect if you pass the predicted values first instead of second.)</p>
-<div id="cb5aca77" class="cell" data-execution_count="11">
+<div id="c5f9eff9" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>confusion_matrix(y_test, y_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
@@ -659,7 +659,7 @@ Name: class, dtype: float64</code></pre>
 <li>In 37 cases, it predicted 0 and that was incorrect. These are False Negatives.</li>
 <li>In 10 cases, it predicted 1 and that was incorrect. These are False Positives.</li>
 </ul>
-<div id="7879e5b8" class="cell" data-execution_count="12">
+<div id="0bd827ed" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> plot_confusion_matrix</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>disp <span class="op">=</span> plot_confusion_matrix(logreg, X_test, y_test, cmap<span class="op">=</span><span class="st">'Blues'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -706,7 +706,7 @@ Name: class, dtype: float64</code></pre>
 <section id="calculating-rates-from-a-confusion-matrix" class="level2" data-number="18.5">
 <h2 data-number="18.5" class="anchored" data-anchor-id="calculating-rates-from-a-confusion-matrix"><span class="header-section-number">18.5</span> Calculating rates from a confusion matrix</h2>
 <p>Before discussing a solution to the problem from the previous lesson, let’s first calculate a few rates from the confusion matrix to help us quantify what we want to improve and what tradeoffs we’ll be making. Here’s another look at the confusion matrix.</p>
-<div id="fb3d89c3" class="cell" data-execution_count="13">
+<div id="ad17f310" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>confusion_matrix(y_test, y_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>array([[2721,   10],
@@ -714,21 +714,21 @@ Name: class, dtype: float64</code></pre>
 </div>
 </div>
 <p>True Positive Rate answers the question: When cancer is present, how often is that correctly predicted? We divide the True Positives by the entire bottom row, and we get 43.1%. True Positive Rate is also known as recall.</p>
-<div id="43c0c6d4" class="cell" data-execution_count="14">
+<div id="05e53e77" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="dv">28</span> <span class="op">/</span> (<span class="dv">37</span> <span class="op">+</span> <span class="dv">28</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>0.4307692307692308</code></pre>
 </div>
 </div>
 <p>True Negative Rate answers the question: When cancer is not present, how often is that correctly predicted? We divide the True Negatives by the entire top row, and we get 99.6%.</p>
-<div id="2ee8ccea" class="cell" data-execution_count="15">
+<div id="0efc53f6" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2721</span> <span class="op">/</span> (<span class="dv">2721</span> <span class="op">+</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
 <pre><code>0.9963383376052728</code></pre>
 </div>
 </div>
 <p>False Positive Rate answers the question: When cancer is not present, how often is that incorrectly predicted? We divide the False Positives by the entire top row, and we get 0.4%. As you might have figured out, the False Positive Rate is 1 minus the True Negative Rate.</p>
-<div id="93699902" class="cell" data-execution_count="16">
+<div id="0fef89c0" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="op">/</span> (<span class="dv">2721</span> <span class="op">+</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>0.003661662394727206</code></pre>
@@ -765,7 +765,7 @@ Name: class, dtype: float64</code></pre>
 <li>The False Positive Rate is not directly shown, but it’s 1 minus the True Negative Rate, thus it rounds to 0%.</li>
 <li>The overall accuracy is also shown, which is 98%, though that’s not our focus here.</li>
 </ul>
-<div id="9fd04e18" class="cell" data-execution_count="17">
+<div id="c2067e74" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, y_pred))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -781,7 +781,7 @@ weighted avg       0.98      0.98      0.98      2796
 </div>
 </div>
 <p>Because the True Positive Rate of 43% seems quite problematic, you might think that the solution is just to work on maximizing that metric alone. However, the danger of only focusing on True Positive Rate is that you might end up with a confusion matrix similar to this.</p>
-<div id="632e25f9" class="cell" data-execution_count="18">
+<div id="57f69b1b" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>confusion_matrix(y_test, np.ones_like(y_pred))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>array([[   0, 2731],
@@ -796,7 +796,7 @@ weighted avg       0.98      0.98      0.98      2796
 <p>The first part of the solution is to choose a different evaluation metric to focus on when tuning our model. We’re going to use AUC, which is short for Area Under the ROC Curve. At a high level, AUC is a measure of how well the model separates the classes by predicting higher probabilities for the class 1 samples than for the class 0 samples.</p>
 <p>To explain this further, let’s have the fitted model output predicted probabilities (rather than class predictions) by using the <code>predict_proba</code> method. We’ll store these in <code>y_score</code> and print them out.</p>
 <p>The first number in the array indicates that for the first sample in the test set, the model predicts a 0.18% likelihood that it belongs to the positive class. The second number indicates that for the second sample, the model predicts a 0.26% likelihood that it belongs to the positive class. And so on.</p>
-<div id="e5838bb9" class="cell" data-execution_count="19">
+<div id="08729879" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>y_score <span class="op">=</span> logreg.predict_proba(X_test)[:, <span class="dv">1</span>]</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>y_score</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="19">
@@ -814,14 +814,14 @@ weighted avg       0.98      0.98      0.98      2796
 <p><strong>Area Under the ROC Curve (AUC):</strong></p>
 <ul>
 <li>Measures how well the model separates the classes</li>
-<li>Rewards the model for assigning higher probabilites to class 1 samples than class 0 samples</li>
+<li>Rewards the model for assigning higher probabilities to class 1 samples than class 0 samples</li>
 <li>Can be used with any classifier that outputs predicted probabilities</li>
 </ul>
 </div>
 </div>
 </div>
 <p>Let’s actually calculate the AUC for our model. We’ll import the <code>roc_auc_score</code> function, and then pass it the true values followed by the predicted probabilities (not the class predictions). It outputs an AUC of 0.93, which is quite good.</p>
-<div id="6397a0b8" class="cell" data-execution_count="20">
+<div id="22b867ed" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_auc_score</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>roc_auc_score(y_test, y_score)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="20">
@@ -865,7 +865,7 @@ weighted avg       0.98      0.98      0.98      2796
 </div>
 </div>
 <p>From looking at the right column of the confusion matrix, we can see that there were only 38 samples in the testing set for which the model predicted class 1.</p>
-<div id="8fef4b8b" class="cell" data-execution_count="21">
+<div id="7c9c9544" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>confusion_matrix(y_test, y_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>array([[2721,   10],
@@ -873,7 +873,7 @@ weighted avg       0.98      0.98      0.98      2796
 </div>
 </div>
 <p>Equivalently, there were only 38 samples for which the model predicted a probability greater than 0.5. (This code works by creating a boolean array and then counting the number of <code>True</code> values in it.)</p>
-<div id="72d25217" class="cell" data-execution_count="22">
+<div id="6914db09" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="bu">sum</span>(y_score <span class="op">&gt;</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>38</code></pre>
@@ -903,7 +903,7 @@ weighted avg       0.98      0.98      0.98      2796
 <p>For example, there is a single point on the curve that represents the default decision threshold of 0.5, for which the True Positive Rate is 43% and the False Positive Rate is nearly 0.</p>
 <p>Changing the decision threshold simply moves you to another point on the curve. For example, you could move to a point that has a True Positive Rate of about 90% and a False Positive Rate of about 10% just by changing the threshold. To be clear, the threshold itself is not shown on this plot, rather the plot only shows the True Positive Rate and False Positive Rate pairs that result from all possible thresholds.</p>
 <p>One final thing I want to note is that the Area Under the Curve is literally the percentage of the plot that is underneath the curve. So because the AUC is 0.93, we know that 93% of the plot is underneath the curve. If we can increase the AUC, we’re moving the curve further into the upper left corner, which means that higher True Positive Rates and lower False Positive Rates will be available to us.</p>
-<div id="d4e345ab" class="cell" data-execution_count="23">
+<div id="ab28e640" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> plot_roc_curve</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>disp <span class="op">=</span> plot_roc_curve(logreg, X_test, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -1006,13 +1006,13 @@ weighted avg       0.98      0.98      0.98      2796
 </div>
 </div>
 <p>Let’s try this out by creating a logistic regression instance that uses <code>class_weight='balanced'</code>. This specifies a class weighting that is inversely proportional to the class frequencies in the input data, though you can specify custom weights for each class if you like.</p>
-<div id="14f022fc" class="cell" data-execution_count="24">
+<div id="e600b43f" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>logreg_cost <span class="op">=</span> LogisticRegression(solver<span class="op">=</span><span class="st">'liblinear'</span>,</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>                                 class_weight<span class="op">=</span><span class="st">'balanced'</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We’ll fit our logistic regression model on the training set, and use the fitted model to make class predictions and predicted probabilities on the testing set. Then we’ll calculate the AUC, and it has increased from 0.93 to 0.94 simply by setting class weights.</p>
 <p>Keep in mind that class weighting is not guaranteed to improve your AUC, and thus it should be tuned like any other parameter, as we’ll see in the next chapter.</p>
-<div id="fe9d3b14" class="cell" data-execution_count="25">
+<div id="14ef4d57" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>logreg_cost.fit(X_train, y_train)</span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> logreg_cost.predict(X_test)</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>y_score <span class="op">=</span> logreg_cost.predict_proba(X_test)[:, <span class="dv">1</span>]</span>
@@ -1027,7 +1027,7 @@ weighted avg       0.98      0.98      0.98      2796
 <li>The True Negative Rate decreased from about 100% to 89%, which means that the False Positive Rate increased from about 0% to 11%.</li>
 </ul>
 <p>I do want to point out that even though this model might match our priorities better, its accuracy has decreased from 98% to 89%. This illustrates how sometimes a useful classifier has a lower accuracy than null accuracy.</p>
-<div id="e1f87c23" class="cell" data-execution_count="26">
+<div id="64ccb495" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, y_pred))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              precision    recall  f1-score   support
@@ -1060,7 +1060,7 @@ weighted avg       0.98      0.89      0.93      2796
 <h2 data-number="18.8" class="anchored" data-anchor-id="sec-18-8"><span class="header-section-number">18.8</span> Tuning the decision threshold</h2>
 <p>At this point, we could continue to tune various aspects of our model to increase the AUC, but instead we’re just going to proceed to our final step, which is tuning the decision threshold.</p>
 <p>Let’s take a look at the ROC curve for our class-weighted logistic regression model. Using the default threshold of 0.5, the model achieved a True Positive Rate of 88% and a False Positive Rate of 11%, which is represented by a single point on the curve. If we wanted to move somewhere else on this curve, in order to better match our priorities, we would simply change the threshold.</p>
-<div id="dc65c3b4" class="cell" data-execution_count="27">
+<div id="e9299754" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>disp <span class="op">=</span> plot_roc_curve(logreg_cost, X_test, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1071,7 +1071,7 @@ weighted avg       0.98      0.89      0.93      2796
 </div>
 </div>
 <p>Before tuning the threshold, it’s useful to examine the current confusion matrix, which results from the default threshold of 0.5. You might notice that there are a lot more True Positives and False Positives than before.</p>
-<div id="99f36b4d" class="cell" data-execution_count="28">
+<div id="3af066a3" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>confusion_matrix(y_test, y_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="28">
 <pre><code>array([[2436,  295],
@@ -1079,21 +1079,21 @@ weighted avg       0.98      0.89      0.93      2796
 </div>
 </div>
 <p>More specifically, the model is predicting the positive class 352 times, whereas previously it predicted the positive class only 38 times.</p>
-<div id="febcf8d2" class="cell" data-execution_count="29">
+<div id="44ec539f" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="bu">sum</span>(y_score <span class="op">&gt;</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="29">
 <pre><code>352</code></pre>
 </div>
 </div>
 <p>Let’s pretend that we’re still uncomfortable with having 8 False Negatives, and thus we want to reduce those even further. By decreasing the threshold to 0.25, we find out that the model will predict the positive class 870 times.</p>
-<div id="17cfc758" class="cell" data-execution_count="30">
+<div id="0e1379e9" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="bu">sum</span>(y_score <span class="op">&gt;</span> <span class="fl">0.25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="30">
 <pre><code>870</code></pre>
 </div>
 </div>
 <p>The boolean array created by this condition can be converted to class predictions simply by multiplying it by 1.</p>
-<div id="f7ba589f" class="cell" data-execution_count="31">
+<div id="de48c023" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>(y_score <span class="op">&gt;</span> <span class="fl">0.25</span>) <span class="op">*</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="31">
 <pre><code>array([0, 0, 0, ..., 0, 1, 0])</code></pre>
@@ -1101,7 +1101,7 @@ weighted avg       0.98      0.89      0.93      2796
 </div>
 <p>In fact, the boolean array can be passed directly to the confusion matrix function, and it will do the conversion automatically.</p>
 <p>Thus we can see that by decreasing the threshold to 0.25, the number of False Negatives has been reduced from 8 to 4, but the number of False Positives has increased from 295 to 809. More generally, decreasing the threshold moves samples from the left column of the confusion matrix to the right column.</p>
-<div id="8f633057" class="cell" data-execution_count="32">
+<div id="95a42140" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>confusion_matrix(y_test, y_score <span class="op">&gt;</span> <span class="fl">0.25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="32">
 <pre><code>array([[1922,  809],
@@ -1109,7 +1109,7 @@ weighted avg       0.98      0.89      0.93      2796
 </div>
 </div>
 <p>Looking at the classification report, the True Positive Rate has increased to 94%, but the False Positive Rate has increased to 30%. That moves us to a new spot on the ROC curve.</p>
-<div id="ee1bf0a2" class="cell" data-execution_count="33">
+<div id="3fe5201f" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, y_score <span class="op">&gt;</span> <span class="fl">0.25</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              precision    recall  f1-score   support
@@ -1138,7 +1138,7 @@ weighted avg       0.98      0.71      0.81      2796
 </div>
 </div>
 <p>Now, let’s pretend that we think the original threshold resulted in too many False Positives. In that case, we could increase the threshold to 0.75, which moves samples from the right column to the left column.</p>
-<div id="4b197e2c" class="cell" data-execution_count="34">
+<div id="d290ab50" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>confusion_matrix(y_test, y_score <span class="op">&gt;</span> <span class="fl">0.75</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="34">
 <pre><code>array([[2632,   99],
@@ -1146,7 +1146,7 @@ weighted avg       0.98      0.71      0.81      2796
 </div>
 </div>
 <p>We can see from the classification report that the True Positive Rate has decreased to 77%, but the False Positive Rate has decreased to 4%. Again, that moves us to a new spot on the ROC curve.</p>
-<div id="ba147545" class="cell" data-execution_count="35">
+<div id="7f497829" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, y_score <span class="op">&gt;</span> <span class="fl">0.75</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              precision    recall  f1-score   support
